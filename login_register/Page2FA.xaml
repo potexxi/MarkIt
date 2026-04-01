@@ -1,0 +1,33 @@
+﻿<Page x:Class="MarkIt.login_register.Page2FA"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MarkIt.login_register"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="600"
+      Title="Page2FA">
+
+    <Grid>
+        <StackPanel Background="#FF1F4572" Margin="0,0,0,0">
+            <Border CornerRadius="20" Background="#FF01021C" Width="400" Margin="0,20,0,0">
+                <StackPanel Orientation="Vertical" Width="400" Height="360">
+                    <Label Content="Enter Code" Margin="0,25,0,0" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Leelawadee UI" FontSize="35" FontWeight="Bold"/>
+                    <!--Code field-->
+                    <Label Content="Enter the Code you recieved by E-Mail. Check Spam!" Foreground="Gray" Margin="24,30,0,0" FontFamily="Leelawadee UI"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,-3,0,0">
+                        <Image Source="/images/code-user-login.png" Width="45" Margin="30,0,0,0"></Image>
+                        <TextBox Width="290" x:Name="TextBoxCode" VerticalContentAlignment="Center" MaxLength="6" TextChanged="TextBoxCode_TextChanged"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Resend Code in: 0s" x:Name="LabelTimer" Foreground="Gray" Margin="24,-4,0,0" FontFamily="Leelawadee UI"/>
+                        <Label Content="False. Try again!" x:Name="LabelFalse" Foreground="#FFFF3E3E" Visibility="Hidden" Margin="142,-4,0,0" FontFamily="Leelawadee UI"/>
+                    </StackPanel>
+                    <!--buttons-->
+                    <Button Cursor="Hand" Content="OK" Width="200" x:Name="ButtonOK" Click="ButtonOK_Click" Height="40" FontSize="18" Margin="0,30,0,0" FontFamily="Leelawadee UI"/>
+                    <Button Cursor="Hand" Content="Cancel" Width="200" Height="40" FontSize="18" Margin="0,10,0,0" FontFamily="Leelawadee UI" Click="ButtonCancel_Click"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Page>

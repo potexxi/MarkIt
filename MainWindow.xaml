@@ -1,0 +1,18 @@
+﻿<Window x:Class="MarkIt.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MarkIt"
+        xmlns:uc="clr-namespace:MarkIt.UserControls"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" Icon="/images/markit-logo.png">
+    <Grid>
+        <StackPanel x:Name="StackPanelNavigationBar" Background="Gray" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="150">
+            <uc:SettingsIcon Width="50" Height="50"/>
+            <uc:AccoundIcon Width="50" Height="50"/>
+            <uc:InformationIcon Width="50" Height="50"/>
+        </StackPanel>
+        <StackPanel x:Name="StackPanelWorksheatSpace" Background="LightGray" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,150,0,0"/>
+    </Grid>
+</Window>

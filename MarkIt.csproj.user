@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="login_register\Page2FA.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="login_register\PageLogin.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="login_register\PageResetPassword1.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="login_register\PageResetPassword2.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="login_register\PageRegister.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="login_register\PageResetPassword3.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\AccoundIcon.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\InformationIcon.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\SettingsIcon.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="login_register\WindowUserLogin.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>
