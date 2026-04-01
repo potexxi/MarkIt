@@ -46,6 +46,7 @@ namespace MarkIt.login_register
             if($"{PageRecetPassword1.code:D6}" == TextBoxCode.Text)
             {
                 _userLogin.Close();
+                Timer.Stop();
             }
             else
             {

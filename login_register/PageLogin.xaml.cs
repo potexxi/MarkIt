@@ -70,18 +70,11 @@ namespace MarkIt.login_register
             }
             catch (Exception ex)
             {
-                if(ex.Message == "password false")
-                {
-                    LabelPasswordNotCorrect.Visibility = Visibility.Visible;
-                    PasswordBoxPassword.BorderThickness = new Thickness(3);
-                    PasswordBoxPassword.BorderBrush = Brushes.LightCoral;
-                }
-                else if(ex.Message == "user does not exist")
-                {
-                    LabelEmailNotFound.Visibility = Visibility.Visible;
-                    TextBoxEmail.BorderThickness = new Thickness(3);
-                    TextBoxEmail.BorderBrush = Brushes.LightCoral;
-                }
+                LabelPasswordNotCorrect.Visibility = Visibility.Visible;
+                PasswordBoxPassword.BorderThickness = new Thickness(3);
+                PasswordBoxPassword.BorderBrush = Brushes.LightCoral;
+                TextBoxEmail.BorderThickness = new Thickness(3);
+                TextBoxEmail.BorderBrush = Brushes.LightCoral;
             }
         }
 
@@ -178,7 +171,7 @@ namespace MarkIt.login_register
             
         }
 
-        public void WriteUsersToServer(int port, string publicIP, string username, string privateKeyFilePath, ClassUserList userList)
+        public async Task WriteUsersToServer(int port, string publicIP, string username, string privateKeyFilePath, ClassUserList userList)
         {
             // code inspired by StackOverflow/Autocompletion
             ConnectionInfo connection;
@@ -197,28 +190,31 @@ namespace MarkIt.login_register
             }
             try
             {
-                using (SftpClient client = new SftpClient(connection))
+                await Task.Run(() =>
                 {
-                    try
+                    using (SftpClient client = new SftpClient(connection))
                     {
-                        client.Connect();
-                    }
-                    catch
-                    {
-                        MainWindow.logger.Error("Server unreachable.");
-                        throw new Exception("server");
-                    }
+                        try
+                        {
+                            client.Connect();
+                        }
+                        catch
+                        {
+                            MainWindow.logger.Error("Server unreachable.");
+                            throw new Exception("server");
+                        }
 
-                    using (var stream = client.OpenWrite("files/users.json"))
-                    using (StreamWriter writer = new StreamWriter(stream))
-                    {
-                        string json = JsonSerializer.Serialize(userList);
-                        writer.Write(json);
-                        MainWindow.logger.Debug("Successfully wrote users to server.");
-                        
+                        using (var stream = client.OpenWrite("files/users.json"))
+                        using (StreamWriter writer = new StreamWriter(stream))
+                        {
+                            string json = JsonSerializer.Serialize(userList);
+                            writer.Write(json);
+                            MainWindow.logger.Debug("Successfully wrote users to server.");
+
+                        }
+                        client.Disconnect();
                     }
-                    client.Disconnect();
-                }
+                });
             }
             catch(Exception e)
             {
@@ -234,9 +230,11 @@ namespace MarkIt.login_register
 
         private void TextBoxEmail_TextChanged(object sender, TextChangedEventArgs e)
         {
-            LabelEmailNotFound.Visibility = Visibility.Hidden;
             TextBoxEmail.BorderThickness = new Thickness(1);
             TextBoxEmail.BorderBrush = Brushes.Gray;
+            LabelPasswordNotCorrect.Visibility = Visibility.Hidden;
+            PasswordBoxPassword.BorderThickness = new Thickness(1);
+            PasswordBoxPassword.BorderBrush = Brushes.Gray;
         }
 
         private void PasswordBoxPassword_PasswordChanged(object sender, RoutedEventArgs e)
@@ -244,6 +242,8 @@ namespace MarkIt.login_register
             LabelPasswordNotCorrect.Visibility = Visibility.Hidden;
             PasswordBoxPassword.BorderThickness = new Thickness(1);
             PasswordBoxPassword.BorderBrush = Brushes.Gray;
+            TextBoxEmail.BorderThickness = new Thickness(1);
+            TextBoxEmail.BorderBrush = Brushes.Gray;
         }
     }
 }

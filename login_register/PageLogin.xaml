@@ -16,7 +16,6 @@
                     <!--Email field-->
                     <StackPanel Orientation="Horizontal">
                         <Label Content="E-Mail Address" Foreground="Gray" Margin="24,15,0,0" FontFamily="Leelawadee UI"/>
-                        <Label x:Name="LabelEmailNotFound" Content="E-Mail Address not found." Visibility="Hidden" Foreground="#FFFF3E3E" Margin="109,15,0,0" FontFamily="Leelawadee UI"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,-3,0,0">
                         <Image x:Name="ImageEmail" Source="/images/profil-user-login.jpg" Width="45" Margin="30,0,0,0"></Image>

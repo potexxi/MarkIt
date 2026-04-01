@@ -49,6 +49,7 @@ namespace MarkIt.login_register
             if ($"{PageRecetPassword1.code.ToString():D6}" == TextBoxCode.Text)
             {
                 _frame.Navigate(WindowUserLogin.pages["PagePassword3"]);
+                Timer.Stop();
             }
             else
             {
@@ -61,6 +62,7 @@ namespace MarkIt.login_register
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             _frame.Navigate(WindowUserLogin.pages["PagePassword1"]);
+            Timer.Stop();
         }
 
         private void TextBoxCode_TextChanged(object sender, TextChangedEventArgs e)
