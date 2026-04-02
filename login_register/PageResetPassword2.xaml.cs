@@ -39,7 +39,7 @@ namespace MarkIt.login_register
             if (timerCount <= 0)
             {
                 timerCount = 90;
-                PageRecetPassword1.SendEmail(PageRecetPassword1.email);
+                PageRecetPassword1.SendEmail(PageRecetPassword1.email, "password reset");
             }
             LabelTimer.Content = $"Resend Code in: {timerCount}s";
         }

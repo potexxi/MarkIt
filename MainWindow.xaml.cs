@@ -1,6 +1,7 @@
 ﻿using MarkIt.login_register;
 using Serilog;
 using Serilog.Core;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,9 +32,6 @@ namespace MarkIt
             InitializeComponent();
             WindowUserLogin window = new WindowUserLogin();
             window.ShowDialog();
-
-
-            
         }
     }
 }

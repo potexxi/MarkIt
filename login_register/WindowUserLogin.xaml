@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MarkIt"
         mc:Ignorable="d"
-        Title="Login" Height="490" Width="600" Icon="/images/markit-logo.png" MinWidth="550" MinHeight="490">
+        Title="Login" Height="490" Width="600" Icon="/images/markit-logo.png" MinWidth="550" MinHeight="490" Closing="Window_Closed">
     <Grid>
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"></Frame>
     </Grid>

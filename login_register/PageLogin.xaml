@@ -12,7 +12,7 @@
         <StackPanel Background="#FF1F4572" Margin="0,0,0,0">
             <Border CornerRadius="20" Background="#FF01021C" Width="400" Margin="0,15,0,0">
                 <StackPanel Orientation="Vertical" Width="400" Height="360">
-                    <Label Content="LOGIN" Margin="0,8,0,0" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Leelawadee UI" FontSize="35" FontWeight="Bold"/>
+                    <Label Content="LOGIN" x:Name="Header" Margin="0,8,0,0" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Leelawadee UI" FontSize="35" FontWeight="Bold"/>
                     <!--Email field-->
                     <StackPanel Orientation="Horizontal">
                         <Label Content="E-Mail Address" Foreground="Gray" Margin="24,15,0,0" FontFamily="Leelawadee UI"/>

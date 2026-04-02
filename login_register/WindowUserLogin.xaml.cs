@@ -21,6 +21,7 @@ namespace MarkIt
     public partial class WindowUserLogin : Window
     {
         public static Dictionary<string, Page> pages;
+        public static bool Guest = false;
         public WindowUserLogin()
         {
             InitializeComponent();
@@ -33,6 +34,12 @@ namespace MarkIt
             pages.Add("Page2FA", new Page2FA(MainFrame, this));
 
             MainFrame.Navigate(pages["PageLogin"]);
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            if(!Guest)
+                Application.Current.Shutdown();
         }
     }
 }

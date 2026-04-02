@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Renci.SshNet;
 
 namespace MarkIt.login_register
@@ -25,7 +26,6 @@ namespace MarkIt.login_register
     {
         private Frame _frame;
         private WindowUserLogin _userLogin;
-        
         public PageLogin(Frame frame, WindowUserLogin window)
         {
             InitializeComponent();
@@ -63,7 +63,7 @@ namespace MarkIt.login_register
                 if (user.Email != "error")
                 {
                     MainWindow.currentUser = user;
-                    PageRecetPassword1.SendEmail(user.Email);
+                    PageRecetPassword1.SendEmail(user.Email, "2fa");
                     Page2FA.Timer.Start();
                     _frame.Navigate(WindowUserLogin.pages["Page2FA"]);
                 }
@@ -112,6 +112,7 @@ namespace MarkIt.login_register
 
         private void ButtonGuest_Click(object sender, RoutedEventArgs e)
         {
+            WindowUserLogin.Guest = true;
             _userLogin.Close();
             MainWindow.currentUser = new ClassUser(-1, "guest", "guest");
         }
@@ -152,10 +153,10 @@ namespace MarkIt.login_register
                     using (StreamReader reader = new StreamReader(stream))
                     {
                         string content = reader.ReadToEnd();
-                        ClassUserList classUserList = JsonSerializer.Deserialize<ClassUserList>(content);
+                        ClassUserList userList = JsonSerializer.Deserialize<ClassUserList>(content);
                         MainWindow.logger.Debug("Successfully got users from server.");
                         client.Disconnect();
-                        return classUserList;
+                        return userList;
                     }
                 }
             }
@@ -168,7 +169,6 @@ namespace MarkIt.login_register
                 MainWindow.logger.Error("No file \"users.json\".");
                 throw new Exception("users file");
             }
-            
         }
 
         public async Task WriteUsersToServer(int port, string publicIP, string username, string privateKeyFilePath, ClassUserList userList)
@@ -190,31 +190,28 @@ namespace MarkIt.login_register
             }
             try
             {
-                await Task.Run(() =>
+                using (SftpClient client = new SftpClient(connection))
                 {
-                    using (SftpClient client = new SftpClient(connection))
+                    try
                     {
-                        try
-                        {
-                            client.Connect();
-                        }
-                        catch
-                        {
-                            MainWindow.logger.Error("Server unreachable.");
-                            throw new Exception("server");
-                        }
-
-                        using (var stream = client.OpenWrite("files/users.json"))
-                        using (StreamWriter writer = new StreamWriter(stream))
-                        {
-                            string json = JsonSerializer.Serialize(userList);
-                            writer.Write(json);
-                            MainWindow.logger.Debug("Successfully wrote users to server.");
-
-                        }
-                        client.Disconnect();
+                        client.Connect();
                     }
-                });
+                    catch
+                    {
+                        MainWindow.logger.Error("Server unreachable.");
+                        throw new Exception("server");
+                    }
+
+                    using (var stream = client.OpenWrite("files/users.json"))
+                    using (StreamWriter writer = new StreamWriter(stream))
+                    {
+                        string json = JsonSerializer.Serialize(userList);
+                        writer.Write(json);
+                        MainWindow.logger.Debug("Successfully wrote users to server.");
+
+                    }
+                    client.Disconnect();
+                }
             }
             catch(Exception e)
             {

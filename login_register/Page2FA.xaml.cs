@@ -45,6 +45,7 @@ namespace MarkIt.login_register
         {
             if($"{PageRecetPassword1.code:D6}" == TextBoxCode.Text)
             {
+                WindowUserLogin.Guest = true;
                 _userLogin.Close();
                 Timer.Stop();
             }
@@ -61,7 +62,7 @@ namespace MarkIt.login_register
             if (timerCount <= 0)
             {
                 timerCount = 90;
-                PageRecetPassword1.SendEmail(MainWindow.currentUser.Email);
+                PageRecetPassword1.SendEmail(MainWindow.currentUser.Email, "2fa");
             }
             LabelTimer.Content = $"Resend Code in: {timerCount}s";
         }
