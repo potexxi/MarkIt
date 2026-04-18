@@ -1,4 +1,5 @@
 ﻿using MarkIt.login_register;
+using MarkIt.worksheet;
 using Serilog;
 using Serilog.Core;
 using System.Runtime.CompilerServices;
@@ -32,6 +33,10 @@ namespace MarkIt
             InitializeComponent();
             WindowUserLogin window = new WindowUserLogin();
             window.ShowDialog();
+
+            // zum Testen
+            ClassWorksheet CurrentWorkSheet = new ClassWorksheet(GridWorksheet);
+            CurrentWorkSheet.Init();
         }
     }
 }

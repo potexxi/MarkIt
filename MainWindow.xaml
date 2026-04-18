@@ -8,11 +8,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Icon="/images/markit-logo.png">
     <Grid>
-        <StackPanel x:Name="StackPanelNavigationBar" Background="Gray" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="150">
-            <uc:SettingsIcon Width="50" Height="50"/>
-            <uc:AccoundIcon Width="50" Height="50"/>
-            <uc:InformationIcon Width="50" Height="50"/>
+        <StackPanel x:Name="StackPanelMainWindow" Orientation="Vertical">
+            <StackPanel x:Name="StackPanelNavigationBar" Background="Gray" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="120">
+                <uc:SettingsIcon Width="50" Height="50"/>
+                <uc:AccoundIcon Width="50" Height="50"/>
+                <uc:InformationIcon Width="50" Height="50"/>
+            </StackPanel>
+            <Grid x:Name="GridWorksheet" Background="LightGray" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
         </StackPanel>
-        <StackPanel x:Name="StackPanelWorksheatSpace" Background="LightGray" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,150,0,0"/>
     </Grid>
 </Window>
