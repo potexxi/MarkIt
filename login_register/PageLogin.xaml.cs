@@ -24,13 +24,9 @@ namespace MarkIt.login_register
     /// </summary>
     public partial class PageLogin : Page
     {
-        private Frame _frame;
-        private WindowUserLogin _userLogin;
-        public PageLogin(Frame frame, WindowUserLogin window)
+        public PageLogin()
         {
             InitializeComponent();
-            _frame = frame;
-            _userLogin = window;
         }
 
         private void Label_MouseEnter(object sender, MouseEventArgs e)
@@ -47,12 +43,12 @@ namespace MarkIt.login_register
 
         private void Label_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            _frame.Navigate(WindowUserLogin.pages["PagePassword1"]);
+            WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PagePassword1"]);
         }
 
         private void ButtonRegister_Click(object sender, RoutedEventArgs e)
         {
-            _frame.Navigate(WindowUserLogin.pages["PageRegister"]);
+            WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PageRegister"]);
         }
 
         private void ButtonLogin_Click(object sender, RoutedEventArgs e)
@@ -65,7 +61,7 @@ namespace MarkIt.login_register
                     MainWindow.currentUser = user;
                     PageRecetPassword1.SendEmail(user.Email, "2fa");
                     Page2FA.Timer.Start();
-                    _frame.Navigate(WindowUserLogin.pages["Page2FA"]);
+                    WindowUserLogin.frame.Navigate(WindowUserLogin.pages["Page2FA"]);
                 }
             }
             catch (Exception ex)
@@ -88,7 +84,7 @@ namespace MarkIt.login_register
             catch(Exception ex) 
             {
                 if (ex.Message == "server")
-                    MessageBox.Show("Currently our server are offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
                 else if (ex.Message == "users file")
                     MessageBox.Show("File on the server not found, please try again.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
                 return new ClassUser(-1, "error", "error");
@@ -113,7 +109,7 @@ namespace MarkIt.login_register
         private void ButtonGuest_Click(object sender, RoutedEventArgs e)
         {
             WindowUserLogin.Guest = true;
-            _userLogin.Close();
+            WindowUserLogin.window.Close();
             MainWindow.currentUser = new ClassUser(-1, "guest", "guest");
         }
 
@@ -128,11 +124,11 @@ namespace MarkIt.login_register
                 
                 PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(username, privateKey);
                 connection = new ConnectionInfo(publicIP, port, username, privateKeyAuth);
-                MainWindow.logger.Debug("Successfully created connection with private key.");
+                Logger.logger.Debug("Successfully created connection with private key.");
             }
             catch
             {
-                MainWindow.logger.Error("Privat key authentication or server unreachable");
+                Logger.logger.Error("Privat key authentication or server unreachable");
                 throw new Exception("server");
             }
             try
@@ -145,7 +141,7 @@ namespace MarkIt.login_register
                     }
                     catch
                     {
-                        MainWindow.logger.Error("Server unreachable.");
+                        Logger.logger.Error("Server unreachable.");
                         throw new Exception("server");
                     }
 
@@ -154,7 +150,7 @@ namespace MarkIt.login_register
                     {
                         string content = reader.ReadToEnd();
                         ClassUserList userList = JsonSerializer.Deserialize<ClassUserList>(content);
-                        MainWindow.logger.Debug("Successfully got users from server.");
+                        Logger.logger.Debug("Successfully got users from server.");
                         client.Disconnect();
                         return userList;
                     }
@@ -166,7 +162,7 @@ namespace MarkIt.login_register
                 {
                     throw new Exception("server");
                 }
-                MainWindow.logger.Error("No file \"users.json\".");
+                Logger.logger.Error("No file \"users.json\".");
                 throw new Exception("users file");
             }
         }
@@ -181,11 +177,11 @@ namespace MarkIt.login_register
 
                 PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(username, privateKey);
                 connection = new ConnectionInfo(publicIP, port, username, privateKeyAuth);
-                MainWindow.logger.Debug("Successfully created connection with private key.");
+                Logger.logger.Debug("Successfully created connection with private key.");
             }
             catch
             {
-                MainWindow.logger.Error("Privat key authentication or server unreachable.");
+                Logger.logger.Error("Privat key authentication or server unreachable.");
                 throw new Exception("server");
             }
             try
@@ -198,7 +194,7 @@ namespace MarkIt.login_register
                     }
                     catch
                     {
-                        MainWindow.logger.Error("Server unreachable.");
+                        Logger.logger.Error("Server unreachable.");
                         throw new Exception("server");
                     }
 
@@ -207,7 +203,7 @@ namespace MarkIt.login_register
                     {
                         string json = JsonSerializer.Serialize(userList);
                         writer.Write(json);
-                        MainWindow.logger.Debug("Successfully wrote users to server.");
+                        Logger.logger.Debug("Successfully wrote users to server.");
 
                     }
                     client.Disconnect();
@@ -219,7 +215,7 @@ namespace MarkIt.login_register
                 {
                     throw new Exception("server");
                 }
-                MainWindow.logger.Error("No file \"users.json\".");
+                Logger.logger.Error("No file \"users.json\".");
                 throw new Exception("users file");
             }
 

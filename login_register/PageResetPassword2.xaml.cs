@@ -21,13 +21,11 @@ namespace MarkIt.login_register
     /// </summary>
     public partial class PageRecetPassword2 : Page
     {
-        private Frame _frame;
         public static DispatcherTimer Timer { get; private set; }
         private int timerCount = 90;
-        public PageRecetPassword2(Frame frame)
+        public PageRecetPassword2()
         {
             InitializeComponent();
-            _frame = frame;
             Timer = new DispatcherTimer();
             Timer.Interval = TimeSpan.FromSeconds(1);
             Timer.Tick += Timer_Tick;
@@ -48,7 +46,7 @@ namespace MarkIt.login_register
         {
             if ($"{PageRecetPassword1.code.ToString():D6}" == TextBoxCode.Text)
             {
-                _frame.Navigate(WindowUserLogin.pages["PagePassword3"]);
+                WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PagePassword3"]);
                 Timer.Stop();
             }
             else
@@ -61,7 +59,7 @@ namespace MarkIt.login_register
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            _frame.Navigate(WindowUserLogin.pages["PagePassword1"]);
+            WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PagePassword1"]);
             Timer.Stop();
         }
 

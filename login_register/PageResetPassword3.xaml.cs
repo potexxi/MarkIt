@@ -20,21 +20,19 @@ namespace MarkIt.login_register
     /// </summary>
     public partial class PageResetPassword3 : Page
     {
-        private Frame _frame;
-        public PageResetPassword3(Frame frame)
+        public PageResetPassword3()
         {
             InitializeComponent();
-            _frame = frame;
         }
 
         private void ButtonReset_Click(object sender, RoutedEventArgs e)
         {
-            _frame.Navigate(WindowUserLogin.pages["PageLogin"]);
+            WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PageLogin"]);
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            _frame.Navigate(WindowUserLogin.pages["PageLogin"]);
+            WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PageLogin"]);
         }
     }
 }

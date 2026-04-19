@@ -24,11 +24,9 @@ namespace MarkIt.login_register
     {
         public static int code {  get; private set; }
         public static string email {  get; private set; }
-        private Frame _frame;
-        public PageRecetPassword1(Frame frame)
+        public PageRecetPassword1()
         {
             InitializeComponent();
-            _frame = frame;
         }
 
         private void ButtonSend_Click(object sender, RoutedEventArgs e)
@@ -36,14 +34,14 @@ namespace MarkIt.login_register
             email = TextBoxEmail.Text;
             if (SendEmail(email, "password reset"))
             {
-                _frame.Navigate(WindowUserLogin.pages["PagePassword2"]);
+                WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PagePassword2"]);
                 PageRecetPassword2.Timer.Start();
             }
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            _frame.Navigate(WindowUserLogin.pages["PageLogin"]);
+            WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PageLogin"]);
         }
 
         static public bool SendEmail(string emailAddress, string reason)
@@ -68,7 +66,7 @@ namespace MarkIt.login_register
                 }
                 catch
                 {
-                    MainWindow.logger.Error($"Mailaddress {emailAddress} not correct format.");
+                    Logger.logger.Error($"Mailaddress {emailAddress} not correct format.");
                     throw new Exception("mailaddress");
                 }
                 MailMessage mail = new MailMessage(from, to);
@@ -95,7 +93,7 @@ namespace MarkIt.login_register
                 catch
                 {
                     throw new Exception("sending");
-                    MainWindow.logger.Fatal($"Sending E-Mail to {emailAddress}.");
+                    Logger.logger.Fatal($"Sending E-Mail to {emailAddress}.");
                 }
             }
             catch (Exception e)

@@ -21,17 +21,21 @@ namespace MarkIt
     public partial class WindowUserLogin : Window
     {
         public static Dictionary<string, Page> pages;
+        public static Frame frame;
         public static bool Guest = false;
+        public static WindowUserLogin window;
         public WindowUserLogin()
         {
             InitializeComponent();
+            window = this;
+            frame = MainFrame;
             pages = new Dictionary<string, Page>();
-            pages.Add("PageLogin", new PageLogin(MainFrame, this));
-            pages.Add("PageRegister", new PageRegister(MainFrame));
-            pages.Add("PagePassword1", new PageRecetPassword1(MainFrame));
-            pages.Add("PagePassword2", new PageRecetPassword2(MainFrame));
-            pages.Add("PagePassword3", new PageResetPassword3(MainFrame));
-            pages.Add("Page2FA", new Page2FA(MainFrame, this));
+            pages.Add("PageLogin", new PageLogin());
+            pages.Add("PageRegister", new PageRegister());
+            pages.Add("PagePassword1", new PageRecetPassword1());
+            pages.Add("PagePassword2", new PageRecetPassword2());
+            pages.Add("PagePassword3", new PageResetPassword3());
+            pages.Add("Page2FA", new Page2FA());
 
             MainFrame.Navigate(pages["PageLogin"]);
         }

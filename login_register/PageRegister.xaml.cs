@@ -20,17 +20,14 @@ namespace MarkIt.login_register
     /// </summary>
     public partial class PageRegister : Page
     {
-        private Frame _frame;
-        public PageRegister(Frame frame)
+        public PageRegister()
         {
             InitializeComponent();
-            _frame = frame;
         }
 
         private void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
-            //PageLogin pageLogin = new PageLogin(_frame);
-            _frame.Navigate(WindowUserLogin.pages["PageLogin"]);
+            WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PageLogin"]);
         }
     }
 }

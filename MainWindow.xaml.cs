@@ -22,14 +22,8 @@ namespace MarkIt
     public partial class MainWindow : Window
     {
         public static ClassUser currentUser;
-        public static Logger logger { get; private set; }
         public MainWindow()
         {
-            LoggerConfiguration config = new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .WriteTo.File("markit-log-.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 5);
-            logger = config.CreateLogger();
-
             InitializeComponent();
             WindowUserLogin window = new WindowUserLogin();
             window.ShowDialog();
