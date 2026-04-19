@@ -34,14 +34,14 @@ namespace MarkIt.login_register
             email = TextBoxEmail.Text;
             if (SendEmail(email, "password reset"))
             {
-                WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PagePassword2"]);
+                WindowUserLogin.Navigate("PagePassword1", "PagePassword2");
                 PageRecetPassword2.Timer.Start();
             }
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PageLogin"]);
+            WindowUserLogin.Navigate("PagePassword1", "PageLogin");
         }
 
         static public bool SendEmail(string emailAddress, string reason)

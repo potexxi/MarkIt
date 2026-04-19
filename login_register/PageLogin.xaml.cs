@@ -43,12 +43,12 @@ namespace MarkIt.login_register
 
         private void Label_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PagePassword1"]);
+            WindowUserLogin.Navigate("PageLogin", "PagePassword1");
         }
 
         private void ButtonRegister_Click(object sender, RoutedEventArgs e)
         {
-            WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PageRegister"]);
+            WindowUserLogin.Navigate("PageLogin", "PageRegister");
         }
 
         private void ButtonLogin_Click(object sender, RoutedEventArgs e)
@@ -61,7 +61,7 @@ namespace MarkIt.login_register
                     MainWindow.currentUser = user;
                     PageRecetPassword1.SendEmail(user.Email, "2fa");
                     Page2FA.Timer.Start();
-                    WindowUserLogin.frame.Navigate(WindowUserLogin.pages["Page2FA"]);
+                    WindowUserLogin.Navigate("PageLogin", "Page2FA");
                 }
             }
             catch (Exception ex)

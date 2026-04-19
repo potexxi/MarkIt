@@ -25,6 +25,7 @@ namespace MarkIt
         public MainWindow()
         {
             InitializeComponent();
+            Logger.Init();
             WindowUserLogin window = new WindowUserLogin();
             window.ShowDialog();
 

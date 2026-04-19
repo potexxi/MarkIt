@@ -34,7 +34,7 @@ namespace MarkIt.login_register
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PageLogin"]);
+            WindowUserLogin.Navigate("Page2FA", "PageLogin");
         }
 
         private void ButtonOK_Click(object sender, RoutedEventArgs e)

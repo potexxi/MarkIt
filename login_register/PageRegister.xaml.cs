@@ -27,7 +27,7 @@ namespace MarkIt.login_register
 
         private void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
-            WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PageLogin"]);
+            WindowUserLogin.Navigate("PageRegister", "PageLogin");
         }
     }
 }

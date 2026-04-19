@@ -27,12 +27,12 @@ namespace MarkIt.login_register
 
         private void ButtonReset_Click(object sender, RoutedEventArgs e)
         {
-            WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PageLogin"]);
+            WindowUserLogin.Navigate("PagePassword3", "PageLogin");
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            WindowUserLogin.frame.Navigate(WindowUserLogin.pages["PageLogin"]);
+            WindowUserLogin.Navigate("PagePassword3", "PageLogin");
         }
     }
 }
