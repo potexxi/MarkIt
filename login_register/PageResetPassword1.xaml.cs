@@ -92,8 +92,8 @@ namespace MarkIt.login_register
                 }
                 catch
                 {
-                    throw new Exception("sending");
                     Logger.logger.Fatal($"Sending E-Mail to {emailAddress}.");
+                    throw new Exception("sending");
                 }
             }
             catch (Exception e)
