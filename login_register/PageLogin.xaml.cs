@@ -60,8 +60,8 @@ namespace MarkIt.login_register
                 {
                     MainWindow.currentUser = user;
                     PageRecetPassword1.SendEmail(user.Email, "2fa");
-                    Page2FA.Timer.Start();
                     WindowUserLogin.Navigate("PageLogin", "Page2FA");
+                    Page2FA.Timer.Start();
                 }
             }
             catch (Exception ex)
@@ -86,7 +86,7 @@ namespace MarkIt.login_register
                 if (ex.Message == "server")
                     MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
                 else if (ex.Message == "users file")
-                    MessageBox.Show("File on the server not found, please try again.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
                 return new ClassUser(-1, "error", "error");
             }
             foreach(ClassUser user in userList.Users)
@@ -113,7 +113,7 @@ namespace MarkIt.login_register
             MainWindow.currentUser = new ClassUser(-1, "guest", "guest");
         }
 
-        public ClassUserList GetUsersFromServer(int port, string publicIP, string username, string privateKeyFilePath)
+        public static ClassUserList GetUsersFromServer(int port, string publicIP, string username, string privateKeyFilePath)
         {
             // code inspired by StackOverflow/Autocompletion
             ConnectionInfo connection;
@@ -162,12 +162,12 @@ namespace MarkIt.login_register
                 {
                     throw new Exception("server");
                 }
-                Logger.logger.Error("No file \"users.json\".");
+                Logger.logger.Fatal("No file \"users.json\".");
                 throw new Exception("users file");
             }
         }
 
-        public async Task WriteUsersToServer(int port, string publicIP, string username, string privateKeyFilePath, ClassUserList userList)
+        public static void WriteUsersToServer(int port, string publicIP, string username, string privateKeyFilePath, ClassUserList userList)
         {
             // code inspired by StackOverflow/Autocompletion
             ConnectionInfo connection;
@@ -197,11 +197,14 @@ namespace MarkIt.login_register
                         Logger.logger.Error("Server unreachable.");
                         throw new Exception("server");
                     }
-
+                    JsonSerializerOptions jsonoptions = new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    };
                     using (var stream = client.OpenWrite("files/users.json"))
                     using (StreamWriter writer = new StreamWriter(stream))
                     {
-                        string json = JsonSerializer.Serialize(userList);
+                        string json = JsonSerializer.Serialize(userList, options: jsonoptions);
                         writer.Write(json);
                         Logger.logger.Debug("Successfully wrote users to server.");
 

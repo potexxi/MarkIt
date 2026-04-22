@@ -29,5 +29,74 @@ namespace MarkIt.login_register
         {
             WindowUserLogin.Navigate("PageRegister", "PageLogin");
         }
+
+        private void ButtonRegister_Click(object sender, RoutedEventArgs e)
+        {
+            if(TextBoxPassword1.Password == TextBoxPassword2.Password)
+            {
+                ClassUserList userList;
+                try
+                {
+                    userList = PageLogin.GetUsersFromServer(10220, "potexxi.duckdns.org", "markit", "sources/markitkey");
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message == "server")
+                        MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                    else if (ex.Message == "users file")
+                        MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                int highestId = -1;
+                foreach (ClassUser user in userList.Users)
+                {
+                    if(user.Email == TextBoxEmail.Text)
+                    {
+                        LabelEmail.Visibility = Visibility.Visible;
+                        TextBoxEmail.BorderBrush = Brushes.LightCoral;
+                        TextBoxEmail.BorderThickness = new Thickness(3);
+                        return;
+                    }
+                    if (user.Id > highestId)
+                    {
+                        highestId = user.Id;
+                    }
+                }
+                if (PageRecetPassword1.SendEmail(TextBoxEmail.Text, "register"))
+                {
+                    MainWindow.currentUser = new ClassUser(highestId + 1, TextBoxEmail.Text, TextBoxPassword2.Password);
+                    userList.Users.Add(MainWindow.currentUser);
+                    PageLogin.WriteUsersToServer(10220, "potexxi.duckdns.org", "markit", "sources/markitkey", userList);
+                    WindowUserLogin.Navigate("PageRegister", "Page2FA");
+                    Page2FA.Timer.Start();
+                }
+            }
+            else
+            {
+                TextBoxPassword1.BorderBrush = Brushes.LightCoral;
+                TextBoxPassword2.BorderBrush = Brushes.LightCoral;
+                TextBoxPassword1.BorderThickness = new Thickness(3);
+                TextBoxPassword2.BorderThickness = new Thickness(3);
+                LabelPasswordNotCorrect1.Visibility = Visibility.Visible;
+                LabelPasswordNotCorrect2.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void TextBoxPassword_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            TextBoxPassword1.BorderBrush = Brushes.Gray;
+            TextBoxPassword2.BorderBrush = Brushes.Gray;
+            TextBoxPassword1.BorderThickness = new Thickness(1);
+            TextBoxPassword2.BorderThickness = new Thickness(1);
+            LabelPasswordNotCorrect1.Visibility = Visibility.Hidden;
+            LabelPasswordNotCorrect2.Visibility = Visibility.Hidden;
+        }
+
+        private void TextBoxEmail_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            LabelEmail.Visibility = Visibility.Hidden;
+            TextBoxEmail.BorderBrush = Brushes.Gray;
+            TextBoxEmail.BorderThickness = new Thickness(1);
+        }
     }
 }
