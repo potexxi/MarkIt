@@ -65,6 +65,8 @@ namespace MarkIt.login_register
                 if (PageRecetPassword1.SendEmail(TextBoxEmail.Text, "register"))
                 {
                     MainWindow.currentUser = new ClassUser(highestId + 1, TextBoxEmail.Text, TextBoxPassword2.Password);
+                    userList.Users.Add(MainWindow.currentUser);
+                    PageLogin.WriteUsersToServer(10220, "potexxi.duckdns.org", "markit", "sources/markitkey", userList);
                     WindowUserLogin.Navigate("PageRegister", "Page2FA");
                     Page2FA.Timer.Start();
                 }
