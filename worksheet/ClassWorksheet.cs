@@ -23,6 +23,10 @@ namespace MarkIt.worksheet
         private Grid gridWorkSheet;
         private List<Canvas> canvisWsPages;
 
+        // muss vielleicht später in ein Settings-file / Class geändert werden
+        private double Zoom = 0.5;
+        private double pageMargin = 50;
+
         public ClassWorksheet()
         {
 
@@ -35,49 +39,42 @@ namespace MarkIt.worksheet
         public void Init()
         // Nur einmal ausfuehren Laded alle Informationen aus der Klasse und erstellt die Pages (welche dann mit Render() gerendert werden können)!
         {
-            wsStringPages.Add("test");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+
             ScrollViewer ScrollViewerWorksheet = new ScrollViewer();
             ScrollViewerWorksheet.HorizontalAlignment = HorizontalAlignment.Stretch;
             ScrollViewerWorksheet.VerticalAlignment = VerticalAlignment.Stretch;
-
+            ScrollViewerWorksheet.Height = 1000; // Muss in window Size mit der current window Size geändert werden
 
             StackPanel stackpanelWorksheet = new StackPanel();
-            //stackpanelWorksheet.Width = gridWorkSheet.Width;
-            //stackpanelWorksheet.Height = gridWorkSheet.Height;
 
-            for (int pageNumber = 0; pageNumber < this.wsStringPages.Count(); pageNumber ++)
+            for (int pageNumber = 0; pageNumber < this.wsStringPages.Count(); pageNumber++)
             {
-                Grid CanvasPage = new Grid();
-                CanvasPage.Height = this.wsHeight;
-                CanvasPage.Width = this.wsWidth;
-                CanvasPage.Margin = new Thickness(0, 100, 0, 0);
+                Grid GridPage = new Grid();
+                GridPage.Height = this.wsHeight * this.Zoom;
+                GridPage.Width = this.wsWidth * this.Zoom;
+                GridPage.Margin = new Thickness(0, pageMargin, 0, 0);
 
-                CanvasPage.Background = Brushes.Black;
-                PageTextBoxes(CanvasPage);
-                stackpanelWorksheet.Children.Add(CanvasPage);
+                GridPage.Background = Brushes.Red;
+
+                TextBox TextboxPage = new TextBox();
+
+                TextboxPage.AcceptsReturn = true; // Zeilen Umbrüche mit Enter erlauben
+
+                GridPage.Children.Add(TextboxPage);
+                stackpanelWorksheet.Children.Add(GridPage);
             }
             ScrollViewerWorksheet.Content = stackpanelWorksheet;
             this.gridWorkSheet.Children.Add(ScrollViewerWorksheet);
 
         }
 
-        private void PageTextBoxes(Grid gridPage)
-        // Unterteilt eine Seite in TextBoxen (Für # | " | ' | * |)
+        private void DisplayedPages()
+        // Diese Methode soll Anzeigen, auf welcher Seite sich der Nutzer Befindet (Um potentziellen Lag bei vielen Pages zu vermeiden)
         {
-            gridPage.Children.Clear();
-            double TextBoxHeight = 35;
-            StackPanel StackPanelLines = new StackPanel();
-            StackPanelLines.Orientation = Orientation.Vertical;
-            StackPanelLines.VerticalAlignment = VerticalAlignment.Center;
-            StackPanelLines.HorizontalAlignment = HorizontalAlignment.Center;
-            for (int line = 0; line < (gridPage.Height / TextBoxHeight); line++)
-            {
-                TextBox TextboxLine = new TextBox();
-                TextboxLine.Height = TextBoxHeight;
-                TextboxLine.Width = gridPage.Width;
-                StackPanelLines.Children.Add(TextboxLine);
-            }
-            gridPage.Children.Add(StackPanelLines);
+            
         }
 
         public void Render()
