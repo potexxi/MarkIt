@@ -47,6 +47,7 @@ namespace MarkIt.login_register
                         MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
+                int highestId = -1;
                 foreach (ClassUser user in userList.Users)
                 {
                     if(user.Email == TextBoxEmail.Text)
@@ -54,7 +55,18 @@ namespace MarkIt.login_register
                         LabelEmail.Visibility = Visibility.Visible;
                         TextBoxEmail.BorderBrush = Brushes.LightCoral;
                         TextBoxEmail.BorderThickness = new Thickness(3);
+                        return;
                     }
+                    if (user.Id > highestId)
+                    {
+                        highestId = user.Id;
+                    }
+                }
+                if (PageRecetPassword1.SendEmail(TextBoxEmail.Text, "register"))
+                {
+                    MainWindow.currentUser = new ClassUser(highestId + 1, TextBoxEmail.Text, TextBoxPassword2.Password);
+                    WindowUserLogin.Navigate("PageRegister", "Page2FA");
+                    Page2FA.Timer.Start();
                 }
             }
             else
