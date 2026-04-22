@@ -29,5 +29,32 @@ namespace MarkIt.login_register
         {
             WindowUserLogin.Navigate("PageRegister", "PageLogin");
         }
+
+        private void ButtonRegister_Click(object sender, RoutedEventArgs e)
+        {
+            if(TextBoxPassword1.Password == TextBoxPassword2.Password)
+            {
+
+            }
+            else
+            {
+                TextBoxPassword1.BorderBrush = Brushes.LightCoral;
+                TextBoxPassword2.BorderBrush = Brushes.LightCoral;
+                TextBoxPassword1.BorderThickness = new Thickness(3);
+                TextBoxPassword2.BorderThickness = new Thickness(3);
+                LabelPasswordNotCorrect1.Visibility = Visibility.Visible;
+                LabelPasswordNotCorrect2.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void TextBoxPassword_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            TextBoxPassword1.BorderBrush = Brushes.Gray;
+            TextBoxPassword2.BorderBrush = Brushes.Gray;
+            TextBoxPassword1.BorderThickness = new Thickness(1);
+            TextBoxPassword2.BorderThickness = new Thickness(1);
+            LabelPasswordNotCorrect1.Visibility = Visibility.Hidden;
+            LabelPasswordNotCorrect2.Visibility = Visibility.Hidden;
+        }
     }
 }

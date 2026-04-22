@@ -167,7 +167,7 @@ namespace MarkIt.login_register
             }
         }
 
-        public async Task WriteUsersToServer(int port, string publicIP, string username, string privateKeyFilePath, ClassUserList userList)
+        public void WriteUsersToServer(int port, string publicIP, string username, string privateKeyFilePath, ClassUserList userList)
         {
             // code inspired by StackOverflow/Autocompletion
             ConnectionInfo connection;
@@ -197,11 +197,14 @@ namespace MarkIt.login_register
                         Logger.logger.Error("Server unreachable.");
                         throw new Exception("server");
                     }
-
+                    JsonSerializerOptions jsonoptions = new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    };
                     using (var stream = client.OpenWrite("files/users.json"))
                     using (StreamWriter writer = new StreamWriter(stream))
                     {
-                        string json = JsonSerializer.Serialize(userList);
+                        string json = JsonSerializer.Serialize(userList, options: jsonoptions);
                         writer.Write(json);
                         Logger.logger.Debug("Successfully wrote users to server.");
 

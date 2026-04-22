@@ -17,22 +17,28 @@
                     <Label Content="E-Mail Address" Foreground="Gray" Margin="24,0,0,0" FontFamily="Leelawadee UI"/>
                     <StackPanel Orientation="Horizontal" Margin="0,-3,0,0">
                         <Image Source="/images/profil-user-login.jpg" Width="45" Margin="30,0,0,0"></Image>
-                        <TextBox Width="290" VerticalContentAlignment="Center" MaxLength="100"></TextBox>
+                        <TextBox x:Name="TextBoxEmail" Width="290" VerticalContentAlignment="Center" MaxLength="100"></TextBox>
                     </StackPanel>
                     <!--Password field-->
-                    <Label Content="Enter Password" Foreground="Gray" Margin="24,5,0,0" FontFamily="Leelawadee UI"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Enter Password" Foreground="Gray" Margin="24,5,0,0" FontFamily="Leelawadee UI"/>
+                        <Label x:Name="LabelPasswordNotCorrect1" Visibility="Hidden" Content="Password not the same." Foreground="#FFFF3E3E" Margin="119,10,0,0" FontFamily="Leelawadee UI"/>
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,-3,0,0">
                         <Image Source="/images/lock-user-login.jpg" Width="45" Margin="30,0,0,0"></Image>
-                        <PasswordBox Width="290" VerticalContentAlignment="Center" MaxLength="35"></PasswordBox>
+                        <PasswordBox x:Name="TextBoxPassword1" Width="290" VerticalContentAlignment="Center" MaxLength="35" PasswordChanged="TextBoxPassword_PasswordChanged"></PasswordBox>
                     </StackPanel>
                     <!--Password field again-->
-                    <Label Content="Enter Password again" Foreground="Gray" Margin="24,5,0,0" FontFamily="Leelawadee UI"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Enter Password again" Foreground="Gray" Margin="24,5,0,0" FontFamily="Leelawadee UI"/>
+                        <Label x:Name="LabelPasswordNotCorrect2" Visibility="Hidden" Content="Password not the same." Foreground="#FFFF3E3E" Margin="86,10,0,0" FontFamily="Leelawadee UI"/>
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,-3,0,0">
                         <Image Source="/images/lock-user-login.jpg" Width="45" Margin="30,0,0,0"></Image>
-                        <PasswordBox Width="290" VerticalContentAlignment="Center" MaxLength="35"></PasswordBox>
+                        <PasswordBox x:Name="TextBoxPassword2" Width="290" PasswordChanged="TextBoxPassword_PasswordChanged" VerticalContentAlignment="Center" MaxLength="35"></PasswordBox>
                     </StackPanel>
                     <!--Register button-->
-                    <Button Cursor="Hand" Content="REGISTER" Width="200" Height="40" FontSize="18" Margin="0,20,0,0" FontFamily="Leelawadee UI"/>
+                    <Button x:Name="ButtonRegister" Cursor="Hand" Content="REGISTER" Width="200" Height="40" FontSize="18" Margin="0,20,0,0" FontFamily="Leelawadee UI" Click="ButtonRegister_Click"/>
                 </StackPanel>
             </Border>
             <!--Register Button-->
