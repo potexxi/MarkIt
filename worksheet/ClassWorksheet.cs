@@ -35,27 +35,49 @@ namespace MarkIt.worksheet
         public void Init()
         // Nur einmal ausfuehren Laded alle Informationen aus der Klasse und erstellt die Pages (welche dann mit Render() gerendert werden können)!
         {
+            wsStringPages.Add("test");
             ScrollViewer ScrollViewerWorksheet = new ScrollViewer();
-            ScrollViewerWorksheet.HorizontalAlignment = HorizontalAlignment.Right;
-            this.gridWorkSheet.Children.Add(ScrollViewerWorksheet);
+            ScrollViewerWorksheet.HorizontalAlignment = HorizontalAlignment.Stretch;
+            ScrollViewerWorksheet.VerticalAlignment = VerticalAlignment.Stretch;
 
-            StackPanel stackpannelWorksheet = new StackPanel();
 
-            for (int pageNumber = 0; pageNumber <= this.wsStringPages.Count(); pageNumber ++)
+            StackPanel stackpanelWorksheet = new StackPanel();
+            //stackpanelWorksheet.Width = gridWorkSheet.Width;
+            //stackpanelWorksheet.Height = gridWorkSheet.Height;
+
+            for (int pageNumber = 0; pageNumber < this.wsStringPages.Count(); pageNumber ++)
             {
-                Canvas CanvasPage = new Canvas();
+                Grid CanvasPage = new Grid();
                 CanvasPage.Height = this.wsHeight;
                 CanvasPage.Width = this.wsWidth;
                 CanvasPage.Margin = new Thickness(0, 100, 0, 0);
 
                 CanvasPage.Background = Brushes.Black;
-
-                stackpannelWorksheet.Children.Add(CanvasPage);
+                PageTextBoxes(CanvasPage);
+                stackpanelWorksheet.Children.Add(CanvasPage);
             }
+            ScrollViewerWorksheet.Content = stackpanelWorksheet;
+            this.gridWorkSheet.Children.Add(ScrollViewerWorksheet);
 
-            stackpannelWorksheet.Width = gridWorkSheet.ActualWidth;
-            stackpannelWorksheet.Height = gridWorkSheet.ActualHeight;
-            ScrollViewerWorksheet.Content = stackpannelWorksheet;
+        }
+
+        private void PageTextBoxes(Grid gridPage)
+        // Unterteilt eine Seite in TextBoxen (Für # | " | ' | * |)
+        {
+            gridPage.Children.Clear();
+            double TextBoxHeight = 35;
+            StackPanel StackPanelLines = new StackPanel();
+            StackPanelLines.Orientation = Orientation.Vertical;
+            StackPanelLines.VerticalAlignment = VerticalAlignment.Center;
+            StackPanelLines.HorizontalAlignment = HorizontalAlignment.Center;
+            for (int line = 0; line < (gridPage.Height / TextBoxHeight); line++)
+            {
+                TextBox TextboxLine = new TextBox();
+                TextboxLine.Height = TextBoxHeight;
+                TextboxLine.Width = gridPage.Width;
+                StackPanelLines.Children.Add(TextboxLine);
+            }
+            gridPage.Children.Add(StackPanelLines);
         }
 
         public void Render()
