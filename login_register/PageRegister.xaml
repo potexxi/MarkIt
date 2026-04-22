@@ -14,10 +14,13 @@
                 <StackPanel Orientation="Vertical" Width="400" Height="360">
                     <Label Content="REGISTER" Margin="0,8,0,0" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Leelawadee UI" FontSize="35" FontWeight="Bold"/>
                     <!--Email field-->
-                    <Label Content="E-Mail Address" Foreground="Gray" Margin="24,0,0,0" FontFamily="Leelawadee UI"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="E-Mail Address" Foreground="Gray" Margin="24,0,0,0" FontFamily="Leelawadee UI"/>
+                        <Label x:Name="LabelEmail" Visibility="Hidden" Content="E-Mail is already in use." Foreground="#FFFF3E3E" Margin="119,10,0,0" FontFamily="Leelawadee UI"/>
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,-3,0,0">
                         <Image Source="/images/profil-user-login.jpg" Width="45" Margin="30,0,0,0"></Image>
-                        <TextBox x:Name="TextBoxEmail" Width="290" VerticalContentAlignment="Center" MaxLength="100"></TextBox>
+                        <TextBox x:Name="TextBoxEmail" TextChanged="TextBoxEmail_TextChanged" Width="290" VerticalContentAlignment="Center" MaxLength="100"></TextBox>
                     </StackPanel>
                     <!--Password field-->
                     <StackPanel Orientation="Horizontal">

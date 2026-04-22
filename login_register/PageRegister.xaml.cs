@@ -34,7 +34,28 @@ namespace MarkIt.login_register
         {
             if(TextBoxPassword1.Password == TextBoxPassword2.Password)
             {
-
+                ClassUserList userList;
+                try
+                {
+                    userList = PageLogin.GetUsersFromServer(10220, "potexxi.duckdns.org", "markit", "sources/markitkey");
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message == "server")
+                        MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                    else if (ex.Message == "users file")
+                        MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                foreach (ClassUser user in userList.Users)
+                {
+                    if(user.Email == TextBoxEmail.Text)
+                    {
+                        LabelEmail.Visibility = Visibility.Visible;
+                        TextBoxEmail.BorderBrush = Brushes.LightCoral;
+                        TextBoxEmail.BorderThickness = new Thickness(3);
+                    }
+                }
             }
             else
             {
@@ -55,6 +76,13 @@ namespace MarkIt.login_register
             TextBoxPassword2.BorderThickness = new Thickness(1);
             LabelPasswordNotCorrect1.Visibility = Visibility.Hidden;
             LabelPasswordNotCorrect2.Visibility = Visibility.Hidden;
+        }
+
+        private void TextBoxEmail_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            LabelEmail.Visibility = Visibility.Hidden;
+            TextBoxEmail.BorderBrush = Brushes.Gray;
+            TextBoxEmail.BorderThickness = new Thickness(1);
         }
     }
 }
