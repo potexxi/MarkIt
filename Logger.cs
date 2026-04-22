@@ -11,6 +11,8 @@ namespace MarkIt
     {
         public static Serilog.ILogger logger { get; set; }
 
+
+
         public static void Init()
         {
             LoggerConfiguration config = new LoggerConfiguration()
