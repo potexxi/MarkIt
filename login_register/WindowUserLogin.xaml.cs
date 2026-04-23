@@ -32,8 +32,9 @@ namespace MarkIt
             FrameMain = MainFrame;
             pages = new Dictionary<string, Page>();
             pages.Add("PageLogin", new PageLogin());
-            FrameMain.Navigate(pages["PageLogin"]);
-            // TODO: check for remembered users and build a ui, to select a user, like in netflix
+            // TODO fix that, if no remembered user => instant login window
+            //pages.Add("PageRemember", new PageRememberedUser());
+            FrameMain.Navigate(new PageRememberedUser());
         }
 
         private void Window_Closed(object sender, EventArgs e)
