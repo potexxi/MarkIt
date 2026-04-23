@@ -27,12 +27,36 @@ namespace MarkIt.login_register
 
         private void ButtonReset_Click(object sender, RoutedEventArgs e)
         {
-            WindowUserLogin.Navigate("PagePassword3", "PageLogin");
+            if(Password1.Password != Password2.Password)
+            {
+                Password1.BorderThickness = new Thickness(3);
+                Password1.BorderBrush = Brushes.LightCoral;
+                Password2.BorderThickness = new Thickness(3);
+                Password2.BorderBrush = Brushes.LightCoral;
+            }
+            else
+            {
+                ClassUserList userList = PageLogin.GetUsersFromServer(10220, "potexxi.duckdns.org", "markit", "sources/markitkey");
+                foreach(ClassUser user in userList.Users)
+                {
+                    // TODO: change password
+                }
+                PageLogin.WriteUsersToServer(10220, "potexxi.duckdns.org", "markit", "sources/markitkey", userList);
+                WindowUserLogin.Navigate("PagePassword3", "PageLogin");
+            } 
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             WindowUserLogin.Navigate("PagePassword3", "PageLogin");
+        }
+
+        private void Password_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            Password1.BorderBrush = Brushes.Gray;
+            Password1.BorderThickness = new Thickness(3);
+            Password2.BorderBrush = Brushes.Gray;
+            Password2.BorderThickness = new Thickness(1);
         }
     }
 }
