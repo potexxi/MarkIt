@@ -1,6 +1,7 @@
 ﻿using MarkIt.login_register;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,9 +33,15 @@ namespace MarkIt
             FrameMain = MainFrame;
             pages = new Dictionary<string, Page>();
             pages.Add("PageLogin", new PageLogin());
-            // TODO fix that, if no remembered user => instant login window
-            //pages.Add("PageRemember", new PageRememberedUser());
-            FrameMain.Navigate(new PageRememberedUser());
+            ClassUserList? userList = PageLogin.GetRemeberedUsers();
+            if (userList == null)
+            {
+                FrameMain.Navigate(pages["PageLogin"]);
+            }
+            else
+            {
+                FrameMain.Navigate(new PageRememberedUser(userList));
+            }   
         }
 
         private void Window_Closed(object sender, EventArgs e)

@@ -233,9 +233,17 @@ namespace MarkIt.login_register
         {
             if (File.Exists("sources/remembered.json"))
             {
-                using (StreamReader reader = new StreamReader("sources/remembered.json"))
+                try
                 {
-                    return JsonSerializer.Deserialize<ClassUserList>(reader.ReadToEnd());
+                    using (StreamReader reader = new StreamReader("sources/remembered.json"))
+                    {
+                        return JsonSerializer.Deserialize<ClassUserList>(reader.ReadToEnd());
+                    }
+                }
+                catch
+                {
+                    Logger.logger.Warning("remembered.json incorrect format.");
+                    return null;
                 }
             }
             else

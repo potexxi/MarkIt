@@ -8,18 +8,11 @@ namespace MarkIt.login_register
     {
         private ClassUserList? _userList;
 
-        public PageRememberedUser()
+        public PageRememberedUser(ClassUserList userList)
         {
             InitializeComponent();
-            _userList = PageLogin.GetRemeberedUsers();
-            if (_userList == null)
-            {
-                WindowUserLogin.FrameMain.Navigate(WindowUserLogin.pages["PageLogin"]);
-            }
-            else
-            {
-                LoadUserButtons();
-            }
+            _userList = userList;
+            LoadUserButtons();
         }
 
         private void LoadUserButtons()
@@ -54,13 +47,12 @@ namespace MarkIt.login_register
 
         private void ButtonOtherUser_Click(object sender, RoutedEventArgs e)
         {
-            //WindowUserLogin.FrameMain.Navigate(WindowUserLogin.pages["PageLogin"]);
-            // TODO
+            WindowUserLogin.Navigate("PageRemember", "PageLogin");
         }
 
         private void ButtonRegister_Click(object sender, RoutedEventArgs e)
         {
-            // TODO
+            WindowUserLogin.Navigate("PageRemember", "PageRegister");
         }
 
         private void ButtonGuest_Click(object sender, RoutedEventArgs e)
