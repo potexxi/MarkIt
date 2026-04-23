@@ -8,6 +8,9 @@
     <Compile Update="login_register\PageLogin.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="login_register\PageRememberedUser.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="login_register\PageResetPassword1.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

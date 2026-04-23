@@ -42,8 +42,13 @@ namespace MarkIt.login_register
             if($"{PageRecetPassword1.code:D6}" == TextBoxCode.Text)
             {
                 WindowUserLogin.Guest = true;
-                WindowUserLogin.window.Close();
+                if(PageLogin.KeepMeLogedIn == true)
+                {
+                    PageLogin.WriteToRememberedUsers(MainWindow.currentUser);
+                }
                 Timer.Stop();
+                timerCount = 90;
+                WindowUserLogin.window.Close();
             }
             else
             {

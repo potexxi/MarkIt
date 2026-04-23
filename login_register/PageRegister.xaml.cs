@@ -37,7 +37,7 @@ namespace MarkIt.login_register
                 ClassUserList userList;
                 try
                 {
-                    userList = PageLogin.GetUsersFromServer(10220, "potexxi.duckdns.org", "markit", "sources/markitkey");
+                    userList = PageLogin.GetUsersFromServer();
                 }
                 catch (Exception ex)
                 {
@@ -66,7 +66,7 @@ namespace MarkIt.login_register
                 {
                     MainWindow.currentUser = new ClassUser(highestId + 1, TextBoxEmail.Text, TextBoxPassword2.Password);
                     userList.Users.Add(MainWindow.currentUser);
-                    PageLogin.WriteUsersToServer(10220, "potexxi.duckdns.org", "markit", "sources/markitkey", userList);
+                    PageLogin.WriteUsersToServer(userList);
                     WindowUserLogin.Navigate("PageRegister", "Page2FA");
                     Page2FA.Timer.Start();
                 }

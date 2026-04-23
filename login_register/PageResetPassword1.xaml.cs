@@ -32,10 +32,26 @@ namespace MarkIt.login_register
         private void ButtonSend_Click(object sender, RoutedEventArgs e)
         {
             email = TextBoxEmail.Text;
+            ClassUserList userList = PageLogin.GetUsersFromServer();
+            bool exists = false;
+            foreach(ClassUser user in userList.Users)
+            {
+                if (user.Email == email) { exists = true; break; }
+            }
+            if (!exists)
+            {
+                MessageBox.Show("This user does not exist. Enter an existing user or create an account!", "No user", MessageBoxButton.OK, MessageBoxImage.Question);
+                return;
+            }
             if (SendEmail(email, "password reset"))
             {
                 WindowUserLogin.Navigate("PagePassword1", "PagePassword2");
                 PageRecetPassword2.Timer.Start();
+            }
+            else
+            {
+                MessageBox.Show("Failed to send email. Please try again!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logger.logger.Fatal("Failed to send email.");
             }
         }
 
@@ -66,7 +82,7 @@ namespace MarkIt.login_register
                 }
                 catch
                 {
-                    Logger.logger.Error($"Mailaddress {emailAddress} not correct format.");
+                    Logger.logger.Warning($"Mailaddress {emailAddress} not correct format.");
                     throw new Exception("mailaddress");
                 }
                 MailMessage mail = new MailMessage(from, to);
@@ -94,6 +110,7 @@ namespace MarkIt.login_register
                 try
                 {
                     client.Send(mail);
+                    Logger.logger.Information($"Send email to \"{emailAddress}\" with code \"{code}\"");
                     return true;
                 }
                 catch

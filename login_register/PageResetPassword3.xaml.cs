@@ -31,19 +31,24 @@ namespace MarkIt.login_register
             {
                 Password1.BorderThickness = new Thickness(3);
                 Password1.BorderBrush = Brushes.LightCoral;
+                LabelPasswordFalse1.Visibility = Visibility.Visible;
                 Password2.BorderThickness = new Thickness(3);
                 Password2.BorderBrush = Brushes.LightCoral;
+                LabelPasswordFalse2.Visibility = Visibility.Visible;
             }
             else
             {
-                ClassUserList userList = PageLogin.GetUsersFromServer(10220, "potexxi.duckdns.org", "markit", "sources/markitkey");
+                ClassUserList userList = PageLogin.GetUsersFromServer();
                 foreach(ClassUser user in userList.Users)
                 {
-                    // TODO: change password
+                    if (user.Email == PageRecetPassword1.email)
+                    {
+                        user.Password = Password2.Password;
+                    }
                 }
-                PageLogin.WriteUsersToServer(10220, "potexxi.duckdns.org", "markit", "sources/markitkey", userList);
+                PageLogin.WriteUsersToServer(userList);
                 WindowUserLogin.Navigate("PagePassword3", "PageLogin");
-            } 
+            }
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
@@ -54,9 +59,11 @@ namespace MarkIt.login_register
         private void Password_PasswordChanged(object sender, RoutedEventArgs e)
         {
             Password1.BorderBrush = Brushes.Gray;
-            Password1.BorderThickness = new Thickness(3);
+            Password1.BorderThickness = new Thickness(1);
+            LabelPasswordFalse1.Visibility = Visibility.Hidden;
             Password2.BorderBrush = Brushes.Gray;
             Password2.BorderThickness = new Thickness(1);
+            LabelPasswordFalse2.Visibility = Visibility.Hidden;
         }
     }
 }

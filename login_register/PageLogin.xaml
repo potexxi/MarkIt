@@ -32,7 +32,7 @@
                     </StackPanel>
                     <!--Remember me and forgot password-->
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                        <CheckBox Cursor="Hand" Content="Remember Me" Foreground="White" Margin="29,6,0,0" FontFamily="Leelawadee UI"/>
+                        <CheckBox x:Name="CheckBoxRemember" Cursor="Hand" Content="Remember Me" Foreground="White" Margin="29,6,0,0" FontFamily="Leelawadee UI"/>
                         <Label Cursor="Hand" Content="Forgot Password" FontStyle="Italic" Foreground="White" Margin="140,0,0,0" FontFamily="Leelawadee UI" MouseEnter="Label_MouseEnter" MouseLeave="Label_MouseLeave" PreviewMouseDown="Label_PreviewMouseDown"/>
                     </StackPanel>
                     <!--Login button-->

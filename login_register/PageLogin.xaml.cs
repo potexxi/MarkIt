@@ -24,6 +24,7 @@ namespace MarkIt.login_register
     /// </summary>
     public partial class PageLogin : Page
     {
+        public static bool KeepMeLogedIn { get; private set; } = false;
         public PageLogin()
         {
             InitializeComponent();
@@ -58,6 +59,10 @@ namespace MarkIt.login_register
                 ClassUser user = CheckUserExists();
                 if (user.Email != "error")
                 {
+                    if(CheckBoxRemember.IsChecked == true)
+                    {
+                        KeepMeLogedIn = true;
+                    }
                     MainWindow.currentUser = user;
                     PageRecetPassword1.SendEmail(user.Email, "2fa");
                     WindowUserLogin.Navigate("PageLogin", "Page2FA");
@@ -79,7 +84,7 @@ namespace MarkIt.login_register
             ClassUserList userList;
             try
             {
-                userList = GetUsersFromServer(10220, "potexxi.duckdns.org", "markit", "sources/markitkey");
+                userList = GetUsersFromServer();
             }
             catch(Exception ex) 
             {
@@ -113,17 +118,17 @@ namespace MarkIt.login_register
             MainWindow.currentUser = new ClassUser(-1, "guest", "guest");
         }
 
-        public static ClassUserList GetUsersFromServer(int port, string publicIP, string username, string privateKeyFilePath)
+        public static ClassUserList GetUsersFromServer()
         {
             // code inspired by StackOverflow/Autocompletion
             ConnectionInfo connection;
             try
             {
 
-                PrivateKeyFile privateKey = new PrivateKeyFile(privateKeyFilePath);
+                PrivateKeyFile privateKey = new PrivateKeyFile(ServerSettings.KeyFilePath);
                 
-                PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(username, privateKey);
-                connection = new ConnectionInfo(publicIP, port, username, privateKeyAuth);
+                PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(ServerSettings.Username, privateKey);
+                connection = new ConnectionInfo(ServerSettings.PublicIp, ServerSettings.Port, ServerSettings.Username, privateKeyAuth);
                 Logger.logger.Debug("Successfully created connection with private key.");
             }
             catch
@@ -167,16 +172,16 @@ namespace MarkIt.login_register
             }
         }
 
-        public static void WriteUsersToServer(int port, string publicIP, string username, string privateKeyFilePath, ClassUserList userList)
+        public static void WriteUsersToServer(ClassUserList userList)
         {
             // code inspired by StackOverflow/Autocompletion
             ConnectionInfo connection;
             try
             {
-                PrivateKeyFile privateKey = new PrivateKeyFile(privateKeyFilePath);
+                PrivateKeyFile privateKey = new PrivateKeyFile(ServerSettings.KeyFilePath);
 
-                PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(username, privateKey);
-                connection = new ConnectionInfo(publicIP, port, username, privateKeyAuth);
+                PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(ServerSettings.Username, privateKey);
+                connection = new ConnectionInfo(ServerSettings.PublicIp, ServerSettings.Port, ServerSettings.Username, privateKeyAuth);
                 Logger.logger.Debug("Successfully created connection with private key.");
             }
             catch
@@ -222,6 +227,39 @@ namespace MarkIt.login_register
                 throw new Exception("users file");
             }
 
+        }
+
+        public static ClassUserList? GetRemeberedUsers()
+        {
+            if (File.Exists("sources/remembered.json"))
+            {
+                using (StreamReader reader = new StreamReader("sources/remembered.json"))
+                {
+                    return JsonSerializer.Deserialize<ClassUserList>(reader.ReadToEnd());
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static void WriteToRememberedUsers(ClassUser user)
+        {
+            ClassUserList? userList = GetRemeberedUsers();
+            if(userList == null)
+            {
+                userList = new ClassUserList();
+            }
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+            userList.Users.Add(user);
+            using(StreamWriter writer = new StreamWriter("sources/remembered.json"))
+            {
+                writer.Write(JsonSerializer.Serialize(userList, options: options));
+            }
         }
 
         private void TextBoxEmail_TextChanged(object sender, TextChangedEventArgs e)

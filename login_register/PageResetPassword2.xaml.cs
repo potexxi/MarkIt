@@ -22,10 +22,11 @@ namespace MarkIt.login_register
     public partial class PageRecetPassword2 : Page
     {
         public static DispatcherTimer Timer { get; private set; }
-        private int timerCount = 90;
+        public static int timerCount = 90;
         public PageRecetPassword2()
         {
             InitializeComponent();
+            timerCount = 90;
             Timer = new DispatcherTimer();
             Timer.Interval = TimeSpan.FromSeconds(1);
             Timer.Tick += Timer_Tick;
