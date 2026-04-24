@@ -26,6 +26,7 @@
   <ItemGroup>
     <Resource Include="images\code-user-login.png" />
     <Resource Include="images\loading-animation.gif" />
+    <Resource Include="images\loading-animation1.gif" />
     <Resource Include="images\lock-user-login.jpg" />
     <Resource Include="images\markit-logo.png" />
     <Resource Include="images\profil-user-login.jpg" />

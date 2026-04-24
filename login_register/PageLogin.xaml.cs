@@ -85,9 +85,9 @@ namespace MarkIt.login_register
             ClassUserList? userList;
             try
             {
-                ImageLoading.Visibility = Visibility.Visible;
+                LoadingScreen.Visibility = Visibility.Visible;
                 userList = await GetUsersFromServer();
-                ImageLoading.Visibility= Visibility.Hidden;
+                LoadingScreen.Visibility= Visibility.Hidden;
                 foreach (ClassUser user in userList.Users)
                 {
                     if (user.Email == TextBoxEmail.Text)
@@ -106,11 +106,13 @@ namespace MarkIt.login_register
             }
             catch(Exception ex) 
             {
-                ImageLoading.Visibility = Visibility.Hidden;
+                LoadingScreen.Visibility = Visibility.Hidden;
                 if (ex.Message == "server")
                     MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
                 else if (ex.Message == "users file")
                     MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                else if (ex.Message == "user does not exist")
+                    throw new Exception(ex.Message);
                 return new ClassUser(-1, "error", "error");
             }
         }
