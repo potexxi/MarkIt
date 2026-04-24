@@ -29,10 +29,10 @@ namespace MarkIt.login_register
             InitializeComponent();
         }
 
-        private void ButtonSend_Click(object sender, RoutedEventArgs e)
+        private async void ButtonSend_Click(object sender, RoutedEventArgs e)
         {
             email = TextBoxEmail.Text;
-            ClassUserList userList = PageLogin.GetUsersFromServer();
+            ClassUserList userList = await PageLogin.GetUsersFromServer();
             bool exists = false;
             foreach(ClassUser user in userList.Users)
             {

@@ -30,14 +30,14 @@ namespace MarkIt.login_register
             WindowUserLogin.Navigate("PageRegister", "PageLogin");
         }
 
-        private void ButtonRegister_Click(object sender, RoutedEventArgs e)
+        private async void ButtonRegister_Click(object sender, RoutedEventArgs e)
         {
             if(TextBoxPassword1.Password == TextBoxPassword2.Password)
             {
                 ClassUserList userList;
                 try
                 {
-                    userList = PageLogin.GetUsersFromServer();
+                    userList = await PageLogin.GetUsersFromServer();
                 }
                 catch (Exception ex)
                 {

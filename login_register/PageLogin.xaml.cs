@@ -25,6 +25,7 @@ namespace MarkIt.login_register
     public partial class PageLogin : Page
     {
         public static bool KeepMeLogedIn { get; private set; } = false;
+        private bool _isloading = false;
         public PageLogin()
         {
             InitializeComponent();
@@ -52,11 +53,11 @@ namespace MarkIt.login_register
             WindowUserLogin.Navigate("PageLogin", "PageRegister");
         }
 
-        private void ButtonLogin_Click(object sender, RoutedEventArgs e)
+        private async void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                ClassUser user = CheckUserExists();
+                ClassUser user = await CheckUserExists();
                 if (user.Email != "error")
                 {
                     if(CheckBoxRemember.IsChecked == true)
@@ -79,36 +80,39 @@ namespace MarkIt.login_register
             }
         }
 
-        private ClassUser CheckUserExists()
+        private async Task<ClassUser> CheckUserExists()
         {
-            ClassUserList userList;
+            ClassUserList? userList;
             try
             {
-                userList = GetUsersFromServer();
+                ImageLoading.Visibility = Visibility.Visible;
+                userList = await GetUsersFromServer();
+                ImageLoading.Visibility= Visibility.Hidden;
+                foreach (ClassUser user in userList.Users)
+                {
+                    if (user.Email == TextBoxEmail.Text)
+                    {
+                        if (user.Password == PasswordBoxPassword.Password)
+                        {
+                            return user;
+                        }
+                        else
+                        {
+                            throw new Exception("password false");
+                        }
+                    }
+                }
+                throw new Exception("user does not exist");
             }
             catch(Exception ex) 
             {
+                ImageLoading.Visibility = Visibility.Hidden;
                 if (ex.Message == "server")
                     MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
                 else if (ex.Message == "users file")
                     MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
                 return new ClassUser(-1, "error", "error");
             }
-            foreach(ClassUser user in userList.Users)
-            {
-                if (user.Email == TextBoxEmail.Text)
-                {
-                    if(user.Password == PasswordBoxPassword.Password)
-                    {
-                        return user;
-                    }
-                    else
-                    {
-                        throw new Exception("password false");
-                    }
-                }
-            }
-            throw new Exception("user does not exist");
         }
 
         private void ButtonGuest_Click(object sender, RoutedEventArgs e)
@@ -118,58 +122,61 @@ namespace MarkIt.login_register
             MainWindow.currentUser = new ClassUser(-1, "guest", "guest");
         }
 
-        public static ClassUserList GetUsersFromServer()
+        public static Task<ClassUserList?> GetUsersFromServer()
         {
             // code inspired by StackOverflow/Autocompletion
-            ConnectionInfo connection;
-            try
+            return Task.Run(() =>
             {
-
-                PrivateKeyFile privateKey = new PrivateKeyFile(ServerSettings.KeyFilePath);
-                
-                PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(ServerSettings.Username, privateKey);
-                connection = new ConnectionInfo(ServerSettings.PublicIp, ServerSettings.Port, ServerSettings.Username, privateKeyAuth);
-                Logger.logger.Debug("Successfully created connection with private key.");
-            }
-            catch
-            {
-                Logger.logger.Error("Privat key authentication or server unreachable");
-                throw new Exception("server");
-            }
-            try
-            {
-                using (SftpClient client = new SftpClient(connection))
+                ConnectionInfo connection;
+                try
                 {
-                    try
-                    {
-                        client.Connect();
-                    }
-                    catch
-                    {
-                        Logger.logger.Error("Server unreachable.");
-                        throw new Exception("server");
-                    }
 
-                    using (var stream = client.OpenRead("/files/users.json"))
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        string content = reader.ReadToEnd();
-                        ClassUserList userList = JsonSerializer.Deserialize<ClassUserList>(content);
-                        Logger.logger.Debug("Successfully got users from server.");
-                        client.Disconnect();
-                        return userList;
-                    }
+                    PrivateKeyFile privateKey = new PrivateKeyFile(ServerSettings.KeyFilePath);
+
+                    PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(ServerSettings.Username, privateKey);
+                    connection = new ConnectionInfo(ServerSettings.PublicIp, ServerSettings.Port, ServerSettings.Username, privateKeyAuth);
+                    Logger.logger.Debug("Successfully created connection with private key.");
                 }
-            }
-            catch(Exception e) 
-            {
-                if (e.Message == "server")
+                catch
                 {
+                    Logger.logger.Error("Privat key authentication or server unreachable");
                     throw new Exception("server");
                 }
-                Logger.logger.Fatal("No file \"users.json\".");
-                throw new Exception("users file");
-            }
+                try
+                {
+                    using (SftpClient client = new SftpClient(connection))
+                    {
+                        try
+                        {
+                            client.Connect();
+                        }
+                        catch
+                        {
+                            Logger.logger.Error("Server unreachable.");
+                            throw new Exception("server");
+                        }
+
+                        using (var stream = client.OpenRead("/files/users.json"))
+                        using (StreamReader reader = new StreamReader(stream))
+                        {
+                            string content = reader.ReadToEnd();
+                            ClassUserList? userList = JsonSerializer.Deserialize<ClassUserList>(content);
+                            Logger.logger.Debug("Successfully got users from server.");
+                            client.Disconnect();
+                            return userList;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (e.Message == "server")
+                    {
+                        throw new Exception("server");
+                    }
+                    Logger.logger.Fatal("No file \"users.json\".");
+                    throw new Exception("users file");
+                }
+            });
         }
 
         public static void WriteUsersToServer(ClassUserList userList)
@@ -248,6 +255,7 @@ namespace MarkIt.login_register
             }
             else
             {
+                Logger.logger.Information("No remembered users, continue to login.");
                 return null;
             }
         }

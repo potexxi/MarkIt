@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MarkIt.login_register"
+      xmlns:gif="http://wpfanimatedgif.codeplex.com"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PageLogin">
@@ -45,5 +46,6 @@
                 <Button Margin="15,20,0,0" Content="Continue as guest" x:Name="ButtonGuest" Width="160"  Cursor="Hand" FontFamily="Leelawadee UI" FontSize="14" HorizontalContentAlignment="Center" Click="ButtonGuest_Click" ></Button>
             </StackPanel>
         </StackPanel>
+        <Image x:Name="ImageLoading" Width="100" Visibility="Hidden" Height="100" gif:ImageBehavior.AnimatedSource="/images/loading-animation.gif"></Image>
     </Grid>
 </Page>

@@ -25,7 +25,7 @@ namespace MarkIt.login_register
             InitializeComponent();
         }
 
-        private void ButtonReset_Click(object sender, RoutedEventArgs e)
+        private async void ButtonReset_Click(object sender, RoutedEventArgs e)
         {
             if(Password1.Password != Password2.Password)
             {
@@ -38,7 +38,7 @@ namespace MarkIt.login_register
             }
             else
             {
-                ClassUserList userList = PageLogin.GetUsersFromServer();
+                ClassUserList userList = await PageLogin.GetUsersFromServer();
                 foreach(ClassUser user in userList.Users)
                 {
                     if (user.Email == PageRecetPassword1.email)

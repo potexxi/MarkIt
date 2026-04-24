@@ -34,6 +34,9 @@ namespace MarkIt.login_register
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
+            timerCount = 90;
+            LabelTimer.Content = $"Resend Code in: {timerCount}s";
+            Timer.Stop();
             WindowUserLogin.Navigate("Page2FA", "PageLogin");
         }
 
@@ -47,6 +50,7 @@ namespace MarkIt.login_register
                     PageLogin.WriteToRememberedUsers(MainWindow.currentUser);
                 }
                 Timer.Stop();
+                LabelTimer.Content = $"Resend Code in: {timerCount}s";
                 timerCount = 90;
                 WindowUserLogin.window.Close();
             }

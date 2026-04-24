@@ -20,8 +20,8 @@
                         <TextBox Width="290" x:Name="TextBoxCode" VerticalContentAlignment="Center" MaxLength="6" TextChanged="TextBoxCode_TextChanged"></TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Resend Code in: 0s" x:Name="LabelTimer" Foreground="Gray" Margin="24,-4,0,0" FontFamily="Leelawadee UI"/>
-                        <Label Content="False. Try again!" x:Name="LabelFalse" Foreground="#FFFF3E3E" Visibility="Hidden" Margin="142,-4,0,0" FontFamily="Leelawadee UI"/>
+                        <Label Content="Resend Code in: 90s" x:Name="LabelTimer" Foreground="Gray" Margin="24,-4,0,0" FontFamily="Leelawadee UI"/>
+                        <Label Content="Wrong Code. Try again!" x:Name="LabelFalse" Foreground="#FFFF3E3E" Visibility="Hidden" Margin="93,-4,0,0" FontFamily="Leelawadee UI"/>
                     </StackPanel>
                     <!--buttons-->
                     <Button Cursor="Hand" Content="OK" Width="200" x:Name="ButtonOK" Click="ButtonOK_Click" Height="40" FontSize="18" Margin="0,30,0,0" FontFamily="Leelawadee UI"/>
