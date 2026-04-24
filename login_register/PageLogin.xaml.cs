@@ -82,12 +82,22 @@ namespace MarkIt.login_register
 
         private async Task<ClassUser> CheckUserExists()
         {
-            ClassUserList? userList;
             try
             {
                 LoadingScreen.Visibility = Visibility.Visible;
-                userList = await GetUsersFromServer();
+                var (userList, errortype) = await UserManager.GetUsersFromServer();
                 LoadingScreen.Visibility= Visibility.Hidden;
+                if(userList == null)
+                {
+                    if(errortype == UserManager.ErrorType.ServerUnreachable)
+                    {
+                        MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                    }
+                    else if(errortype == UserManager.ErrorType.UsersFile)
+                    {
+                        MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
                 foreach (ClassUser user in userList.Users)
                 {
                     if (user.Email == TextBoxEmail.Text)
@@ -107,11 +117,7 @@ namespace MarkIt.login_register
             catch(Exception ex) 
             {
                 LoadingScreen.Visibility = Visibility.Hidden;
-                if (ex.Message == "server")
-                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
-                else if (ex.Message == "users file")
-                    MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
-                else if (ex.Message == "user does not exist")
+                if (ex.Message == "user does not exist")
                     throw new Exception(ex.Message);
                 return new ClassUser(-1, "error", "error");
             }
@@ -122,162 +128,6 @@ namespace MarkIt.login_register
             WindowUserLogin.Guest = true;
             WindowUserLogin.window.Close();
             MainWindow.currentUser = new ClassUser(-1, "guest", "guest");
-        }
-
-        public static Task<ClassUserList?> GetUsersFromServer()
-        {
-            // code inspired by StackOverflow/Autocompletion
-            return Task.Run(() =>
-            {
-                ConnectionInfo connection;
-                try
-                {
-
-                    PrivateKeyFile privateKey = new PrivateKeyFile(ServerSettings.KeyFilePath);
-
-                    PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(ServerSettings.Username, privateKey);
-                    connection = new ConnectionInfo(ServerSettings.PublicIp, ServerSettings.Port, ServerSettings.Username, privateKeyAuth);
-                    Logger.logger.Debug("Successfully created connection with private key.");
-                }
-                catch
-                {
-                    Logger.logger.Error("Privat key authentication or server unreachable");
-                    throw new Exception("server");
-                }
-                try
-                {
-                    using (SftpClient client = new SftpClient(connection))
-                    {
-                        try
-                        {
-                            client.Connect();
-                        }
-                        catch
-                        {
-                            Logger.logger.Error("Server unreachable.");
-                            throw new Exception("server");
-                        }
-
-                        using (var stream = client.OpenRead("/files/users.json"))
-                        using (StreamReader reader = new StreamReader(stream))
-                        {
-                            string content = reader.ReadToEnd();
-                            ClassUserList? userList = JsonSerializer.Deserialize<ClassUserList>(content);
-                            Logger.logger.Debug("Successfully got users from server.");
-                            client.Disconnect();
-                            return userList;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    if (e.Message == "server")
-                    {
-                        throw new Exception("server");
-                    }
-                    Logger.logger.Fatal("No file \"users.json\".");
-                    throw new Exception("users file");
-                }
-            });
-        }
-
-        public static void WriteUsersToServer(ClassUserList userList)
-        {
-            // code inspired by StackOverflow/Autocompletion
-            ConnectionInfo connection;
-            try
-            {
-                PrivateKeyFile privateKey = new PrivateKeyFile(ServerSettings.KeyFilePath);
-
-                PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(ServerSettings.Username, privateKey);
-                connection = new ConnectionInfo(ServerSettings.PublicIp, ServerSettings.Port, ServerSettings.Username, privateKeyAuth);
-                Logger.logger.Debug("Successfully created connection with private key.");
-            }
-            catch
-            {
-                Logger.logger.Error("Privat key authentication or server unreachable.");
-                throw new Exception("server");
-            }
-            try
-            {
-                using (SftpClient client = new SftpClient(connection))
-                {
-                    try
-                    {
-                        client.Connect();
-                    }
-                    catch
-                    {
-                        Logger.logger.Error("Server unreachable.");
-                        throw new Exception("server");
-                    }
-                    JsonSerializerOptions jsonoptions = new JsonSerializerOptions
-                    {
-                        WriteIndented = true
-                    };
-                    using (var stream = client.OpenWrite("files/users.json"))
-                    using (StreamWriter writer = new StreamWriter(stream))
-                    {
-                        string json = JsonSerializer.Serialize(userList, options: jsonoptions);
-                        writer.Write(json);
-                        Logger.logger.Debug("Successfully wrote users to server.");
-
-                    }
-                    client.Disconnect();
-                }
-            }
-            catch(Exception e)
-            {
-                if (e.Message == "server")
-                {
-                    throw new Exception("server");
-                }
-                Logger.logger.Error("No file \"users.json\".");
-                throw new Exception("users file");
-            }
-
-        }
-
-        public static ClassUserList? GetRemeberedUsers()
-        {
-            if (File.Exists("sources/remembered.json"))
-            {
-                try
-                {
-                    using (StreamReader reader = new StreamReader("sources/remembered.json"))
-                    {
-                        return JsonSerializer.Deserialize<ClassUserList>(reader.ReadToEnd());
-                    }
-                }
-                catch
-                {
-                    Logger.logger.Warning("remembered.json incorrect format.");
-                    return null;
-                }
-            }
-            else
-            {
-                Logger.logger.Information("No remembered users, continue to login.");
-                return null;
-            }
-        }
-
-        public static void WriteToRememberedUsers(ClassUser user)
-        {
-            ClassUserList? userList = GetRemeberedUsers();
-            if(userList == null)
-            {
-                userList = new ClassUserList();
-            }
-            JsonSerializerOptions options = new JsonSerializerOptions
-            {
-                WriteIndented = true
-            };
-            userList.Users.Add(user);
-            using(StreamWriter writer = new StreamWriter("sources/remembered.json"))
-            {
-                writer.Write(JsonSerializer.Serialize(userList, options: options));
-            }
         }
 
         private void TextBoxEmail_TextChanged(object sender, TextChangedEventArgs e)

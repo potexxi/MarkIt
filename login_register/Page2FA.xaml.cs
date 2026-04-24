@@ -47,7 +47,7 @@ namespace MarkIt.login_register
                 WindowUserLogin.Guest = true;
                 if(PageLogin.KeepMeLogedIn == true)
                 {
-                    PageLogin.WriteToRememberedUsers(MainWindow.currentUser);
+                    UserManager.WriteToRememberedUsers(MainWindow.currentUser);
                 }
                 Timer.Stop();
                 LabelTimer.Content = $"Resend Code in: {timerCount}s";

@@ -37,7 +37,8 @@ namespace MarkIt.login_register
                 ClassUserList userList;
                 try
                 {
-                    userList = await PageLogin.GetUsersFromServer();
+                    var (userList1, errortype)  = await UserManager.GetUsersFromServer();
+                    userList = userList1;
                 }
                 catch (Exception ex)
                 {
@@ -66,7 +67,7 @@ namespace MarkIt.login_register
                 {
                     MainWindow.currentUser = new ClassUser(highestId + 1, TextBoxEmail.Text, TextBoxPassword2.Password);
                     userList.Users.Add(MainWindow.currentUser);
-                    PageLogin.WriteUsersToServer(userList);
+                    UserManager.WriteUsersToServer(userList);
                     WindowUserLogin.Navigate("PageRegister", "Page2FA");
                     Page2FA.Timer.Start();
                 }

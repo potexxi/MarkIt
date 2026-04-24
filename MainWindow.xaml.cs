@@ -26,7 +26,7 @@ namespace MarkIt
         {
             InitializeComponent();
             Logger.Init();
-            ServerSettings.Init(10220, "potexxi.duckdns.org", "markit", "sources/markitkey");
+            ServerSettings.Init(10220, "potexxi.duckdns", "markit", "sources/markitkey");
             WindowUserLogin window = new WindowUserLogin();
             window.ShowDialog();
 

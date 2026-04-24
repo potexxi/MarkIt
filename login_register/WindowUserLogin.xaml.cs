@@ -33,7 +33,7 @@ namespace MarkIt
             FrameMain = MainFrame;
             pages = new Dictionary<string, Page>();
             pages.Add("PageLogin", new PageLogin());
-            ClassUserList? userList = PageLogin.GetRemeberedUsers();
+            ClassUserList? userList = UserManager.GetRemeberedUsers();
             if (userList == null)
             {
                 FrameMain.Navigate(pages["PageLogin"]);

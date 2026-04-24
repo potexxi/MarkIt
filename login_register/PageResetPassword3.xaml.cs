@@ -38,7 +38,7 @@ namespace MarkIt.login_register
             }
             else
             {
-                ClassUserList userList = await PageLogin.GetUsersFromServer();
+                var (userList, errortype) = await UserManager.GetUsersFromServer();
                 foreach(ClassUser user in userList.Users)
                 {
                     if (user.Email == PageRecetPassword1.email)
@@ -46,7 +46,7 @@ namespace MarkIt.login_register
                         user.Password = Password2.Password;
                     }
                 }
-                PageLogin.WriteUsersToServer(userList);
+                UserManager.WriteUsersToServer(userList);
                 WindowUserLogin.Navigate("PagePassword3", "PageLogin");
             }
         }
