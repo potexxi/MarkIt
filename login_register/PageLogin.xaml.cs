@@ -55,72 +55,62 @@ namespace MarkIt.login_register
 
         private async void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
-            try
+            ClassUser? user = await CheckUserExists();
+            if(user == null)
             {
-                ClassUser user = await CheckUserExists();
-                if (user.Email != "error")
-                {
-                    if(CheckBoxRemember.IsChecked == true)
-                    {
-                        KeepMeLogedIn = true;
-                    }
-                    MainWindow.currentUser = user;
-                    PageRecetPassword1.SendEmail(user.Email, "2fa");
-                    WindowUserLogin.Navigate("PageLogin", "Page2FA");
-                    Page2FA.Timer.Start();
-                }
+                return;
             }
-            catch (Exception ex)
+            else
             {
-                LabelPasswordNotCorrect.Visibility = Visibility.Visible;
-                PasswordBoxPassword.BorderThickness = new Thickness(3);
-                PasswordBoxPassword.BorderBrush = Brushes.LightCoral;
-                TextBoxEmail.BorderThickness = new Thickness(3);
-                TextBoxEmail.BorderBrush = Brushes.LightCoral;
+                if (CheckBoxRemember.IsChecked == true)
+                {
+                    KeepMeLogedIn = true;
+                }
+                MainWindow.currentUser = user;
+                PageRecetPassword1.SendEmail(user.Email, "2fa");
+                WindowUserLogin.Navigate("PageLogin", "Page2FA");
+                Page2FA.Timer.Start();
             }
         }
 
-        private async Task<ClassUser> CheckUserExists()
+        private async Task<ClassUser?> CheckUserExists()
         {
-            try
+            LoadingScreen.Visibility = Visibility.Visible;
+            var (userList, errortype) = await UserManager.GetUsersFromServer();
+            LoadingScreen.Visibility= Visibility.Hidden;
+            if(userList == null)
             {
-                LoadingScreen.Visibility = Visibility.Visible;
-                var (userList, errortype) = await UserManager.GetUsersFromServer();
-                LoadingScreen.Visibility= Visibility.Hidden;
-                if(userList == null)
+                if(errortype == UserManager.ErrorType.ServerUnreachable || errortype == UserManager.ErrorType.PrivatKeyAuth)
                 {
-                    if(errortype == UserManager.ErrorType.ServerUnreachable)
+                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                    return null;
+                }
+                else if(errortype == UserManager.ErrorType.UsersFile)
+                {
+                    MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return null;
+                }
+            }
+            foreach (ClassUser user in userList.Users)
+            {
+                if (user.Email == TextBoxEmail.Text)
+                {
+                    if (user.Password == PasswordBoxPassword.Password)
                     {
-                        MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                        return user;
                     }
-                    else if(errortype == UserManager.ErrorType.UsersFile)
+                    else
                     {
-                        MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                        break;
                     }
                 }
-                foreach (ClassUser user in userList.Users)
-                {
-                    if (user.Email == TextBoxEmail.Text)
-                    {
-                        if (user.Password == PasswordBoxPassword.Password)
-                        {
-                            return user;
-                        }
-                        else
-                        {
-                            throw new Exception("password false");
-                        }
-                    }
-                }
-                throw new Exception("user does not exist");
             }
-            catch(Exception ex) 
-            {
-                LoadingScreen.Visibility = Visibility.Hidden;
-                if (ex.Message == "user does not exist")
-                    throw new Exception(ex.Message);
-                return new ClassUser(-1, "error", "error");
-            }
+            LabelPasswordNotCorrect.Visibility = Visibility.Visible;
+            PasswordBoxPassword.BorderThickness = new Thickness(3);
+            PasswordBoxPassword.BorderBrush = Brushes.LightCoral;
+            TextBoxEmail.BorderThickness = new Thickness(3);
+            TextBoxEmail.BorderBrush = Brushes.LightCoral;
+            return null;
         }
 
         private void ButtonGuest_Click(object sender, RoutedEventArgs e)

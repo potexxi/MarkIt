@@ -32,21 +32,22 @@ namespace MarkIt.login_register
 
         private async void ButtonRegister_Click(object sender, RoutedEventArgs e)
         {
+            // TODO overwork whole function
             if(TextBoxPassword1.Password == TextBoxPassword2.Password)
             {
-                ClassUserList userList;
-                try
+                var (userList, errortype)  = await UserManager.GetUsersFromServer();
+                if (userList == null)
                 {
-                    var (userList1, errortype)  = await UserManager.GetUsersFromServer();
-                    userList = userList1;
-                }
-                catch (Exception ex)
-                {
-                    if (ex.Message == "server")
+                    if (errortype == UserManager.ErrorType.ServerUnreachable || errortype == UserManager.ErrorType.PrivatKeyAuth)
+                    {
                         MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
-                    else if (ex.Message == "users file")
+                        return;
+                    }
+                    else if (errortype == UserManager.ErrorType.UsersFile)
+                    {
                         MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
+                        return;
+                    }
                 }
                 int highestId = -1;
                 foreach (ClassUser user in userList.Users)
