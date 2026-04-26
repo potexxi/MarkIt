@@ -17,7 +17,7 @@
                     <!--Email field-->
                     <StackPanel Orientation="Horizontal">
                         <Label Content="E-Mail Address" Foreground="Gray" Margin="24,0,0,0" FontFamily="Leelawadee UI"/>
-                        <Label x:Name="LabelEmail" Visibility="Hidden" Content="E-Mail is already in use." Foreground="#FFFF3E3E" Margin="119,10,0,0" FontFamily="Leelawadee UI"/>
+                        <Label x:Name="LabelEmail" Visibility="Hidden" Content="E-Mail is already in use." Foreground="#FFFF3E3E" Margin="119,0,0,0" FontFamily="Leelawadee UI"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,-3,0,0">
                         <Image Source="/images/profil-user-login.jpg" Width="45" Margin="30,0,0,0"></Image>
@@ -26,7 +26,7 @@
                     <!--Password field-->
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Enter Password" Foreground="Gray" Margin="24,5,0,0" FontFamily="Leelawadee UI"/>
-                        <Label x:Name="LabelPasswordNotCorrect1" Visibility="Hidden" Content="Password not the same." Foreground="#FFFF3E3E" Margin="119,10,0,0" FontFamily="Leelawadee UI"/>
+                        <Label x:Name="LabelPasswordNotCorrect1" Visibility="Hidden" Content="Password not the same." Foreground="#FFFF3E3E" Margin="119,0,0,0" FontFamily="Leelawadee UI"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,-3,0,0">
                         <Image Source="/images/lock-user-login.jpg" Width="45" Margin="30,0,0,0"></Image>
@@ -35,7 +35,7 @@
                     <!--Password field again-->
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Enter Password again" Foreground="Gray" Margin="24,5,0,0" FontFamily="Leelawadee UI"/>
-                        <Label x:Name="LabelPasswordNotCorrect2" Visibility="Hidden" Content="Password not the same." Foreground="#FFFF3E3E" Margin="86,10,0,0" FontFamily="Leelawadee UI"/>
+                        <Label x:Name="LabelPasswordNotCorrect2" Visibility="Hidden" Content="Password not the same." Foreground="#FFFF3E3E" Margin="86,0,0,0" FontFamily="Leelawadee UI"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,-3,0,0">
                         <Image Source="/images/lock-user-login.jpg" Width="45" Margin="30,0,0,0"></Image>

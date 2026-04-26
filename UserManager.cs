@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace MarkIt
 {
@@ -15,25 +16,32 @@ namespace MarkIt
     {
         UserManager() { }
 
-        public static Task<ClassUserList?> GetUsersFromServer()
+        public enum ErrorType
+        {
+            Unknown,
+            OK,
+            ServerUnreachable,
+            PrivKey,
+            UsersFile
+        }
+        public static async Task<ClassUserList?> GetUsersFromServerAndHandleErrors(Grid loadingScreen)
         {
             // code inspired by StackOverflow/Autocompletion
-            return Task.Run(() =>
+            loadingScreen.Visibility = Visibility.Visible;
+            var (userList,errortype)  = await Task.Run(() =>
             {
                 ConnectionInfo connection;
                 try
                 {
                     PrivateKeyFile privateKey = new PrivateKeyFile(ServerSettings.KeyFilePath);
-
                     PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(ServerSettings.Username, privateKey);
                     connection = new ConnectionInfo(ServerSettings.PublicIp, ServerSettings.Port, ServerSettings.Username, privateKeyAuth);
-                    Logger.logger.Debug("Successfully created connection with private key.");
+                    Logger.logger.Debug("Successfully initiated connection with private key.");
                 }
                 catch
                 {
                     Logger.logger.Error("Privat key authentication or server unreachable");
-                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
-                    return null;
+                    return (null, ErrorType.PrivKey);
                 }
                 try
                 {
@@ -47,7 +55,7 @@ namespace MarkIt
                             ClassUserList? userList = JsonSerializer.Deserialize<ClassUserList>(content);
                             Logger.logger.Debug("Successfully got users from server.");
                             client.Disconnect();
-                            return userList;
+                            return (userList, ErrorType.OK);
                         }
                     }
                 }
@@ -55,22 +63,34 @@ namespace MarkIt
                 catch (System.Net.Sockets.SocketException)
                 {
                     Logger.logger.Error("Server unreachable.");
-                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
-                    return null;
+                    return (null, ErrorType.ServerUnreachable);
                 }
-                catch
+                catch (Exception e)
                 {
-                    Logger.logger.Fatal("No file \"users.json\" or incorrect format.");
-                    MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return null;
+                    Logger.logger.Fatal($"No file \"users.json\" or {e.Message}");
+                    return (null, ErrorType.UsersFile);
                 }
             });
+            loadingScreen.Visibility = Visibility.Hidden;
+            if(userList == null)
+            {
+                if(errortype == ErrorType.ServerUnreachable || errortype == ErrorType.ServerUnreachable)
+                {
+                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                }
+                else if(errortype == ErrorType.UsersFile)
+                {
+                    MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            return userList;
         }
 
-        public static Task<bool> WriteUsersToServer(ClassUserList userList)
+        public static async Task<bool> WriteUsersToServer(ClassUserList userList, Grid loadingScreen)
         {
             // code inspired by StackOverflow/Autocompletion
-            return Task.Run(() =>
+            loadingScreen.Visibility= Visibility.Visible;
+            var (result, errortype) = await Task.Run(() =>
             {
                 ConnectionInfo connection;
                 try
@@ -83,8 +103,7 @@ namespace MarkIt
                 catch
                 {
                     Logger.logger.Error("Privat key authentication or server unreachable.");
-                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
-                    return false;
+                    return (false, ErrorType.PrivKey);
                 }
                 try
                 {
@@ -95,32 +114,42 @@ namespace MarkIt
                         {
                             WriteIndented = true
                         };
-                        using (var stream = client.OpenWrite("files/users.json"))
+                        using (var stream = client.OpenWrite("/files/users.json"))
                         using (StreamWriter writer = new StreamWriter(stream))
                         {
                             string json = JsonSerializer.Serialize(userList, options: jsonoptions);
                             writer.Write(json);
                             Logger.logger.Debug("Successfully wrote users to server.");
-                            client.Disconnect();
-                            return true;
                         }
+                        client.Disconnect();
+                        return (true, ErrorType.OK);
                     }
                 }
                 // Exception for client.connect()
                 catch (System.Net.Sockets.SocketException)
                 {
                     Logger.logger.Error("Server unreachable.");
-                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
-                    return false;
+                    return (false, ErrorType.ServerUnreachable);
                 }
-                catch
+                catch(Exception e)
                 {
-                    Logger.logger.Fatal("No file \"users.json\" or incorrect format.");
-                    MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return false;
+                    Logger.logger.Fatal($"No file \"users.json\" or {e.Message}");
+                    return (false, ErrorType.UsersFile);
                 }
             });
-
+            loadingScreen.Visibility = Visibility.Hidden;
+            if (result == false)
+            {
+                if (errortype == ErrorType.ServerUnreachable || errortype == ErrorType.ServerUnreachable)
+                {
+                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                }
+                else if (errortype == ErrorType.UsersFile)
+                {
+                    MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            return result;
         }
 
         public static ClassUserList? GetRemeberedUsers()

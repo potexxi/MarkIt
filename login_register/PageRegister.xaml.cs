@@ -34,11 +34,9 @@ namespace MarkIt.login_register
         {
             if(TextBoxPassword1.Password == TextBoxPassword2.Password)
             {
-                LoadingScreen.Visibility = Visibility.Visible;
-                ClassUserList? userList = await UserManager.GetUsersFromServer();
+                ClassUserList? userList = await UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
                 if (userList == null)
                 {
-                    LoadingScreen.Visibility = Visibility.Hidden;
                     return;
                 }
                 int highestId = -1;
@@ -49,7 +47,6 @@ namespace MarkIt.login_register
                         LabelEmail.Visibility = Visibility.Visible;
                         TextBoxEmail.BorderBrush = Brushes.LightCoral;
                         TextBoxEmail.BorderThickness = new Thickness(3);
-                        LoadingScreen.Visibility = Visibility.Hidden;
                         return;
                     }
                     if (user.Id > highestId)
@@ -61,12 +58,11 @@ namespace MarkIt.login_register
                 {
                     MainWindow.currentUser = new ClassUser(highestId + 1, TextBoxEmail.Text, TextBoxPassword2.Password);
                     userList.Users.Add(MainWindow.currentUser);
-                    if (await UserManager.WriteUsersToServer(userList))
+                    if (await UserManager.WriteUsersToServer(userList, LoadingScreen))
                     {
                         WindowUserLogin.Navigate("PageRegister", "Page2FA");
                         Page2FA.Timer.Start();
                     }
-                    LoadingScreen.Visibility = Visibility.Hidden;
                     return;
                 }
             }

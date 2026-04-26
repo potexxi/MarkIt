@@ -25,7 +25,6 @@ namespace MarkIt.login_register
     public partial class PageLogin : Page
     {
         public static bool KeepMeLogedIn { get; private set; } = false;
-        private bool _isloading = false;
         public PageLogin()
         {
             InitializeComponent();
@@ -71,9 +70,7 @@ namespace MarkIt.login_register
 
         private async Task<ClassUser?> CheckUserExists()
         {
-            LoadingScreen.Visibility = Visibility.Visible;
-            ClassUserList? userList = await UserManager.GetUsersFromServer();
-            LoadingScreen.Visibility= Visibility.Hidden;
+            ClassUserList? userList = await UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
             if(userList == null)
             {
                 return null;

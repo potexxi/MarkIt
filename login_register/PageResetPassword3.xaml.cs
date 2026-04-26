@@ -38,9 +38,7 @@ namespace MarkIt.login_register
             }
             else
             {
-                LoadingScreen.Visibility = Visibility.Visible;
-                ClassUserList? userList = await UserManager.GetUsersFromServer();
-                LoadingScreen.Visibility = Visibility.Hidden;
+                ClassUserList? userList = await UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
                 if(userList == null)
                 {
                     return;
@@ -52,12 +50,10 @@ namespace MarkIt.login_register
                         user.Password = Password2.Password;
                     }
                 }
-                LoadingScreen.Visibility = Visibility.Visible;
-                if (await UserManager.WriteUsersToServer(userList))
+                if (await UserManager.WriteUsersToServer(userList, LoadingScreen))
                 {
                     WindowUserLogin.Navigate("PagePassword3", "PageLogin");
                 }
-                LoadingScreen.Visibility = Visibility.Hidden;
                 return;
             }
         }

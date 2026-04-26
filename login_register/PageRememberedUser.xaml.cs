@@ -6,7 +6,7 @@ namespace MarkIt.login_register
 {
     public partial class PageRememberedUser : Page
     {
-        private ClassUserList? _userList;
+        private ClassUserList _userList;
 
         public PageRememberedUser(ClassUserList userList)
         {

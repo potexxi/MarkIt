@@ -48,6 +48,7 @@ namespace MarkIt.login_register
             if ($"{PageRecetPassword1.code.ToString():D6}" == TextBoxCode.Text)
             {
                 WindowUserLogin.Navigate("PagePassword2", "PagePassword3");
+                timerCount = 90;
                 Timer.Stop();
             }
             else
@@ -61,6 +62,8 @@ namespace MarkIt.login_register
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             WindowUserLogin.Navigate("PagePassword2", "PagePassword1");
+            timerCount = 90;
+            LabelTimer.Content = $"Resend Code in: {timerCount}s";
             Timer.Stop();
         }
 
