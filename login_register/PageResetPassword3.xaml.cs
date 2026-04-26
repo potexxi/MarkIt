@@ -38,7 +38,13 @@ namespace MarkIt.login_register
             }
             else
             {
-                var (userList, errortype) = await UserManager.GetUsersFromServer();
+                LoadingScreen.Visibility = Visibility.Visible;
+                ClassUserList? userList = await UserManager.GetUsersFromServer();
+                LoadingScreen.Visibility = Visibility.Hidden;
+                if(userList == null)
+                {
+                    return;
+                }
                 foreach(ClassUser user in userList.Users)
                 {
                     if (user.Email == PageRecetPassword1.email)
@@ -46,8 +52,13 @@ namespace MarkIt.login_register
                         user.Password = Password2.Password;
                     }
                 }
-                UserManager.WriteUsersToServer(userList);
-                WindowUserLogin.Navigate("PagePassword3", "PageLogin");
+                LoadingScreen.Visibility = Visibility.Visible;
+                if (await UserManager.WriteUsersToServer(userList))
+                {
+                    WindowUserLogin.Navigate("PagePassword3", "PageLogin");
+                }
+                LoadingScreen.Visibility = Visibility.Hidden;
+                return;
             }
         }
 

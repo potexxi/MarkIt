@@ -32,22 +32,14 @@ namespace MarkIt.login_register
 
         private async void ButtonRegister_Click(object sender, RoutedEventArgs e)
         {
-            // TODO overwork whole function
             if(TextBoxPassword1.Password == TextBoxPassword2.Password)
             {
-                var (userList, errortype)  = await UserManager.GetUsersFromServer();
+                LoadingScreen.Visibility = Visibility.Visible;
+                ClassUserList? userList = await UserManager.GetUsersFromServer();
                 if (userList == null)
                 {
-                    if (errortype == UserManager.ErrorType.ServerUnreachable || errortype == UserManager.ErrorType.PrivatKeyAuth)
-                    {
-                        MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
-                        return;
-                    }
-                    else if (errortype == UserManager.ErrorType.UsersFile)
-                    {
-                        MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
+                    LoadingScreen.Visibility = Visibility.Hidden;
+                    return;
                 }
                 int highestId = -1;
                 foreach (ClassUser user in userList.Users)
@@ -57,6 +49,7 @@ namespace MarkIt.login_register
                         LabelEmail.Visibility = Visibility.Visible;
                         TextBoxEmail.BorderBrush = Brushes.LightCoral;
                         TextBoxEmail.BorderThickness = new Thickness(3);
+                        LoadingScreen.Visibility = Visibility.Hidden;
                         return;
                     }
                     if (user.Id > highestId)
@@ -68,9 +61,13 @@ namespace MarkIt.login_register
                 {
                     MainWindow.currentUser = new ClassUser(highestId + 1, TextBoxEmail.Text, TextBoxPassword2.Password);
                     userList.Users.Add(MainWindow.currentUser);
-                    UserManager.WriteUsersToServer(userList);
-                    WindowUserLogin.Navigate("PageRegister", "Page2FA");
-                    Page2FA.Timer.Start();
+                    if (await UserManager.WriteUsersToServer(userList))
+                    {
+                        WindowUserLogin.Navigate("PageRegister", "Page2FA");
+                        Page2FA.Timer.Start();
+                    }
+                    LoadingScreen.Visibility = Visibility.Hidden;
+                    return;
                 }
             }
             else

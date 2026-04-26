@@ -32,7 +32,11 @@ namespace MarkIt.login_register
         private async void ButtonSend_Click(object sender, RoutedEventArgs e)
         {
             email = TextBoxEmail.Text;
-            var (userList, errortype) = await UserManager.GetUsersFromServer();
+            ClassUserList? userList = await UserManager.GetUsersFromServer();
+            if(userList == null)
+            {
+                return;
+            }
             bool exists = false;
             foreach(ClassUser user in userList.Users)
             {

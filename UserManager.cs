@@ -7,23 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MarkIt
 {
     public class UserManager
     {
-        public enum ErrorType
-        {
-            NoError,
-            Unknown,
-            ServerUnreachable,
-            PrivatKeyAuth,
-            UsersFile
-        }
-
         UserManager() { }
 
-        public static Task<(ClassUserList?, ErrorType)> GetUsersFromServer()
+        public static Task<ClassUserList?> GetUsersFromServer()
         {
             // code inspired by StackOverflow/Autocompletion
             return Task.Run(() =>
@@ -40,14 +32,14 @@ namespace MarkIt
                 catch
                 {
                     Logger.logger.Error("Privat key authentication or server unreachable");
-                    return (null, ErrorType.PrivatKeyAuth);
+                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                    return null;
                 }
                 try
                 {
                     using (SftpClient client = new SftpClient(connection))
                     {
                         client.Connect();
-
                         using (var stream = client.OpenRead("/files/users.json"))
                         using (StreamReader reader = new StreamReader(stream))
                         {
@@ -55,77 +47,79 @@ namespace MarkIt
                             ClassUserList? userList = JsonSerializer.Deserialize<ClassUserList>(content);
                             Logger.logger.Debug("Successfully got users from server.");
                             client.Disconnect();
-                            return (userList, ErrorType.NoError);
+                            return userList;
                         }
                     }
                 }
+                // Exception for client.connect()
                 catch (System.Net.Sockets.SocketException)
                 {
                     Logger.logger.Error("Server unreachable.");
-                    return (null, ErrorType.ServerUnreachable);
+                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                    return null;
                 }
                 catch
                 {
                     Logger.logger.Fatal("No file \"users.json\" or incorrect format.");
-                    return (null, ErrorType.UsersFile);
+                    MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return null;
                 }
             });
         }
 
-        public static void WriteUsersToServer(ClassUserList userList)
+        public static Task<bool> WriteUsersToServer(ClassUserList userList)
         {
             // code inspired by StackOverflow/Autocompletion
-            ConnectionInfo connection;
-            try
+            return Task.Run(() =>
             {
-                PrivateKeyFile privateKey = new PrivateKeyFile(ServerSettings.KeyFilePath);
-
-                PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(ServerSettings.Username, privateKey);
-                connection = new ConnectionInfo(ServerSettings.PublicIp, ServerSettings.Port, ServerSettings.Username, privateKeyAuth);
-                Logger.logger.Debug("Successfully created connection with private key.");
-            }
-            catch
-            {
-                Logger.logger.Error("Privat key authentication or server unreachable.");
-                throw new Exception("server");
-            }
-            try
-            {
-                using (SftpClient client = new SftpClient(connection))
+                ConnectionInfo connection;
+                try
                 {
-                    try
+                    PrivateKeyFile privateKey = new PrivateKeyFile(ServerSettings.KeyFilePath);
+                    PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(ServerSettings.Username, privateKey);
+                    connection = new ConnectionInfo(ServerSettings.PublicIp, ServerSettings.Port, ServerSettings.Username, privateKeyAuth);
+                    Logger.logger.Debug("Successfully created connection with private key.");
+                }
+                catch
+                {
+                    Logger.logger.Error("Privat key authentication or server unreachable.");
+                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                    return false;
+                }
+                try
+                {
+                    using (SftpClient client = new SftpClient(connection))
                     {
                         client.Connect();
+                        JsonSerializerOptions jsonoptions = new JsonSerializerOptions
+                        {
+                            WriteIndented = true
+                        };
+                        using (var stream = client.OpenWrite("files/users.json"))
+                        using (StreamWriter writer = new StreamWriter(stream))
+                        {
+                            string json = JsonSerializer.Serialize(userList, options: jsonoptions);
+                            writer.Write(json);
+                            Logger.logger.Debug("Successfully wrote users to server.");
+                            client.Disconnect();
+                            return true;
+                        }
                     }
-                    catch
-                    {
-                        Logger.logger.Error("Server unreachable.");
-                        throw new Exception("server");
-                    }
-                    JsonSerializerOptions jsonoptions = new JsonSerializerOptions
-                    {
-                        WriteIndented = true
-                    };
-                    using (var stream = client.OpenWrite("files/users.json"))
-                    using (StreamWriter writer = new StreamWriter(stream))
-                    {
-                        string json = JsonSerializer.Serialize(userList, options: jsonoptions);
-                        writer.Write(json);
-                        Logger.logger.Debug("Successfully wrote users to server.");
-
-                    }
-                    client.Disconnect();
                 }
-            }
-            catch (Exception e)
-            {
-                if (e.Message == "server")
+                // Exception for client.connect()
+                catch (System.Net.Sockets.SocketException)
                 {
-                    throw new Exception("server");
+                    Logger.logger.Error("Server unreachable.");
+                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                    return false;
                 }
-                Logger.logger.Error("No file \"users.json\".");
-                throw new Exception("users file");
-            }
+                catch
+                {
+                    Logger.logger.Fatal("No file \"users.json\" or incorrect format.");
+                    MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
+                }
+            });
 
         }
 

@@ -56,11 +56,7 @@ namespace MarkIt.login_register
         private async void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
             ClassUser? user = await CheckUserExists();
-            if(user == null)
-            {
-                return;
-            }
-            else
+            if (user != null)
             {
                 if (CheckBoxRemember.IsChecked == true)
                 {
@@ -76,20 +72,11 @@ namespace MarkIt.login_register
         private async Task<ClassUser?> CheckUserExists()
         {
             LoadingScreen.Visibility = Visibility.Visible;
-            var (userList, errortype) = await UserManager.GetUsersFromServer();
+            ClassUserList? userList = await UserManager.GetUsersFromServer();
             LoadingScreen.Visibility= Visibility.Hidden;
             if(userList == null)
             {
-                if(errortype == UserManager.ErrorType.ServerUnreachable || errortype == UserManager.ErrorType.PrivatKeyAuth)
-                {
-                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
-                    return null;
-                }
-                else if(errortype == UserManager.ErrorType.UsersFile)
-                {
-                    MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return null;
-                }
+                return null;
             }
             foreach (ClassUser user in userList.Users)
             {
