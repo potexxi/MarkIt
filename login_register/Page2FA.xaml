@@ -18,7 +18,7 @@
                     <Label Content="Enter the Code you recieved by E-Mail. Check Spam!" Foreground="Gray" Margin="24,30,0,0" FontFamily="Leelawadee UI"/>
                     <StackPanel Orientation="Horizontal" Margin="0,-3,0,0">
                         <Image Source="/images/code-user-login.png" Width="45" Margin="30,0,0,0"></Image>
-                        <TextBox Width="290" x:Name="TextBoxCode" VerticalContentAlignment="Center" MaxLength="6" TextChanged="TextBoxCode_TextChanged"></TextBox>
+                        <TextBox FontSize="14" Width="290" x:Name="TextBoxCode" VerticalContentAlignment="Center" MaxLength="6" TextChanged="TextBoxCode_TextChanged"></TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Resend Code in: 90s" x:Name="LabelTimer" Foreground="Gray" Margin="24,-4,0,0" FontFamily="Leelawadee UI"/>

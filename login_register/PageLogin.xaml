@@ -20,7 +20,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,-3,0,0">
                         <Image x:Name="ImageEmail" Source="/images/profil-user-login.jpg" Width="45" Margin="30,0,0,0"></Image>
-                        <TextBox TextChanged="TextBoxEmail_TextChanged" x:Name="TextBoxEmail" Width="290" VerticalContentAlignment="Center" MaxLength="100"></TextBox>
+                        <TextBox FontSize="14" TextChanged="TextBoxEmail_TextChanged" x:Name="TextBoxEmail" Width="290" VerticalContentAlignment="Center" MaxLength="100"></TextBox>
                     </StackPanel>
                     <!--Password field-->
                     <StackPanel Orientation="Horizontal">
