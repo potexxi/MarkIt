@@ -28,7 +28,6 @@ namespace MarkIt
         {
             // code inspired by StackOverflow/Autocompletion
             loadingScreen.Visibility = Visibility.Visible;
-            await Task.Delay(1000);
             var (userList,errortype)  = await Task.Run(() =>
             {
                 ConnectionInfo connection;

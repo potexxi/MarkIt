@@ -54,6 +54,10 @@ namespace MarkIt.login_register
 
         private async void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
+            if(TextBoxEmail.Text == "" || PasswordBoxPassword.Password == "")
+            {
+                return;
+            }
             ClassUser? user = await CheckUserExists();
             if (user != null)
             {
