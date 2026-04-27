@@ -125,5 +125,13 @@ namespace MarkIt.login_register
             TextBoxEmail.BorderThickness = new Thickness(1);
             TextBoxEmail.BorderBrush = Brushes.Gray;
         }
+
+        private void Page_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                ButtonLogin_Click(null, null);
+            }
+        }
     }
 }
