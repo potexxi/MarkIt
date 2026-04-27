@@ -11,8 +11,8 @@ using System.Windows.Media;
 namespace MarkIt.worksheet
 {
     public class ClassWorksheet
-    // Diese Klasse soll das WorkSheet managen dazu soll gehoert = Bearbeitung, Speichern, Laden, Displayen(Live Rendering) 
-    // WS = Worksheet
+    // this class manages everything about the worksheets (may use sub-classes later on)
+    // ws = worksheet
     {
         private string wsName { get; set; } = "markdown";
         private DateTime wsCreationDate { get; set; }
@@ -23,7 +23,7 @@ namespace MarkIt.worksheet
         private Grid gridWorkSheet;
         private List<Canvas> canvisWsPages;
 
-        // muss vielleicht später in ein Settings-file / Class geändert werden
+        // might be moved to a different setting / config file
         private double Zoom = 0.5;
         private double pageMargin = 50;
 
@@ -37,7 +37,7 @@ namespace MarkIt.worksheet
         }
 
         public void Init()
-        // Nur einmal ausfuehren Laded alle Informationen aus der Klasse und erstellt die Pages (welche dann mit Render() gerendert werden können)!
+        // may also be move to a render-class (otherwise just use it once, while it gets created)
         {
             wsStringPages.Add("testpage");
             wsStringPages.Add("testpage");
@@ -46,7 +46,7 @@ namespace MarkIt.worksheet
             ScrollViewer ScrollViewerWorksheet = new ScrollViewer();
             ScrollViewerWorksheet.HorizontalAlignment = HorizontalAlignment.Stretch;
             ScrollViewerWorksheet.VerticalAlignment = VerticalAlignment.Stretch;
-            ScrollViewerWorksheet.Height = 1000; // Muss in window Size mit der current window Size geändert werden
+            ScrollViewerWorksheet.Height = 1000; // must be chanhe in windowsizechange event later on
 
             StackPanel stackpanelWorksheet = new StackPanel();
 
@@ -60,38 +60,50 @@ namespace MarkIt.worksheet
                 GridPage.Background = Brushes.Red;
 
                 TextBox TextboxPage = new TextBox();
+                TextboxPage.TextChanged += TextboxPage_TextChanged; ;
 
-                TextboxPage.AcceptsReturn = true; // Zeilen Umbrüche mit Enter erlauben
+                TextboxPage.AcceptsReturn = true; // allows user to press enter to create a new line inside of the textbox
 
                 GridPage.Children.Add(TextboxPage);
                 stackpanelWorksheet.Children.Add(GridPage);
             }
             ScrollViewerWorksheet.Content = stackpanelWorksheet;
             this.gridWorkSheet.Children.Add(ScrollViewerWorksheet);
-
         }
 
-        private void DisplayedPages()
-        // Diese Methode soll Anzeigen, auf welcher Seite sich der Nutzer Befindet (Um potentziellen Lag bei vielen Pages zu vermeiden)
+        private void TextboxPage_TextChanged(object sender, TextChangedEventArgs e)
         {
-            
+            //MessageBox.Show(Convert.ToString(sender));
+            CheckIfNextPage(0);
+        }
+
+        private void CheckIfNextPage(int pagenumber)
+        // this methode sees if the user should be creating a new page if he presses the enter-key
+        {
+            MessageBox.Show(wsStringPages[pagenumber]);
+            if (wsStringPages[pagenumber].Split("\n").Count() >= 10)
+            {
+                MessageBox.Show("10 Zeilen");
+            }
         }
 
         public void Render()
-        // Zeichnet die Blaetter & Scrawlbar. Irgendwann dann auch noch die Schrift Decorations (*italic*, **Bold**)
+        // renders the pages that are in view (*italic*, **Bold**)
         {
             foreach (Canvas page in this.canvisWsPages)
             {
 
             }
         }
+
+
         public void Load(string filepath)
-        // laded ein Worksheat von einem File in das 
+        // loads a worksheet from filepath
         {
 
         }
         public void Save(string filepath)
-        // laded ein Worksheat von einem File in das 
+        // saves current worksheet to filepath
         {
 
         }
