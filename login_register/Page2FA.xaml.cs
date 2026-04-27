@@ -42,12 +42,12 @@ namespace MarkIt.login_register
 
         private void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
-            if($"{PageRecetPassword1.code:D6}" == TextBoxCode.Text)
+            if($"{WindowUserLogin.EmailManager.Code:D6}" == TextBoxCode.Text)
             {
                 WindowUserLogin.Guest = true;
                 if(PageLogin.KeepMeLogedIn == true)
                 {
-                    UserManager.WriteToRememberedUsers(MainWindow.currentUser);
+                    WindowUserLogin.UserManager.WriteToRememberedUsers(MainWindow.currentUser);
                 }
                 Timer.Stop();
                 LabelTimer.Content = $"Resend Code in: {timerCount}s";
@@ -61,13 +61,13 @@ namespace MarkIt.login_register
                 LabelFalse.Visibility = Visibility.Visible;
             }
         }
-        private void Timer_Tick(object? sender, EventArgs e)
+        private async void Timer_Tick(object? sender, EventArgs e)
         {
             timerCount -= 1;
             if (timerCount <= 0)
             {
                 timerCount = 90;
-                PageRecetPassword1.SendEmail(MainWindow.currentUser.Email, "2fa");
+                await WindowUserLogin.EmailManager.SendEmailAndHandleErrors(MainWindow.currentUser.Email, LoadingScreen);
             }
             LabelTimer.Content = $"Resend Code in: {timerCount}s";
         }

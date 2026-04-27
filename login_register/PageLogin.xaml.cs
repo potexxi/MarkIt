@@ -62,7 +62,7 @@ namespace MarkIt.login_register
                     KeepMeLogedIn = true;
                 }
                 MainWindow.currentUser = user;
-                PageRecetPassword1.SendEmail(user.Email, "2fa");
+                await WindowUserLogin.EmailManager.SendEmailAndHandleErrors(user.Email, LoadingScreen);
                 WindowUserLogin.Navigate("PageLogin", "Page2FA");
                 Page2FA.Timer.Start();
             }
@@ -70,7 +70,7 @@ namespace MarkIt.login_register
 
         private async Task<ClassUser?> CheckUserExists()
         {
-            ClassUserList? userList = await UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
+            ClassUserList? userList = await WindowUserLogin.UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
             if(userList == null)
             {
                 return null;

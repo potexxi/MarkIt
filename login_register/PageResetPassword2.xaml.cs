@@ -32,20 +32,20 @@ namespace MarkIt.login_register
             Timer.Tick += Timer_Tick;
         }
 
-        private void Timer_Tick(object? sender, EventArgs e)
+        private async void Timer_Tick(object? sender, EventArgs e)
         {
             timerCount -= 1;
             if (timerCount <= 0)
             {
                 timerCount = 90;
-                PageRecetPassword1.SendEmail(PageRecetPassword1.email, "password reset");
+                await WindowUserLogin.EmailManager.SendEmailAndHandleErrors(WindowUserLogin.EmailManager.Email, LoadingScreen);
             }
             LabelTimer.Content = $"Resend Code in: {timerCount}s";
         }
 
         private void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
-            if ($"{PageRecetPassword1.code.ToString():D6}" == TextBoxCode.Text)
+            if ($"{WindowUserLogin.EmailManager.Code.ToString():D6}" == TextBoxCode.Text)
             {
                 WindowUserLogin.Navigate("PagePassword2", "PagePassword3");
                 timerCount = 90;

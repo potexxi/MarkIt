@@ -38,19 +38,19 @@ namespace MarkIt.login_register
             }
             else
             {
-                ClassUserList? userList = await UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
+                ClassUserList? userList = await WindowUserLogin.UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
                 if(userList == null)
                 {
                     return;
                 }
                 foreach(ClassUser user in userList.Users)
                 {
-                    if (user.Email == PageRecetPassword1.email)
+                    if (user.Email == WindowUserLogin.EmailManager.Email)
                     {
                         user.Password = Password2.Password;
                     }
                 }
-                if (await UserManager.WriteUsersToServer(userList, LoadingScreen))
+                if (await WindowUserLogin.UserManager.WriteUsersToServer(userList, LoadingScreen))
                 {
                     WindowUserLogin.Navigate("PagePassword3", "PageLogin");
                 }

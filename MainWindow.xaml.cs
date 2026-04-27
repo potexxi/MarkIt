@@ -21,7 +21,7 @@ namespace MarkIt
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static ClassUser currentUser;
+        public static ClassUser? currentUser;
         public MainWindow()
         {
             InitializeComponent();

@@ -22,16 +22,19 @@ namespace MarkIt
     /// </summary>
     public partial class WindowUserLogin : Window
     {
-        public static Dictionary<string, Page> pages;
-        public static Frame FrameMain;
+        public static Dictionary<string, Page>? pages;
+        public static Frame? FrameMain;
         public static bool Guest = false;
-        public static WindowUserLogin window;
+        public static WindowUserLogin? window;
+        public static EmailManager? EmailManager;
+        public static UserManager UserManager = new UserManager();
         public WindowUserLogin()
         {
             InitializeComponent();
             window = this;
             FrameMain = MainFrame;
             pages = new Dictionary<string, Page>();
+            EmailManager = new EmailManager();
             pages.Add("PageLogin", new PageLogin());
             ClassUserList? userList = UserManager.GetRemeberedUsers();
             if (userList == null)

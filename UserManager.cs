@@ -14,9 +14,9 @@ namespace MarkIt
 {
     public class UserManager
     {
-        UserManager() { }
+        public UserManager() { }
 
-        public enum ErrorType
+        private enum ErrorType
         {
             Unknown,
             OK,
@@ -24,10 +24,11 @@ namespace MarkIt
             PrivKey,
             UsersFile
         }
-        public static async Task<ClassUserList?> GetUsersFromServerAndHandleErrors(Grid loadingScreen)
+        public async Task<ClassUserList?> GetUsersFromServerAndHandleErrors(Grid loadingScreen)
         {
             // code inspired by StackOverflow/Autocompletion
             loadingScreen.Visibility = Visibility.Visible;
+            await Task.Delay(1000);
             var (userList,errortype)  = await Task.Run(() =>
             {
                 ConnectionInfo connection;
@@ -86,7 +87,7 @@ namespace MarkIt
             return userList;
         }
 
-        public static async Task<bool> WriteUsersToServer(ClassUserList userList, Grid loadingScreen)
+        public async Task<bool> WriteUsersToServer(ClassUserList userList, Grid loadingScreen)
         {
             // code inspired by StackOverflow/Autocompletion
             loadingScreen.Visibility= Visibility.Visible;
@@ -152,7 +153,7 @@ namespace MarkIt
             return result;
         }
 
-        public static ClassUserList? GetRemeberedUsers()
+        public ClassUserList? GetRemeberedUsers()
         {
             if (File.Exists("sources/remembered.json"))
             {
@@ -176,7 +177,7 @@ namespace MarkIt
             }
         }
 
-        public static void WriteToRememberedUsers(ClassUser user)
+        public void WriteToRememberedUsers(ClassUser user)
         {
             ClassUserList? userList = GetRemeberedUsers();
             if (userList == null)

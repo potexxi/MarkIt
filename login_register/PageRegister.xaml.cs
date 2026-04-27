@@ -34,7 +34,7 @@ namespace MarkIt.login_register
         {
             if(TextBoxPassword1.Password == TextBoxPassword2.Password)
             {
-                ClassUserList? userList = await UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
+                ClassUserList? userList = await WindowUserLogin.UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
                 if (userList == null)
                 {
                     return;
@@ -54,11 +54,11 @@ namespace MarkIt.login_register
                         highestId = user.Id;
                     }
                 }
-                if (PageRecetPassword1.SendEmail(TextBoxEmail.Text, "register"))
+                if (await WindowUserLogin.EmailManager.SendEmailAndHandleErrors(TextBoxEmail.Text, LoadingScreen))
                 {
                     MainWindow.currentUser = new ClassUser(highestId + 1, TextBoxEmail.Text, TextBoxPassword2.Password);
                     userList.Users.Add(MainWindow.currentUser);
-                    if (await UserManager.WriteUsersToServer(userList, LoadingScreen))
+                    if (await WindowUserLogin.UserManager.WriteUsersToServer(userList, LoadingScreen))
                     {
                         WindowUserLogin.Navigate("PageRegister", "Page2FA");
                         Page2FA.Timer.Start();
