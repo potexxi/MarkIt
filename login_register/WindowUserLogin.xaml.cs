@@ -1,6 +1,7 @@
 ﻿using MarkIt.login_register;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,10 +22,12 @@ namespace MarkIt
     /// </summary>
     public partial class WindowUserLogin : Window
     {
-        public static Dictionary<string, Page> pages;
-        public static Frame FrameMain;
+        public static Dictionary<string, Page>? pages;
+        public static Frame? FrameMain;
         public static bool Guest = false;
-        public static WindowUserLogin window;
+        public static WindowUserLogin? window;
+        public static EmailManager EmailManager = new EmailManager();
+        public static UserManager UserManager = new UserManager();
         public WindowUserLogin()
         {
             InitializeComponent();
@@ -32,7 +35,15 @@ namespace MarkIt
             FrameMain = MainFrame;
             pages = new Dictionary<string, Page>();
             pages.Add("PageLogin", new PageLogin());
-            FrameMain.Navigate(pages["PageLogin"]);
+            ClassUserList? userList = UserManager.GetRemeberedUsers();
+            if (userList == null)
+            {
+                FrameMain.Navigate(pages["PageLogin"]);
+            }
+            else
+            {
+                FrameMain.Navigate(new PageRememberedUser(userList));
+            }   
         }
 
         private void Window_Closed(object sender, EventArgs e)

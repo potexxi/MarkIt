@@ -24,6 +24,7 @@ namespace MarkIt.login_register
     /// </summary>
     public partial class PageLogin : Page
     {
+        public static bool KeepMeLogedIn { get; private set; } = false;
         public PageLogin()
         {
             InitializeComponent();
@@ -51,59 +52,53 @@ namespace MarkIt.login_register
             WindowUserLogin.Navigate("PageLogin", "PageRegister");
         }
 
-        private void ButtonLogin_Click(object sender, RoutedEventArgs e)
+        private async void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if(TextBoxEmail.Text == "" || PasswordBoxPassword.Password == "")
             {
-                ClassUser user = CheckUserExists();
-                if (user.Email != "error")
-                {
-                    MainWindow.currentUser = user;
-                    PageRecetPassword1.SendEmail(user.Email, "2fa");
-                    WindowUserLogin.Navigate("PageLogin", "Page2FA");
-                    Page2FA.Timer.Start();
-                }
+                return;
             }
-            catch (Exception ex)
+            ClassUser? user = await CheckUserExists();
+            if (user != null)
             {
-                LabelPasswordNotCorrect.Visibility = Visibility.Visible;
-                PasswordBoxPassword.BorderThickness = new Thickness(3);
-                PasswordBoxPassword.BorderBrush = Brushes.LightCoral;
-                TextBoxEmail.BorderThickness = new Thickness(3);
-                TextBoxEmail.BorderBrush = Brushes.LightCoral;
+                if (CheckBoxRemember.IsChecked == true)
+                {
+                    KeepMeLogedIn = true;
+                }
+                MainWindow.currentUser = user;
+                await WindowUserLogin.EmailManager.SendEmailAndHandleErrors(user.Email, LoadingScreen);
+                WindowUserLogin.Navigate("PageLogin", "Page2FA");
+                Page2FA.Timer.Start();
             }
         }
 
-        private ClassUser CheckUserExists()
+        private async Task<ClassUser?> CheckUserExists()
         {
-            ClassUserList userList;
-            try
+            ClassUserList? userList = await WindowUserLogin.UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
+            if(userList == null)
             {
-                userList = GetUsersFromServer(10220, "potexxi.duckdns.org", "markit", "sources/markitkey");
+                return null;
             }
-            catch(Exception ex) 
-            {
-                if (ex.Message == "server")
-                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
-                else if (ex.Message == "users file")
-                    MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
-                return new ClassUser(-1, "error", "error");
-            }
-            foreach(ClassUser user in userList.Users)
+            foreach (ClassUser user in userList.Users)
             {
                 if (user.Email == TextBoxEmail.Text)
                 {
-                    if(user.Password == PasswordBoxPassword.Password)
+                    if (user.Password == PasswordBoxPassword.Password)
                     {
                         return user;
                     }
                     else
                     {
-                        throw new Exception("password false");
+                        break;
                     }
                 }
             }
-            throw new Exception("user does not exist");
+            LabelPasswordNotCorrect.Visibility = Visibility.Visible;
+            PasswordBoxPassword.BorderThickness = new Thickness(3);
+            PasswordBoxPassword.BorderBrush = Brushes.LightCoral;
+            TextBoxEmail.BorderThickness = new Thickness(3);
+            TextBoxEmail.BorderBrush = Brushes.LightCoral;
+            return null;
         }
 
         private void ButtonGuest_Click(object sender, RoutedEventArgs e)
@@ -111,117 +106,6 @@ namespace MarkIt.login_register
             WindowUserLogin.Guest = true;
             WindowUserLogin.window.Close();
             MainWindow.currentUser = new ClassUser(-1, "guest", "guest");
-        }
-
-        public static ClassUserList GetUsersFromServer(int port, string publicIP, string username, string privateKeyFilePath)
-        {
-            // code inspired by StackOverflow/Autocompletion
-            ConnectionInfo connection;
-            try
-            {
-
-                PrivateKeyFile privateKey = new PrivateKeyFile(privateKeyFilePath);
-                
-                PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(username, privateKey);
-                connection = new ConnectionInfo(publicIP, port, username, privateKeyAuth);
-                Logger.logger.Debug("Successfully created connection with private key.");
-            }
-            catch
-            {
-                Logger.logger.Error("Privat key authentication or server unreachable");
-                throw new Exception("server");
-            }
-            try
-            {
-                using (SftpClient client = new SftpClient(connection))
-                {
-                    try
-                    {
-                        client.Connect();
-                    }
-                    catch
-                    {
-                        Logger.logger.Error("Server unreachable.");
-                        throw new Exception("server");
-                    }
-
-                    using (var stream = client.OpenRead("/files/users.json"))
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        string content = reader.ReadToEnd();
-                        ClassUserList userList = JsonSerializer.Deserialize<ClassUserList>(content);
-                        Logger.logger.Debug("Successfully got users from server.");
-                        client.Disconnect();
-                        return userList;
-                    }
-                }
-            }
-            catch(Exception e) 
-            {
-                if (e.Message == "server")
-                {
-                    throw new Exception("server");
-                }
-                Logger.logger.Fatal("No file \"users.json\".");
-                throw new Exception("users file");
-            }
-        }
-
-        public static void WriteUsersToServer(int port, string publicIP, string username, string privateKeyFilePath, ClassUserList userList)
-        {
-            // code inspired by StackOverflow/Autocompletion
-            ConnectionInfo connection;
-            try
-            {
-                PrivateKeyFile privateKey = new PrivateKeyFile(privateKeyFilePath);
-
-                PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(username, privateKey);
-                connection = new ConnectionInfo(publicIP, port, username, privateKeyAuth);
-                Logger.logger.Debug("Successfully created connection with private key.");
-            }
-            catch
-            {
-                Logger.logger.Error("Privat key authentication or server unreachable.");
-                throw new Exception("server");
-            }
-            try
-            {
-                using (SftpClient client = new SftpClient(connection))
-                {
-                    try
-                    {
-                        client.Connect();
-                    }
-                    catch
-                    {
-                        Logger.logger.Error("Server unreachable.");
-                        throw new Exception("server");
-                    }
-                    JsonSerializerOptions jsonoptions = new JsonSerializerOptions
-                    {
-                        WriteIndented = true
-                    };
-                    using (var stream = client.OpenWrite("files/users.json"))
-                    using (StreamWriter writer = new StreamWriter(stream))
-                    {
-                        string json = JsonSerializer.Serialize(userList, options: jsonoptions);
-                        writer.Write(json);
-                        Logger.logger.Debug("Successfully wrote users to server.");
-
-                    }
-                    client.Disconnect();
-                }
-            }
-            catch(Exception e)
-            {
-                if (e.Message == "server")
-                {
-                    throw new Exception("server");
-                }
-                Logger.logger.Error("No file \"users.json\".");
-                throw new Exception("users file");
-            }
-
         }
 
         private void TextBoxEmail_TextChanged(object sender, TextChangedEventArgs e)
@@ -240,6 +124,14 @@ namespace MarkIt.login_register
             PasswordBoxPassword.BorderBrush = Brushes.Gray;
             TextBoxEmail.BorderThickness = new Thickness(1);
             TextBoxEmail.BorderBrush = Brushes.Gray;
+        }
+
+        private void Page_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                ButtonLogin_Click(null, null);
+            }
         }
     }
 }

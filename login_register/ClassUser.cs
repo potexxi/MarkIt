@@ -31,8 +31,6 @@ namespace MarkIt.login_register
         public string Email { get; set; }
         public string Password { get; set; }
 
-        public ClassUser() { }
-
         public ClassUser(int id, string email, string password)
         {
             Id = id;

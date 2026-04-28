@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MarkIt.login_register"
+      xmlns:gif="http://wpfanimatedgif.codeplex.com"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="600"
       Title="Page2FA">
@@ -17,11 +18,11 @@
                     <Label Content="Enter the Code you recieved by E-Mail. Check Spam!" Foreground="Gray" Margin="24,30,0,0" FontFamily="Leelawadee UI"/>
                     <StackPanel Orientation="Horizontal" Margin="0,-3,0,0">
                         <Image Source="/images/code-user-login.png" Width="45" Margin="30,0,0,0"></Image>
-                        <TextBox Width="290" x:Name="TextBoxCode" VerticalContentAlignment="Center" MaxLength="6" TextChanged="TextBoxCode_TextChanged"></TextBox>
+                        <TextBox FontSize="14" Width="290" x:Name="TextBoxCode" VerticalContentAlignment="Center" MaxLength="6" TextChanged="TextBoxCode_TextChanged"></TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Resend Code in: 0s" x:Name="LabelTimer" Foreground="Gray" Margin="24,-4,0,0" FontFamily="Leelawadee UI"/>
-                        <Label Content="False. Try again!" x:Name="LabelFalse" Foreground="#FFFF3E3E" Visibility="Hidden" Margin="142,-4,0,0" FontFamily="Leelawadee UI"/>
+                        <Label Content="Resend Code in: 90s" x:Name="LabelTimer" Foreground="Gray" Margin="24,-4,0,0" FontFamily="Leelawadee UI"/>
+                        <Label Content="Wrong Code. Try again!" x:Name="LabelFalse" Foreground="#FFFF3E3E" Visibility="Hidden" Margin="93,-4,0,0" FontFamily="Leelawadee UI"/>
                     </StackPanel>
                     <!--buttons-->
                     <Button Cursor="Hand" Content="OK" Width="200" x:Name="ButtonOK" Click="ButtonOK_Click" Height="40" FontSize="18" Margin="0,30,0,0" FontFamily="Leelawadee UI"/>
@@ -29,5 +30,9 @@
                 </StackPanel>
             </Border>
         </StackPanel>
+        <Grid Visibility="Hidden" x:Name="LoadingScreen">
+            <Rectangle Fill="#FF1F4572" Opacity="0.5"></Rectangle>
+            <Image Width="100" Visibility="Visible" Height="100" gif:ImageBehavior.AnimatedSource="/images/loading-animation.gif"></Image>
+        </Grid>
     </Grid>
 </Page>

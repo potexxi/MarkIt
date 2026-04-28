@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MarkIt.login_register"
+      xmlns:gif="http://wpfanimatedgif.codeplex.com"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PageRegister">
@@ -16,29 +17,29 @@
                     <!--Email field-->
                     <StackPanel Orientation="Horizontal">
                         <Label Content="E-Mail Address" Foreground="Gray" Margin="24,0,0,0" FontFamily="Leelawadee UI"/>
-                        <Label x:Name="LabelEmail" Visibility="Hidden" Content="E-Mail is already in use." Foreground="#FFFF3E3E" Margin="119,10,0,0" FontFamily="Leelawadee UI"/>
+                        <Label x:Name="LabelEmail" Visibility="Hidden" Content="E-Mail is already in use." Foreground="#FFFF3E3E" Margin="119,0,0,0" FontFamily="Leelawadee UI"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,-3,0,0">
                         <Image Source="/images/profil-user-login.jpg" Width="45" Margin="30,0,0,0"></Image>
-                        <TextBox x:Name="TextBoxEmail" TextChanged="TextBoxEmail_TextChanged" Width="290" VerticalContentAlignment="Center" MaxLength="100"></TextBox>
+                        <TextBox FontSize="14" x:Name="TextBoxEmail" TextChanged="TextBoxEmail_TextChanged" Width="290" VerticalContentAlignment="Center" MaxLength="100"></TextBox>
                     </StackPanel>
                     <!--Password field-->
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Enter Password" Foreground="Gray" Margin="24,5,0,0" FontFamily="Leelawadee UI"/>
-                        <Label x:Name="LabelPasswordNotCorrect1" Visibility="Hidden" Content="Password not the same." Foreground="#FFFF3E3E" Margin="119,10,0,0" FontFamily="Leelawadee UI"/>
+                        <Label x:Name="LabelPasswordNotCorrect1" Visibility="Hidden" Content="Password not the same." Foreground="#FFFF3E3E" Margin="119,0,0,0" FontFamily="Leelawadee UI"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,-3,0,0">
                         <Image Source="/images/lock-user-login.jpg" Width="45" Margin="30,0,0,0"></Image>
-                        <PasswordBox x:Name="TextBoxPassword1" Width="290" VerticalContentAlignment="Center" MaxLength="35" PasswordChanged="TextBoxPassword_PasswordChanged"></PasswordBox>
+                        <PasswordBox FontSize="14" x:Name="TextBoxPassword1" Width="290" VerticalContentAlignment="Center" MaxLength="35" PasswordChanged="TextBoxPassword_PasswordChanged"></PasswordBox>
                     </StackPanel>
                     <!--Password field again-->
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Enter Password again" Foreground="Gray" Margin="24,5,0,0" FontFamily="Leelawadee UI"/>
-                        <Label x:Name="LabelPasswordNotCorrect2" Visibility="Hidden" Content="Password not the same." Foreground="#FFFF3E3E" Margin="86,10,0,0" FontFamily="Leelawadee UI"/>
+                        <Label x:Name="LabelPasswordNotCorrect2" Visibility="Hidden" Content="Password not the same." Foreground="#FFFF3E3E" Margin="86,0,0,0" FontFamily="Leelawadee UI"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,-3,0,0">
                         <Image Source="/images/lock-user-login.jpg" Width="45" Margin="30,0,0,0"></Image>
-                        <PasswordBox x:Name="TextBoxPassword2" Width="290" PasswordChanged="TextBoxPassword_PasswordChanged" VerticalContentAlignment="Center" MaxLength="35"></PasswordBox>
+                        <PasswordBox FontSize="14" x:Name="TextBoxPassword2" Width="290" PasswordChanged="TextBoxPassword_PasswordChanged" VerticalContentAlignment="Center" MaxLength="35"></PasswordBox>
                     </StackPanel>
                     <!--Register button-->
                     <Button x:Name="ButtonRegister" Cursor="Hand" Content="REGISTER" Width="200" Height="40" FontSize="18" Margin="0,20,0,0" FontFamily="Leelawadee UI" Click="ButtonRegister_Click"/>
@@ -47,5 +48,9 @@
             <!--Register Button-->
             <Button Margin="0,20,0,0" Content="Login instead" Width="200" x:Name="ButtonLogin" Click="ButtonLogin_Click" Cursor="Hand" FontFamily="Leelawadee UI" FontSize="14" HorizontalContentAlignment="Center" ></Button>
         </StackPanel>
+        <Grid Visibility="Hidden" x:Name="LoadingScreen">
+            <Rectangle Fill="#FF1F4572" Opacity="0.5"></Rectangle>
+            <Image Width="100" Visibility="Visible" Height="100" gif:ImageBehavior.AnimatedSource="/images/loading-animation.gif"></Image>
+        </Grid>
     </Grid>
 </Page>

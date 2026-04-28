@@ -21,11 +21,14 @@ namespace MarkIt
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static ClassUser currentUser;
+        public static ClassUser? currentUser;
+        public static ServerManager ServerManager;
         public MainWindow()
         {
             InitializeComponent();
             Logger.Init();
+            ServerManager = new ServerManager();
+            ServerManager.CreatePrivateKeyAuth();
             WindowUserLogin window = new WindowUserLogin();
             window.ShowDialog();
 

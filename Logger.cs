@@ -9,7 +9,7 @@ namespace MarkIt
 {
     public static class Logger
     {
-        public static Serilog.ILogger logger { get; set; }
+        public static Serilog.ILogger? logger { get; set; }
 
 
 

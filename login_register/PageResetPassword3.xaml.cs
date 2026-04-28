@@ -25,14 +25,52 @@ namespace MarkIt.login_register
             InitializeComponent();
         }
 
-        private void ButtonReset_Click(object sender, RoutedEventArgs e)
+        private async void ButtonReset_Click(object sender, RoutedEventArgs e)
         {
-            WindowUserLogin.Navigate("PagePassword3", "PageLogin");
+            if(Password1.Password != Password2.Password)
+            {
+                Password1.BorderThickness = new Thickness(3);
+                Password1.BorderBrush = Brushes.LightCoral;
+                LabelPasswordFalse1.Visibility = Visibility.Visible;
+                Password2.BorderThickness = new Thickness(3);
+                Password2.BorderBrush = Brushes.LightCoral;
+                LabelPasswordFalse2.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ClassUserList? userList = await WindowUserLogin.UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
+                if(userList == null)
+                {
+                    return;
+                }
+                foreach(ClassUser user in userList.Users)
+                {
+                    if (user.Email == WindowUserLogin.EmailManager.Email)
+                    {
+                        user.Password = Password2.Password;
+                    }
+                }
+                if (await WindowUserLogin.UserManager.WriteUsersToServer(userList, LoadingScreen))
+                {
+                    WindowUserLogin.Navigate("PagePassword3", "PageLogin");
+                }
+                return;
+            }
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             WindowUserLogin.Navigate("PagePassword3", "PageLogin");
+        }
+
+        private void Password_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            Password1.BorderBrush = Brushes.Gray;
+            Password1.BorderThickness = new Thickness(1);
+            LabelPasswordFalse1.Visibility = Visibility.Hidden;
+            Password2.BorderBrush = Brushes.Gray;
+            Password2.BorderThickness = new Thickness(1);
+            LabelPasswordFalse2.Visibility = Visibility.Hidden;
         }
     }
 }

@@ -30,21 +30,13 @@ namespace MarkIt.login_register
             WindowUserLogin.Navigate("PageRegister", "PageLogin");
         }
 
-        private void ButtonRegister_Click(object sender, RoutedEventArgs e)
+        private async void ButtonRegister_Click(object sender, RoutedEventArgs e)
         {
             if(TextBoxPassword1.Password == TextBoxPassword2.Password)
             {
-                ClassUserList userList;
-                try
+                ClassUserList? userList = await WindowUserLogin.UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
+                if (userList == null)
                 {
-                    userList = PageLogin.GetUsersFromServer(10220, "potexxi.duckdns.org", "markit", "sources/markitkey");
-                }
-                catch (Exception ex)
-                {
-                    if (ex.Message == "server")
-                        MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
-                    else if (ex.Message == "users file")
-                        MessageBox.Show("Our server caused a fatal error, please try again later.", "File not found", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
                 int highestId = -1;
@@ -62,13 +54,16 @@ namespace MarkIt.login_register
                         highestId = user.Id;
                     }
                 }
-                if (PageRecetPassword1.SendEmail(TextBoxEmail.Text, "register"))
+                if (await WindowUserLogin.EmailManager.SendEmailAndHandleErrors(TextBoxEmail.Text, LoadingScreen))
                 {
                     MainWindow.currentUser = new ClassUser(highestId + 1, TextBoxEmail.Text, TextBoxPassword2.Password);
                     userList.Users.Add(MainWindow.currentUser);
-                    PageLogin.WriteUsersToServer(10220, "potexxi.duckdns.org", "markit", "sources/markitkey", userList);
-                    WindowUserLogin.Navigate("PageRegister", "Page2FA");
-                    Page2FA.Timer.Start();
+                    if (await WindowUserLogin.UserManager.WriteUsersToServer(userList, LoadingScreen))
+                    {
+                        WindowUserLogin.Navigate("PageRegister", "Page2FA");
+                        Page2FA.Timer.Start();
+                    }
+                    return;
                 }
             }
             else
