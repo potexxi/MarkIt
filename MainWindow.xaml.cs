@@ -22,11 +22,13 @@ namespace MarkIt
     public partial class MainWindow : Window
     {
         public static ClassUser? currentUser;
+        public static ServerManager ServerManager;
         public MainWindow()
         {
             InitializeComponent();
             Logger.Init();
-            ServerSettings.Init(10220, "potexxi.duckdns.org", "markit", "sources/markitkey");
+            ServerManager = new ServerManager();
+            ServerManager.CreatePrivateKeyAuth();
             WindowUserLogin window = new WindowUserLogin();
             window.ShowDialog();
 

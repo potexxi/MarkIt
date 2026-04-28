@@ -26,7 +26,7 @@ namespace MarkIt
         public static Frame? FrameMain;
         public static bool Guest = false;
         public static WindowUserLogin? window;
-        public static EmailManager? EmailManager;
+        public static EmailManager EmailManager = new EmailManager();
         public static UserManager UserManager = new UserManager();
         public WindowUserLogin()
         {
@@ -34,7 +34,6 @@ namespace MarkIt
             window = this;
             FrameMain = MainFrame;
             pages = new Dictionary<string, Page>();
-            EmailManager = new EmailManager();
             pages.Add("PageLogin", new PageLogin());
             ClassUserList? userList = UserManager.GetRemeberedUsers();
             if (userList == null)

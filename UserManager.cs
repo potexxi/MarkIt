@@ -30,22 +30,17 @@ namespace MarkIt
             loadingScreen.Visibility = Visibility.Visible;
             var (userList,errortype)  = await Task.Run(() =>
             {
-                ConnectionInfo connection;
-                try
+                if(MainWindow.ServerManager.ConnectionInfo == null)
                 {
-                    PrivateKeyFile privateKey = new PrivateKeyFile(ServerSettings.KeyFilePath);
-                    PrivateKeyAuthenticationMethod privateKeyAuth = new PrivateKeyAuthenticationMethod(ServerSettings.Username, privateKey);
-                    connection = new ConnectionInfo(ServerSettings.PublicIp, ServerSettings.Port, ServerSettings.Username, privateKeyAuth);
-                    Logger.logger.Debug("Successfully initiated connection with private key.");
-                }
-                catch
-                {
-                    Logger.logger.Error("Privat key authentication or server unreachable");
-                    return (null, ErrorType.PrivKey);
+                    MainWindow.ServerManager.CreatePrivateKeyAuth();
+                    if(MainWindow.ServerManager.ConnectionInfo == null)
+                    {
+                        return (null, ErrorType.PrivKey);
+                    }
                 }
                 try
                 {
-                    using (SftpClient client = new SftpClient(connection))
+                    using (SftpClient client = new SftpClient(MainWindow.ServerManager.ConnectionInfo))
                     {
                         client.Connect();
                         using (var stream = client.OpenRead("/files/users.json"))
