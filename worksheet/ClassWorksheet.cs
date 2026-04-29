@@ -24,13 +24,10 @@ namespace MarkIt.worksheet
         private List<Canvas> canvisWsPages;
 
         // might be moved to a different setting / config file
-        private double Zoom = 0.5;
+        private double Zoom = 0.8;
         private double pageMargin = 50;
 
-        public ClassWorksheet()
-        {
-
-        }
+        public ClassWorksheet() {}
         public ClassWorksheet(Grid _gridWorkSheet)
         {
             this.gridWorkSheet = _gridWorkSheet;
@@ -73,6 +70,10 @@ namespace MarkIt.worksheet
 
         private void TextboxPage_TextChanged(object sender, TextChangedEventArgs e)
         {
+            ClassPages page = new ClassPages(gridWorkSheet);
+            TextBox textbox = (TextBox)sender;
+            page.content = textbox.Text;
+            page.Render();
             //MessageBox.Show(Convert.ToString(sender));
             CheckIfNextPage(0);
         }
@@ -80,7 +81,7 @@ namespace MarkIt.worksheet
         private void CheckIfNextPage(int pagenumber)
         // this methode sees if the user should be creating a new page if he presses the enter-key
         {
-            MessageBox.Show(wsStringPages[pagenumber]);
+            //MessageBox.Show(wsStringPages[pagenumber]);
             if (wsStringPages[pagenumber].Split("\n").Count() >= 10)
             {
                 MessageBox.Show("10 Zeilen");
