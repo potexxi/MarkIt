@@ -9,3 +9,4 @@
 | Karim | 22.04. | Work on Worksheet |
 | Max | 22.04. - 25.04. | Bug fixes |
 | Max | 27.04. | finished sftp-login-register |
+| Max | 29.04 | supabase setup on server | 

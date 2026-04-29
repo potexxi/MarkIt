@@ -9,6 +9,10 @@
       Title="PageRememberedUser">
 
     <Grid>
+        <!--Claude Code Anfang-->
+        <!--PROMPT: generiere mir im markit project im file PagRememberedUsers.xaml den XAML code fuer eine page, auf der man angemeldete-->
+        <!--user auswaehlen kann und sich mit denen anmeldet. mache nur das design, fuege dann noch ein stackpanel ein, in das ich-->
+        <!--vom c# code aus buttons hinzufuegen kann, jeder remembered user bekommt ein button-->
         <StackPanel Background="#FF1F4572">
             <Border CornerRadius="20" Background="#FF01021C" Width="400" Margin="0,15,0,0">
                 <StackPanel Orientation="Vertical" Width="400">
@@ -26,4 +30,5 @@
             </StackPanel>
         </StackPanel>
     </Grid>
+    <!--Claude Code ende-->
 </Page>

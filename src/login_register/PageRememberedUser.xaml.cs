@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MarkIt.login_register
@@ -20,17 +21,14 @@ namespace MarkIt.login_register
             StackPanelUsers.Children.Clear();
             foreach (ClassUser user in _userList.Users)
             {
-                Button button = new Button
-                {
-                    Content = user.Email,
-                    Height = 40,
-                    FontSize = 15,
-                    FontFamily = new System.Windows.Media.FontFamily("Leelawadee UI"),
-                    Margin = new Thickness(0, 6, 0, 0),
-                    Cursor = System.Windows.Input.Cursors.Hand,
-                    // from Stackoverflow
-                    Tag = user
-                };
+                Button button = new Button();
+                button.Content = user.Email;
+                button.Height = 40;
+                button.FontSize = 15;
+                button.FontFamily = new FontFamily("Leelawadee UI");
+                button.Margin = new Thickness(0, 6, 0, 0);
+                button.Cursor = Cursors.Hand;
+                button.Tag = user;
                 button.Click += UserButton_Click;
                 StackPanelUsers.Children.Add(button);
             }
