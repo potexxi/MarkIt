@@ -15,6 +15,15 @@ namespace MarkIt
             ServerSettings.Init(10220, "potexxi.duckdns.org", "markit", "sources/markitkey");
         }
 
+        public void InitSupabaseClient()
+        {
+            MainWindow.supabase = new Supabase.Client(
+                "http://potexxi.duckdns.org:10222", 
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzc3NDg2MDEzLCJleHAiOjE5MzUxNjYwMTN9.nD1CD7gEaXtslcNpTd34JV9ACeD-06HjKzv8PERf3S0"
+                );
+            Logger.logger.Debug("Supabase client successfully initiated.");
+        }
+
         public void CreatePrivateKeyAuth()
         {
             ConnectionInfo connection;

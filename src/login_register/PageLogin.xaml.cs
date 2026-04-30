@@ -54,21 +54,39 @@ namespace MarkIt.login_register
 
         private async void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
-            if(TextBoxEmail.Text == "" || PasswordBoxPassword.Password == "")
+            //if(TextBoxEmail.Text == "" || PasswordBoxPassword.Password == "")
+            //{
+            //    return;
+            //}
+            //ClassUser? user = await CheckUserExists();
+            //if (user != null)
+            //{
+            //    if (CheckBoxRemember.IsChecked == true)
+            //    {
+            //        KeepMeLogedIn = true;
+            //    }
+            //    MainWindow.currentUser = user;
+            //    await WindowUserLogin.EmailManager.SendEmailAndHandleErrors(user.Email, LoadingScreen);
+            //    WindowUserLogin.Navigate("PageLogin", "Page2FA");
+            //    Page2FA.Timer.Start();
+            //}
+            var errortype =  await WindowUserLogin.UserManager.SignInAndHandleErrors(TextBoxEmail.Text, PasswordBoxPassword.Password.ToString(), LoadingScreen);
+            if(errortype == UserManager.ErrorType.OK)
+            {
+                WindowUserLogin.Guest = true;
+                WindowUserLogin.window.Close();
+            }
+            else if(errortype == UserManager.ErrorType.PasswordFalse)
+            {
+                LabelPasswordNotCorrect.Visibility = Visibility.Visible;
+                PasswordBoxPassword.BorderThickness = new Thickness(3);
+                PasswordBoxPassword.BorderBrush = Brushes.LightCoral;
+                TextBoxEmail.BorderThickness = new Thickness(3);
+                TextBoxEmail.BorderBrush = Brushes.LightCoral;
+            }
+            else if(errortype == UserManager.ErrorType.ServerUnreachable)
             {
                 return;
-            }
-            ClassUser? user = await CheckUserExists();
-            if (user != null)
-            {
-                if (CheckBoxRemember.IsChecked == true)
-                {
-                    KeepMeLogedIn = true;
-                }
-                MainWindow.currentUser = user;
-                await WindowUserLogin.EmailManager.SendEmailAndHandleErrors(user.Email, LoadingScreen);
-                WindowUserLogin.Navigate("PageLogin", "Page2FA");
-                Page2FA.Timer.Start();
             }
         }
 

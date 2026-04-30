@@ -17,13 +17,14 @@ namespace MarkIt
     {
         public UserManager() { }
 
-        private enum ErrorType
+        public enum ErrorType
         {
             Unknown,
             OK,
             ServerUnreachable,
             PrivKey,
-            UsersFile
+            UsersFile,
+            PasswordFalse
         }
 
         public async Task<ClassUserList?> GetUsersSupa()
@@ -45,9 +46,39 @@ namespace MarkIt
             {
                 MessageBox.Show(ex.ToString());
             }
-
             return null;
         }
+
+        public async Task<ErrorType> SignInAndHandleErrors(string email, string password, Grid loadingScreen)
+        {
+            loadingScreen.Visibility = Visibility.Visible;
+            try
+            {
+                await MainWindow.supabase.Auth.SignIn(email, password);
+                Logger.logger.Information("Login succesfully to server.");
+                return ErrorType.OK;
+            }
+            catch (Supabase.Gotrue.Exceptions.GotrueException)
+            {
+                Logger.logger.Debug("Invalid password or email.");
+                return ErrorType.PasswordFalse;
+            }
+            catch (NotSupportedException)
+            {
+                MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                Logger.logger.Error("Server unreachable.");
+                return ErrorType.ServerUnreachable;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return ErrorType.OK;
+            }
+            finally
+            {
+                loadingScreen.Visibility = Visibility.Hidden;
+            }
+}
 
         public async Task<ClassUserList?> GetUsersFromServerAndHandleErrors(Grid loadingScreen)
         {
