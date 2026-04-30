@@ -30,7 +30,7 @@ namespace MarkIt
         {
             try
             {
-                var client = new Supabase.Client(
+                var client = new Client(
                     "http://potexxi.duckdns.org:10223",
                     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzc3NDg2MDEzLCJleHAiOjE5MzUxNjYwMTN9.nD1CD7gEaXtslcNpTd34JV9ACeD-06HjKzv8PERf3S0"
                 );
