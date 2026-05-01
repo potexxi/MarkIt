@@ -34,35 +34,17 @@ namespace MarkIt.login_register
         {
             if(TextBoxPassword1.Password == TextBoxPassword2.Password)
             {
-                ClassUserList? userList = await WindowUserLogin.UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
-                if (userList == null)
+                var errortype = await WindowUserLogin.UserManager.SignUpAndHandleErrors(TextBoxEmail.Text, TextBoxPassword2.Password, LoadingScreen);
+                if(errortype == UserManager.ErrorType.OK)
                 {
-                    return;
+                    WindowUserLogin.Navigate("PageRegister", "Page2FA");
+                    Page2FA.Timer.Start();
                 }
-                int highestId = -1;
-                foreach (ClassUser user in userList.Users)
+                else if(errortype == UserManager.ErrorType.EmailExists)
                 {
-                    if(user.Email == TextBoxEmail.Text)
-                    {
-                        LabelEmail.Visibility = Visibility.Visible;
-                        TextBoxEmail.BorderBrush = Brushes.LightCoral;
-                        TextBoxEmail.BorderThickness = new Thickness(3);
-                        return;
-                    }
-                    if (user.Id > highestId)
-                    {
-                        highestId = user.Id;
-                    }
-                }
-                if (await WindowUserLogin.EmailManager.SendEmailAndHandleErrors(TextBoxEmail.Text, LoadingScreen))
-                {
-                    MainWindow.currentUser = new ClassUser(highestId + 1, TextBoxEmail.Text, TextBoxPassword2.Password);
-                    userList.Users.Add(MainWindow.currentUser);
-                    if (await WindowUserLogin.UserManager.WriteUsersToServer(userList, LoadingScreen))
-                    {
-                        WindowUserLogin.Navigate("PageRegister", "Page2FA");
-                        Page2FA.Timer.Start();
-                    }
+                    LabelEmail.Visibility = Visibility.Visible;
+                    TextBoxEmail.BorderBrush = Brushes.LightCoral;
+                    TextBoxEmail.BorderThickness = new Thickness(3);
                     return;
                 }
             }

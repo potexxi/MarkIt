@@ -90,34 +90,34 @@ namespace MarkIt.login_register
             }
         }
 
-        private async Task<ClassUser?> CheckUserExists()
-        {
-            ClassUserList? userList = await WindowUserLogin.UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
-            if(userList == null)
-            {
-                return null;
-            }
-            foreach (ClassUser user in userList.Users)
-            {
-                if (user.Email == TextBoxEmail.Text)
-                {
-                    if (user.Password == PasswordBoxPassword.Password)
-                    {
-                        return user;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            LabelPasswordNotCorrect.Visibility = Visibility.Visible;
-            PasswordBoxPassword.BorderThickness = new Thickness(3);
-            PasswordBoxPassword.BorderBrush = Brushes.LightCoral;
-            TextBoxEmail.BorderThickness = new Thickness(3);
-            TextBoxEmail.BorderBrush = Brushes.LightCoral;
-            return null;
-        }
+        //private async Task<ClassUser?> CheckUserExists()
+        //{
+        //    ClassUserList? userList = await WindowUserLogin.UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
+        //    if(userList == null)
+        //    {
+        //        return null;
+        //    }
+        //    foreach (ClassUser user in userList.Users)
+        //    {
+        //        if (user.Email == TextBoxEmail.Text)
+        //        {
+        //            if (user.Password == PasswordBoxPassword.Password)
+        //            {
+        //                return user;
+        //            }
+        //            else
+        //            {
+        //                break;
+        //            }
+        //        }
+        //    }
+        //    LabelPasswordNotCorrect.Visibility = Visibility.Visible;
+        //    PasswordBoxPassword.BorderThickness = new Thickness(3);
+        //    PasswordBoxPassword.BorderBrush = Brushes.LightCoral;
+        //    TextBoxEmail.BorderThickness = new Thickness(3);
+        //    TextBoxEmail.BorderBrush = Brushes.LightCoral;
+        //    return null;
+        //}
 
         private void ButtonGuest_Click(object sender, RoutedEventArgs e)
         {
