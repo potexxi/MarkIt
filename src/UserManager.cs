@@ -1,5 +1,4 @@
 ﻿using MarkIt.login_register;
-using Renci.SshNet;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -232,7 +231,7 @@ namespace MarkIt
         //    return result;
         //}
 
-        public ClassUserList? GetRemeberedUsers()
+        public List<Supabase.Gotrue.Session>? GetRemeberedUsers()
         {
             if (File.Exists("sources/remembered.json"))
             {
@@ -240,7 +239,7 @@ namespace MarkIt
                 {
                     using (StreamReader reader = new StreamReader("sources/remembered.json"))
                     {
-                        return JsonSerializer.Deserialize<ClassUserList>(reader.ReadToEnd());
+                        return JsonSerializer.Deserialize<List<Supabase.Gotrue.Session>>(reader.ReadToEnd());
                     }
                 }
                 catch
@@ -256,21 +255,21 @@ namespace MarkIt
             }
         }
 
-        public void WriteToRememberedUsers(ClassUser user)
+        public void WriteToRememberedUsers(Supabase.Gotrue.Session currentSession)
         {
-            ClassUserList? userList = GetRemeberedUsers();
-            if (userList == null)
+            List<Supabase.Gotrue.Session>? sessions = GetRemeberedUsers();
+            if (sessions == null)
             {
-                userList = new ClassUserList();
+                sessions = new List<Supabase.Gotrue.Session>();
             }
             JsonSerializerOptions options = new JsonSerializerOptions
             {
                 WriteIndented = true
             };
-            userList.Users.Add(user);
+            sessions.Add(currentSession);
             using (StreamWriter writer = new StreamWriter("sources/remembered.json"))
             {
-                writer.Write(JsonSerializer.Serialize(userList, options: options));
+                writer.Write(JsonSerializer.Serialize(sessions, options: options));
             }
         }
     }

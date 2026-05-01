@@ -15,7 +15,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using Renci.SshNet;
 
 namespace MarkIt.login_register
 {
@@ -73,6 +72,10 @@ namespace MarkIt.login_register
             var errortype =  await WindowUserLogin.UserManager.SignInAndHandleErrors(TextBoxEmail.Text, PasswordBoxPassword.Password.ToString(), LoadingScreen);
             if(errortype == UserManager.ErrorType.OK)
             {
+                if(CheckBoxRemember.IsChecked == true)
+                {
+                    WindowUserLogin.UserManager.WriteToRememberedUsers(MainWindow.supabase.Auth.CurrentSession);
+                }
                 WindowUserLogin.Guest = true;
                 WindowUserLogin.window.Close();
             }
@@ -83,10 +86,6 @@ namespace MarkIt.login_register
                 PasswordBoxPassword.BorderBrush = Brushes.LightCoral;
                 TextBoxEmail.BorderThickness = new Thickness(3);
                 TextBoxEmail.BorderBrush = Brushes.LightCoral;
-            }
-            else if(errortype == UserManager.ErrorType.ServerUnreachable)
-            {
-                return;
             }
         }
 

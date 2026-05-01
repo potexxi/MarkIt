@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace MarkIt
 {

@@ -21,22 +21,48 @@ namespace MarkIt.login_register
     /// </summary>
     public partial class Page2FA : Page
     {
-        public static DispatcherTimer Timer { get; private set; }
+        public static DispatcherTimer TimerResend { get; private set; }
+        public static DispatcherTimer TimerCheckVerified;
         private int timerCount = 90;
 
         public Page2FA()
         {
             InitializeComponent();
-            Timer = new DispatcherTimer();
-            Timer.Interval = TimeSpan.FromSeconds(1);
-            Timer.Tick += Timer_Tick;
+            TimerResend = new DispatcherTimer();
+            TimerResend.Interval = TimeSpan.FromSeconds(1);
+            TimerResend.Tick += Timer_Tick;
+            TimerCheckVerified = new DispatcherTimer();
+            TimerCheckVerified.Interval = TimeSpan.FromSeconds(1);
+            TimerCheckVerified.Tick += TimerCheckVerified_Tick;
+        }
+
+        private async void TimerCheckVerified_Tick(object? sender, EventArgs e)
+        {
+            try
+            {
+                var signin = await MainWindow.supabase.Auth.SignIn(MainWindow.currentUser.Email, MainWindow.currentUser.Password);
+                WindowUserLogin.Guest = true;
+                TimerResend.Stop();
+                TimerCheckVerified.Stop();
+                LabelTimer.Content = $"Resend Code in: {timerCount}s";
+                timerCount = 90;
+                WindowUserLogin.window.Close();
+            }
+            catch(Supabase.Gotrue.Exceptions.GotrueException ex)
+            {
+                if(ex.Reason is Supabase.Gotrue.Exceptions.FailureHint.Reason.UserEmailNotConfirmed)
+                {
+                    Logger.logger.Debug("User not confirmed.");
+                }
+            }
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             timerCount = 90;
             LabelTimer.Content = $"Resend Code in: {timerCount}s";
-            Timer.Stop();
+            TimerResend.Stop();
+            TimerCheckVerified.Stop();
             WindowUserLogin.Navigate("Page2FA", "PageLogin");
         }
 
@@ -53,9 +79,9 @@ namespace MarkIt.login_register
                 // ChatGPT ende
                 if (result != null)
                 {
-                    // TODO: keep me logged in
                     WindowUserLogin.Guest = true;
-                    Timer.Stop();
+                    TimerResend.Stop();
+                    TimerCheckVerified.Stop();
                     LabelTimer.Content = $"Resend Code in: {timerCount}s";
                     timerCount = 90;
                     WindowUserLogin.window.Close();

@@ -38,7 +38,8 @@ namespace MarkIt.login_register
                 if(errortype == UserManager.ErrorType.OK)
                 {
                     WindowUserLogin.Navigate("PageRegister", "Page2FA");
-                    Page2FA.Timer.Start();
+                    Page2FA.TimerResend.Start();
+                    Page2FA.TimerCheckVerified.Start();
                 }
                 else if(errortype == UserManager.ErrorType.EmailExists)
                 {

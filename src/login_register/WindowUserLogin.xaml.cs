@@ -1,4 +1,5 @@
 ﻿using MarkIt.login_register;
+using Supabase.Gotrue;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,7 +36,7 @@ namespace MarkIt
             FrameMain = MainFrame;
             pages = new Dictionary<string, Page>();
             pages.Add("PageLogin", new PageLogin());
-            ClassUserList? userList = UserManager.GetRemeberedUsers();
+            List<Session>? userList = UserManager.GetRemeberedUsers();
             //UserManager.GetUsersSupa();
             if (userList == null)
             {
