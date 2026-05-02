@@ -63,6 +63,7 @@ namespace MarkIt.login_register
             }
             catch (Supabase.Gotrue.Exceptions.GotrueException ex)
             {
+                LoadingScreen.Visibility = Visibility.Hidden;
                 if (ex.InnerException is HttpRequestException)
                 {
                     MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
