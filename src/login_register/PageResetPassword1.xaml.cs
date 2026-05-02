@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Mail;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,8 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Net.Mail;
-using System.Net.Mime;
+using static MarkIt.UserManager;
 
 namespace MarkIt.login_register
 {
@@ -51,6 +53,37 @@ namespace MarkIt.login_register
             //    WindowUserLogin.Navigate("PagePassword1", "PagePassword2");
             //    PageRecetPassword2.Timer.Start();
             //}
+            try
+            {
+                LoadingScreen.Visibility = Visibility.Visible;
+                await MainWindow.supabase.Auth.ResetPasswordForEmail(TextBoxEmail.Text);
+                LoadingScreen.Visibility = Visibility.Hidden;
+                WindowUserLogin.Navigate("PagePassword1", "PagePassword2");
+                PageRecetPassword2.TimerResend.Start();
+            }
+            catch (Supabase.Gotrue.Exceptions.GotrueException ex)
+            {
+                if (ex.InnerException is HttpRequestException)
+                {
+                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                    Logger.logger.Error($"Server unreachable. {ex.Message}");
+                    return;
+                }
+                else if (ex.Reason is Supabase.Gotrue.Exceptions.FailureHint.Reason.UserBadEmailAddress)
+                {
+                    MessageBox.Show("Bad Email-Address! Check if your Email-Address is in valid format.", "Bad Email", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Logger.logger.Debug($"Bad Email: {TextBoxEmail.Text}");
+                    return;
+                }
+                else if (ex.Reason is Supabase.Gotrue.Exceptions.FailureHint.Reason.UserTooManyRequests)
+                {
+                    Logger.logger.Debug($"Too many requests {TextBoxEmail.Text}");
+                    MessageBox.Show("Too many requests! Please try again later.", "Too many requests.", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+                LoadingScreen.Visibility = Visibility.Hidden;
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)

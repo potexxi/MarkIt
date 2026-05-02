@@ -21,15 +21,40 @@ namespace MarkIt.login_register
     /// </summary>
     public partial class PageRecetPassword2 : Page
     {
-        public static DispatcherTimer Timer { get; private set; }
+        public static DispatcherTimer TimerResend { get; private set; }
+        public static DispatcherTimer TimerCheckVerified;
         public static int timerCount = 90;
         public PageRecetPassword2()
         {
             InitializeComponent();
             timerCount = 90;
-            Timer = new DispatcherTimer();
-            Timer.Interval = TimeSpan.FromSeconds(1);
-            Timer.Tick += Timer_Tick;
+            TimerResend = new DispatcherTimer();
+            TimerResend.Interval = TimeSpan.FromSeconds(1);
+            TimerResend.Tick += Timer_Tick;
+            TimerCheckVerified = new DispatcherTimer();
+            TimerCheckVerified.Interval = TimeSpan.FromSeconds(1);
+            TimerCheckVerified.Tick += TimerCheckVerified_Tick;
+        }
+
+        private async void TimerCheckVerified_Tick(object? sender, EventArgs e)
+        {
+            try
+            {
+                var signin = await MainWindow.supabase.Auth.SignIn(MainWindow.currentUser.Email, MainWindow.currentUser.Password);
+                WindowUserLogin.Guest = true;
+                TimerResend.Stop();
+                TimerCheckVerified.Stop();
+                LabelTimer.Content = $"Resend Code in: {timerCount}s";
+                timerCount = 90;
+                WindowUserLogin.window.Close();
+            }
+            catch (Supabase.Gotrue.Exceptions.GotrueException ex)
+            {
+                if (ex.Reason is Supabase.Gotrue.Exceptions.FailureHint.Reason.UserEmailNotConfirmed)
+                {
+                    Logger.logger.Debug("User not confirmed.");
+                }
+            }
         }
 
         private async void Timer_Tick(object? sender, EventArgs e)
@@ -43,15 +68,28 @@ namespace MarkIt.login_register
             LabelTimer.Content = $"Resend Code in: {timerCount}s";
         }
 
-        private void ButtonOK_Click(object sender, RoutedEventArgs e)
+        private async void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
-            if ($"{WindowUserLogin.EmailManager.Code.ToString():D6}" == TextBoxCode.Text)
+            try
             {
-                WindowUserLogin.Navigate("PagePassword2", "PagePassword3");
-                timerCount = 90;
-                Timer.Stop();
+                // ChatGPT anfang
+                // Prompt: c# supabase checken ob ein code == code in verify email ist
+                var result = await MainWindow.supabase.Auth.VerifyOTP(
+                    email: MainWindow.currentUser.Email,
+                    token: TextBoxCode.Text,
+                    type: Supabase.Gotrue.Constants.EmailOtpType.Email);
+                // ChatGPT ende
+                if (result != null)
+                {
+                    WindowUserLogin.Guest = true;
+                    TimerResend.Stop();
+                    TimerCheckVerified.Stop();
+                    LabelTimer.Content = $"Resend Code in: {timerCount}s";
+                    timerCount = 90;
+                    WindowUserLogin.window.Close();
+                }
             }
-            else
+            catch
             {
                 TextBoxCode.BorderThickness = new Thickness(3);
                 TextBoxCode.BorderBrush = Brushes.LightCoral;
@@ -64,7 +102,7 @@ namespace MarkIt.login_register
             WindowUserLogin.Navigate("PagePassword2", "PagePassword1");
             timerCount = 90;
             LabelTimer.Content = $"Resend Code in: {timerCount}s";
-            Timer.Stop();
+            TimerResend.Stop();
         }
 
         private void TextBoxCode_TextChanged(object sender, TextChangedEventArgs e)
