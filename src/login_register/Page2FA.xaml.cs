@@ -84,7 +84,7 @@ namespace MarkIt.login_register
                     TimerCheckVerified.Stop();
                     LabelTimer.Content = $"Resend Code in: {timerCount}s";
                     timerCount = 90;
-                    WindowUserLogin.window.Close();
+                    WindowUserLogin.Navigate("PagePassword2", "PagePassword3");
                 }
             }
             catch

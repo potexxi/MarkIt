@@ -32,34 +32,14 @@ namespace MarkIt.login_register
 
         private async void ButtonSend_Click(object sender, RoutedEventArgs e)
         {
-            //string email = TextBoxEmail.Text;
-            //ClassUserList? userList = await WindowUserLogin.UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
-            //if(userList == null)
-            //{
-            //    return;
-            //}
-            //bool exists = false;
-            //foreach(ClassUser user in userList.Users)
-            //{
-            //    if (user.Email == WindowUserLogin.EmailManager.Email) { exists = true; break; }
-            //}
-            //if (!exists)
-            //{
-            //    MessageBox.Show("This user does not exist. Enter an existing user or create an account!", "No user", MessageBoxButton.OK, MessageBoxImage.Question);
-            //    return;
-            //}
-            //if (await WindowUserLogin.EmailManager.SendEmailAndHandleErrors(email, LoadingScreen))
-            //{
-            //    WindowUserLogin.Navigate("PagePassword1", "PagePassword2");
-            //    PageRecetPassword2.Timer.Start();
-            //}
             try
             {
                 LoadingScreen.Visibility = Visibility.Visible;
                 await MainWindow.supabase.Auth.ResetPasswordForEmail(TextBoxEmail.Text);
+                MainWindow.currentUser = new ClassUser(TextBoxEmail.Text, "reset");
                 LoadingScreen.Visibility = Visibility.Hidden;
+                PageRecetPassword2.StartPasswordListener();
                 WindowUserLogin.Navigate("PagePassword1", "PagePassword2");
-                PageRecetPassword2.TimerResend.Start();
             }
             catch (Supabase.Gotrue.Exceptions.GotrueException ex)
             {

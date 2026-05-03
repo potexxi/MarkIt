@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,52 +22,37 @@ namespace MarkIt.login_register
     /// </summary>
     public partial class PageRecetPassword2 : Page
     {
-        public static DispatcherTimer TimerResend { get; private set; }
-        public static DispatcherTimer TimerCheckVerified;
-        public static int timerCount = 90;
         public PageRecetPassword2()
         {
             InitializeComponent();
-            timerCount = 90;
-            TimerResend = new DispatcherTimer();
-            TimerResend.Interval = TimeSpan.FromSeconds(1);
-            TimerResend.Tick += Timer_Tick;
-            TimerCheckVerified = new DispatcherTimer();
-            TimerCheckVerified.Interval = TimeSpan.FromSeconds(1);
-            TimerCheckVerified.Tick += TimerCheckVerified_Tick;
         }
 
-        private async void TimerCheckVerified_Tick(object? sender, EventArgs e)
+        // Claude Anfang
+        // Prompt: wie kann ich von meiner password reset site an meine wpf app ein request senden also dass das password
+        // veraendert wurde
+        public static async void StartPasswordListener()
         {
-            try
+            var listener = new HttpListener();
+            listener.Prefixes.Add("http://localhost:9876/password-changed/");
+            listener.Start();
+
+            await Task.Run(async () =>
             {
-                var signin = await MainWindow.supabase.Auth.SignIn(MainWindow.currentUser.Email, MainWindow.currentUser.Password);
-                WindowUserLogin.Guest = true;
-                TimerResend.Stop();
-                TimerCheckVerified.Stop();
-                LabelTimer.Content = $"Resend Code in: {timerCount}s";
-                timerCount = 90;
-                WindowUserLogin.window.Close();
-            }
-            catch (Supabase.Gotrue.Exceptions.GotrueException ex)
-            {
-                if (ex.Reason is Supabase.Gotrue.Exceptions.FailureHint.Reason.UserEmailNotConfirmed)
+                var ctx = await listener.GetContextAsync();
+
+                // CORS Header damit Browser nicht blockiert
+                ctx.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                ctx.Response.Close();
+
+                Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Logger.logger.Debug("User not confirmed.");
-                }
-            }
+                    MessageBox.Show("Your password has been succesfully changed. Please login again!", "Password reset", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Logger.logger.Debug($"User changed password via Link: {MainWindow.currentUser.Email}");
+                    WindowUserLogin.Navigate("PagePassword3", "PageLogin");
+                });
+            });
         }
-
-        private async void Timer_Tick(object? sender, EventArgs e)
-        {
-            timerCount -= 1;
-            if (timerCount <= 0)
-            {
-                timerCount = 90;
-                //await WindowUserLogin.EmailManager.SendEmailAndHandleErrors(WindowUserLogin.EmailManager.Email, LoadingScreen);
-            }
-            LabelTimer.Content = $"Resend Code in: {timerCount}s";
-        }
+        // Claude Ende
 
         private async void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
@@ -82,11 +68,7 @@ namespace MarkIt.login_register
                 if (result != null)
                 {
                     WindowUserLogin.Guest = true;
-                    TimerResend.Stop();
-                    TimerCheckVerified.Stop();
-                    LabelTimer.Content = $"Resend Code in: {timerCount}s";
-                    timerCount = 90;
-                    WindowUserLogin.window.Close();
+                    WindowUserLogin.Navigate("PagePassword2", "PagePassword3");
                 }
             }
             catch
@@ -100,9 +82,6 @@ namespace MarkIt.login_register
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             WindowUserLogin.Navigate("PagePassword2", "PagePassword1");
-            timerCount = 90;
-            LabelTimer.Content = $"Resend Code in: {timerCount}s";
-            TimerResend.Stop();
         }
 
         private void TextBoxCode_TextChanged(object sender, TextChangedEventArgs e)
