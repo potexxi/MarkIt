@@ -74,7 +74,7 @@ namespace MarkIt.login_register
         private void ButtonGuest_Click(object sender, RoutedEventArgs e)
         {
             WindowUserLogin.Guest = true;
-            MainWindow.currentUser = new ClassUser(-1, "guest", "guest");
+            MainWindow.currentUser = new ClassUser("guest", "guest");
             WindowUserLogin.window.Close();
         }
     }

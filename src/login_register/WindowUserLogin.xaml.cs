@@ -27,7 +27,6 @@ namespace MarkIt
         public static Frame? FrameMain;
         public static bool Guest = false;
         public static WindowUserLogin? window;
-        public static EmailManager EmailManager = new EmailManager();
         public static UserManager UserManager = new UserManager();
         public WindowUserLogin()
         {

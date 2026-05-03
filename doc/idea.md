@@ -8,6 +8,7 @@
     - [Cloud-Syncs/Work-Togheter](#cloud-syncswork-togheter)
     - [User-Accounts](#user-accounts)
     - [Skizzen](#skizzen)
+    - [Klassen-UML](#klassen-uml)
 
 ### Unsere Idee
 
@@ -55,3 +56,62 @@ User-Accounts wollen wir entweder mit einer kleinen SQL-Datenbank verwalten oder
 
 ![alt text](images/main-window.png)
 ![alt text](images/settings.png)
+
+### Klassen-UML
+
+@startuml
+top to bottom direction
+
+skinparam classAttributeIconSize 0
+
+class UserManager {
+    + ErrorType : enum
+    --
+    + UserManager()
+    --
+    + SignInAndHandleErrors(email : string, password : string): void
+    + SignUpAndHandleErrors(email: string, password: string): void
+    + GetRememberedUsers(): List<Session>
+    + WriteToRememberedUsers(currentSession: session): void
+}
+
+class Logger {
+    + Logger : ILogger
+    --
+    + Init(): void
+}
+
+class ServerSettings {
+    <u>+ Port: int {get; private set}
+    <u>+ PublicIP: string {get; private set}
+    <u>+ Username: string {get; private set}
+    <u>+ KeyFilePath: string {get; private set}
+    --
+    <u>+ Init(): void
+}
+
+class ServerManager{
+    + ServerStatus: enum
+    --
+    + ServerManager()
+    --
+    + InitSupabaseClient(): void
+    + GetStatus(): ServerStatus
+}
+
+class ClassUser{
+    + Email: string {get ; set}
+    + Password: string {get ; set}
+    --
+    + ClassUser(email: string, password:string)
+}
+
+' ChatGPT Anfang
+' prompt: wie kann ich in plantuml diagramme untereinenader machen
+UserManager -[hidden]-> Logger
+Logger -[hidden]-> ServerSettings
+ServerSettings -[hidden]-> ServerManager
+ServerManager -[hidden]-> ClassUser
+' ChatGPT ende
+
+@enduml

@@ -13,3 +13,4 @@
 | Max | 30.04. | intigrate supabase into c# code |
 | Max | 01.05. | intigrate supabase into c# code |
 | Max | 02.05. | password reset with supabase |
+| Max | 03.05 | --//-- and class uml |

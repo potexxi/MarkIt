@@ -122,7 +122,7 @@ namespace MarkIt.login_register
         {
             WindowUserLogin.Guest = true;
             WindowUserLogin.window.Close();
-            MainWindow.currentUser = new ClassUser(-1, "guest", "guest");
+            MainWindow.currentUser = new ClassUser("guest", "guest");
         }
 
         private void TextBoxEmail_TextChanged(object sender, TextChangedEventArgs e)

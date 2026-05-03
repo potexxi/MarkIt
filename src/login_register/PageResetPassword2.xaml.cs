@@ -63,7 +63,7 @@ namespace MarkIt.login_register
             if (timerCount <= 0)
             {
                 timerCount = 90;
-                await WindowUserLogin.EmailManager.SendEmailAndHandleErrors(WindowUserLogin.EmailManager.Email, LoadingScreen);
+                //await WindowUserLogin.EmailManager.SendEmailAndHandleErrors(WindowUserLogin.EmailManager.Email, LoadingScreen);
             }
             LabelTimer.Content = $"Resend Code in: {timerCount}s";
         }

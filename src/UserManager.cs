@@ -66,7 +66,7 @@ namespace MarkIt
             try
             {
                 await MainWindow.supabase.Auth.SignUp(email, password);
-                MainWindow.currentUser = new ClassUser(0, email, password);
+                MainWindow.currentUser = new ClassUser(email, password);
                 Logger.logger.Information("Register succesfully to server.");
                 loadingScreen.Visibility = Visibility.Hidden;
                 return ErrorType.OK;
