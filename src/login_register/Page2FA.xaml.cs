@@ -79,12 +79,11 @@ namespace MarkIt.login_register
                 // ChatGPT ende
                 if (result != null)
                 {
-                    WindowUserLogin.Guest = true;
                     TimerResend.Stop();
                     TimerCheckVerified.Stop();
                     LabelTimer.Content = $"Resend Code in: {timerCount}s";
                     timerCount = 90;
-                    WindowUserLogin.Navigate("PagePassword2", "PagePassword3");
+                    WindowUserLogin.Navigate("Page2FA", "PageLogin");
                 }
             }
             catch

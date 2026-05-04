@@ -17,13 +17,13 @@ namespace MarkIt
 
         public ServerManager() 
         {
-            ServerSettings.Init(10220, "potexxi.duckdns.org", "markit", "sources/markitkey");
+            ServerSettings.Init(10223, "89.247.162.135");
         }
 
         public void InitSupabaseClient()
         {
             MainWindow.supabase = new Supabase.Client(
-                "http://potexxi.duckdns.org:10223", 
+                $"http://{ServerSettings.PublicIp}:{ServerSettings.Port}", 
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzc3NDg2MDEzLCJleHAiOjE5MzUxNjYwMTN9.nD1CD7gEaXtslcNpTd34JV9ACeD-06HjKzv8PERf3S0"
                 );
             Logger.logger.Debug("Supabase client successfully initiated.");

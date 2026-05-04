@@ -49,6 +49,8 @@ namespace MarkIt.login_register
                     MessageBox.Show("Your password has been succesfully changed. Please login again!", "Password reset", MessageBoxButton.OK, MessageBoxImage.Information);
                     Logger.logger.Debug($"User changed password via Link: {MainWindow.currentUser.Email}");
                     WindowUserLogin.Navigate("PagePassword3", "PageLogin");
+                    listener.Stop();
+                    listener.Close();
                 });
             });
         }
@@ -67,7 +69,6 @@ namespace MarkIt.login_register
                 // ChatGPT ende
                 if (result != null)
                 {
-                    WindowUserLogin.Guest = true;
                     WindowUserLogin.Navigate("PagePassword2", "PagePassword3");
                 }
             }
