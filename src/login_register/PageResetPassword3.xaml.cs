@@ -27,7 +27,7 @@ namespace MarkIt.login_register
 
         private async void ButtonReset_Click(object sender, RoutedEventArgs e)
         {
-            if(Password1.Password != Password2.Password)
+            if (Password1.Password != Password2.Password)
             {
                 Password1.BorderThickness = new Thickness(3);
                 Password1.BorderBrush = Brushes.LightCoral;
@@ -38,22 +38,14 @@ namespace MarkIt.login_register
             }
             else
             {
-                ClassUserList? userList = await WindowUserLogin.UserManager.GetUsersFromServerAndHandleErrors(LoadingScreen);
-                if(userList == null)
-                {
-                    return;
-                }
-                foreach(ClassUser user in userList.Users)
-                {
-                    if (user.Email == WindowUserLogin.EmailManager.Email)
-                    {
-                        user.Password = Password2.Password;
-                    }
-                }
-                if (await WindowUserLogin.UserManager.WriteUsersToServer(userList, LoadingScreen))
-                {
-                    WindowUserLogin.Navigate("PagePassword3", "PageLogin");
-                }
+                LoadingScreen.Visibility = Visibility.Visible;
+                await MainWindow.supabase.Auth.Update(new Supabase.Gotrue.UserAttributes { Password = Password2.Password });
+                ClassUser newUser = new ClassUser(MainWindow.currentUser.Email, Password2.Password);
+                MainWindow.currentUser = newUser;
+                LoadingScreen.Visibility = Visibility.Hidden;
+                MessageBox.Show("Your password has been succesfully changed. Please login again!", "Password reset", MessageBoxButton.OK, MessageBoxImage.Information);
+                Logger.logger.Debug($"User changed password: {MainWindow.currentUser.Email}");
+                WindowUserLogin.Navigate("PagePassword3", "PageLogin");
                 return;
             }
         }
