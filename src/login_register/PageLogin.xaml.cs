@@ -53,6 +53,7 @@ namespace MarkIt.login_register
 
         private async void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
+            if (TextBoxEmail.Text == "" && PasswordBoxPassword.Password == "") return;
             var errortype =  await WindowUserLogin.UserManager.SignInAndHandleErrors(TextBoxEmail.Text, PasswordBoxPassword.Password.ToString(), LoadingScreen);
             if(errortype == UserManager.ErrorType.OK)
             {

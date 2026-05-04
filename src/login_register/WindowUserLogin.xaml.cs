@@ -37,7 +37,7 @@ namespace MarkIt
             pages.Add("PageLogin", new PageLogin());
             List<Session>? userList = UserManager.GetRemeberedUsers();
             //UserManager.GetUsersSupa();
-            if (userList == null)
+            if (userList == null || userList.Count == 0)
             {
                 FrameMain.Navigate(pages["PageLogin"]);
             }

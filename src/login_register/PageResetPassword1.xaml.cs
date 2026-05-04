@@ -32,6 +32,7 @@ namespace MarkIt.login_register
 
         private async void ButtonSend_Click(object sender, RoutedEventArgs e)
         {
+            if (TextBoxEmail.Text == "") return;
             try
             {
                 LoadingScreen.Visibility = Visibility.Visible;
@@ -75,6 +76,14 @@ namespace MarkIt.login_register
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             WindowUserLogin.Navigate("PagePassword1", "PageLogin");
+        }
+
+        private void Page_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                ButtonSend_Click(sender, e);
+            }
         }
     }
 }

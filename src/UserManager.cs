@@ -167,9 +167,15 @@ namespace MarkIt
             List<Supabase.Gotrue.Session>? sessions = GetRemeberedUsers();
             if (sessions == null)
             {
-                return;
+                sessions = new List<Session>();
             }
-            sessions.Remove(session);
+            else
+            {
+                // ChatGPT-Anfang
+                // Prompt: davor: sessions.Remove(session) und dann STRG c STRG v : wieso wird sie session nicht richtig removed
+                sessions.RemoveAll(s => s.AccessToken == session.AccessToken);
+                // ChatGPT-Ende
+            }
             JsonSerializerOptions options = new JsonSerializerOptions
             {
                 WriteIndented = true
