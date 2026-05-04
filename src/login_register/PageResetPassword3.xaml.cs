@@ -27,6 +27,7 @@ namespace MarkIt.login_register
 
         private async void ButtonReset_Click(object sender, RoutedEventArgs e)
         {
+            WindowMessageBox box;
             if (Password1.Password != Password2.Password)
             {
                 Password1.BorderThickness = new Thickness(3);
@@ -39,11 +40,25 @@ namespace MarkIt.login_register
             else
             {
                 LoadingScreen.Visibility = Visibility.Visible;
-                await MainWindow.supabase.Auth.Update(new Supabase.Gotrue.UserAttributes { Password = Password2.Password });
+                try
+                {
+                    await MainWindow.supabase.Auth.Update(new Supabase.Gotrue.UserAttributes { Password = Password2.Password });
+                }
+                catch(Supabase.Gotrue.Exceptions.GotrueException ex)
+                {
+                    if (ex.Reason is Supabase.Gotrue.Exceptions.FailureHint.Reason.UserBadPassword)
+                    {
+                        box = new WindowMessageBox("Passwords", "Password should be different!");
+                        box.ShowDialog();
+                        LoadingScreen.Visibility = Visibility.Hidden;
+                        return;
+                    }
+                }
                 ClassUser newUser = new ClassUser(MainWindow.currentUser.Email, Password2.Password);
                 MainWindow.currentUser = newUser;
                 LoadingScreen.Visibility = Visibility.Hidden;
-                MessageBox.Show("Your password has been succesfully changed. Please login again!", "Password reset", MessageBoxButton.OK, MessageBoxImage.Information);
+                box = new WindowMessageBox("Password reset", "Your password has been succesfully changed. Please login again!");
+                box.ShowDialog();
                 Logger.logger.Debug($"User changed password: {MainWindow.currentUser.Email}");
                 WindowUserLogin.Navigate("PagePassword3", "PageLogin");
                 return;

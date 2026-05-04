@@ -1,0 +1,21 @@
+﻿<Window x:Class="MarkIt.WindowMessageBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MarkIt"
+        mc:Ignorable="d"
+        Title="WindowMessageBox" Height="220" Width="410" ResizeMode="NoResize">
+    <Grid Background="#FF1F4572">
+        <StackPanel Orientation="Horizontal">
+            <Image Source="/images/markit-logo.png" Width="120"></Image>
+            <StackPanel Orientation="Vertical" Width="281">
+                <Label x:Name="LabelHeading" Content="Test" Margin="0,0,0,0" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Leelawadee UI" FontSize="30" FontWeight="Bold"/>
+                <TextBlock x:Name="LabelContent" Text="test" TextWrapping="Wrap" Margin="0,0,0,0" Width="261" Foreground="White" FontFamily="Leelawadee UI" FontSize="16" Height="78"/>
+                <StackPanel Width="260" Height="46" x:Name="StackPanelButtons" Orientation="Horizontal">
+
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
