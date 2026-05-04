@@ -1,0 +1,259 @@
+<!--ALLES VON LEHRER BECHTOLD NICHT VON UNS-->
+
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>POS Projekt — Checkliste</title>
+<style>
+body{margin:2rem;font-family:sans-serif;background:#fff;color:#222;max-width:800px;}
+.progress-wrap{background:#f0f0f0;border-radius:99px;height:6px;margin:6px 0 1.5rem;}
+.progress-bar{height:6px;border-radius:99px;background:#1D9E75;transition:width .3s;}
+div[onclick]:hover{background:#f5f5f5;border-radius:6px;}
+@media print{body{margin:1cm;}}
+</style>
+</head>
+<body>
+<h2 style="font-size:18px;font-weight:500;margin:0 0 4px;">POS Projekt — Checkliste</h2>
+<div id="prog-label" style="font-size:12px;color:#888;">0 von 0 erledigt</div>
+<div class="progress-wrap"><div class="progress-bar" id="prog-bar" style="width:0%"></div></div>
+<div style="margin-bottom:1.5rem;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <div style="width:9px;height:9px;border-radius:50%;background:#7F77DD;flex-shrink:0;"></div>
+      <span style="font-size:13px;font-weight:500;color:#222;">1. Team & Projektidee</span>
+    </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Team zusammengestellt (2er-Team)</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Projektidee ausgedacht und grob beschrieben</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Dokument: Wie werden Mindestanforderungen umgesetzt?</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Dokument: Must-have Features definiert</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Dokument: Nice-to-have Features definiert</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Dokument: Grobe Umsetzungsidee beschrieben</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Dokument abgegeben & Freigabe erhalten</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#FAECE7;color:#712B13;">Abgabe</span>
+        </div>
+      </div></div><div style="margin-bottom:1.5rem;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <div style="width:9px;height:9px;border-radius:50%;background:#1D9E75;flex-shrink:0;"></div>
+      <span style="font-size:13px;font-weight:500;color:#222;">2. Planungsphase</span>
+    </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">GUI-Skizzen erstellt (welche Fenster gibt es?)</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Benutzernavigation geplant</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Klassendiagramm erstellt (verpflichtend!)</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Klassendetails geplant: Properties, Methoden, Konstruktoren</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Tabellarischer Zeitplan erstellt (Datum / Tätigkeit / Person / Zeitschätzung)</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Git Repository angelegt</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#E1F5EE;color:#085041;">Git</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Ordnerstruktur angelegt (doc/, src/, bin/)</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#E1F5EE;color:#085041;">Git</span>
+        </div>
+      </div></div><div style="margin-bottom:1.5rem;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <div style="width:9px;height:9px;border-radius:50%;background:#BA7517;flex-shrink:0;"></div>
+      <span style="font-size:13px;font-weight:500;color:#222;">3. Umsetzungsphase</span>
+    </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">OOP umgesetzt (Klassen verwendet)</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Collections verwendet (Listen, ...)</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">UserControls implementiert</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Grafische Darstellung von Objekten umgesetzt</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Prozedurales Zeichnen von UI-Elementen umgesetzt</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Serialisierung implementiert (Speichern/Laden)</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Unterformulare / PopUp-Fenster implementiert</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Logging implementiert</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Animationen erstellt</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#EEEDFE;color:#3C3489;">Pflicht</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Projekttagebuch laufend geführt (wer / wann / was)</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#FAECE7;color:#712B13;">Abgabe</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Dokumentation laufend erweitert</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#FAECE7;color:#712B13;">Abgabe</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Stolpersteine & Lösungen dokumentiert</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#FAECE7;color:#712B13;">Abgabe</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Regelmäßige Git-Commits von beiden Mitgliedern</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#E1F5EE;color:#085041;">Git</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Mit feature branches gearbeitet</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#E1F5EE;color:#085041;">Git</span>
+        </div>
+      </div></div><div style="margin-bottom:1.5rem;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <div style="width:9px;height:9px;border-radius:50%;background:#D85A30;flex-shrink:0;"></div>
+      <span style="font-size:13px;font-weight:500;color:#222;">4. Abgabe & Dokumentation</span>
+    </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Lastenheft / Projektplanung vollständig</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#FAECE7;color:#712B13;">Abgabe</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Pflichtenheft: Softwarevoraussetzungen mit Versionen</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#FAECE7;color:#712B13;">Abgabe</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Pflichtenheft: Architektur & Funktionsblöcke beschrieben</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#FAECE7;color:#712B13;">Abgabe</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Pflichtenheft: Detaillierte Umsetzungsbeschreibung</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#FAECE7;color:#712B13;">Abgabe</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Pflichtenheft: Probleme & Lösungen dokumentiert</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#FAECE7;color:#712B13;">Abgabe</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Testbeschreibung verfasst (wie wurde getestet?)</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#FAECE7;color:#712B13;">Abgabe</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Bedienungsanleitung mit Screenshots erstellt</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#FAECE7;color:#712B13;">Abgabe</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Quellenverzeichnis für Grafiken/Medien (mit Lizenz)</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#FAECE7;color:#712B13;">Abgabe</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Dokumentation als Markdown + PDF exportiert</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#FAECE7;color:#712B13;">Abgabe</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Kompiliertes Programm in bin/ mit allen Abhängigkeiten</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#FAECE7;color:#712B13;">Abgabe</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Git Repository aktualisiert & vollständig</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#E1F5EE;color:#085041;">Git</span>
+        </div>
+      </div><div style="display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;" onclick="toggle(this)">
+        <div style="width:16px;height:16px;border-radius:3px;border:1.5px solid #ccc;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;" class="cb" data-done="0"></div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+          <span style="font-size:13px;color:#222;line-height:1.4;" class="ct">Abgabe pünktlich & vollständig eingereicht</span><span style="font-size:11px;padding:2px 7px;border-radius:99px;margin-left:6px;background:#FAECE7;color:#712B13;">Abgabe</span>
+        </div>
+      </div></div>
+<script>
+function toggle(el){
+  const cb=el.querySelector('.cb'),ct=el.querySelector('.ct');
+  const done=cb.dataset.done==='1';
+  if(!done){
+    cb.style.background='#1D9E75';cb.style.borderColor='#1D9E75';
+    cb.innerHTML='<svg width="10" height="7" viewBox="0 0 10 7"><path d="M1 3.5L3.5 6L9 1" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><\/svg>';
+    ct.style.textDecoration='line-through';ct.style.color='#aaa';cb.dataset.done='1';
+  } else {
+    cb.style.background='';cb.style.borderColor='#ccc';cb.innerHTML='';
+    ct.style.textDecoration='';ct.style.color='#222';cb.dataset.done='0';
+  }
+  updateProgress();
+}
+function updateProgress(){
+  const all=document.querySelectorAll('.cb');
+  const done=[...all].filter(c=>c.dataset.done==='1').length;
+  const pct=all.length?Math.round(done/all.length*100):0;
+  document.getElementById('prog-bar').style.width=pct+'%';
+  document.getElementById('prog-label').textContent=done+' von '+all.length+' erledigt ('+pct+'%)';
+}
+updateProgress();
+</script>
+</body>
+</html>
