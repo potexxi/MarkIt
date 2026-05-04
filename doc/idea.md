@@ -84,8 +84,6 @@ class Logger {
 class ServerSettings {
     <u>+ Port: int {get; private set}
     <u>+ PublicIP: string {get; private set}
-    <u>+ Username: string {get; private set}
-    <u>+ KeyFilePath: string {get; private set}
     --
     <u>+ Init(): void
 }
@@ -106,6 +104,61 @@ class ClassUser{
     + ClassUser(email: string, password:string)
 }
 
+class Settings{
+    + With: double {get ; set}
+    + Height: double {get ; set}
+    + Color: Color {get ; set}
+    --
+    + Settings()
+    --
+    + LoadString(): Settings
+    + SaveString(): string
+    + AllColors(): List<Color>
+    + ChangeColors(): void
+}
+
+class ToolBar{
+    + GridToolBar: Grid {get ; set}
+    --
+    + ToolBar()
+    --
+    + Init(): void
+    + SetColorSchem(foreground:Color, background:Color): void
+    + ButtonClick(): void
+    + ...
+}
+
+class Worksheet{
+    + pages: List<Page> {get ; set}
+    + Zoom: double {get ; set}
+    + GirdWorksheet: Grid {get ; set}
+    --
+    + Worksheet(GridWorksheet)
+    --
+    + Render():void
+    + findCurrentPage():void
+    + Init()
+}
+
+class Page{
+    + lines: List<string> {get ; set}
+    + TextBoxesPage: List<Textbox>
+    --
+    + Page()
+    + Page(contente: string)
+    --
+    + Render(): void;
+    + ToString(): string
+}
+
+class WorksheetUtilities{
+    --
+    <u>+ findSymbole(content:string, symbole:char):List<char>
+    + ...
+}
+
+
+
 ' ChatGPT Anfang
 ' prompt: wie kann ich in plantuml diagramme untereinenader machen
 UserManager -[hidden]-> Logger
@@ -113,5 +166,11 @@ Logger -[hidden]-> ServerSettings
 ServerSettings -[hidden]-> ServerManager
 ServerManager -[hidden]-> ClassUser
 ' ChatGPT ende
+
+ClassUser -[hidden]-> Settings
+Settings -[hidden]-> ToolBar
+ToolBar -[hidden]-> Worksheet
+Worksheet -[hidden]-> Page
+Page -[hidden]-> WorksheetUtilities
 
 @enduml
