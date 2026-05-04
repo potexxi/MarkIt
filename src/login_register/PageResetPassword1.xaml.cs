@@ -44,26 +44,31 @@ namespace MarkIt.login_register
             catch (Supabase.Gotrue.Exceptions.GotrueException ex)
             {
                 LoadingScreen.Visibility = Visibility.Hidden;
+                WindowMessageBox box;
                 if (ex.InnerException is HttpRequestException)
                 {
-                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                    box = new WindowMessageBox("Server offline", "Currently our server is offline, please try again later or continue as guest.");
+                    box.ShowDialog();
                     Logger.logger.Error($"Server unreachable. {ex.Message}");
                     return;
                 }
                 else if (ex.Reason is Supabase.Gotrue.Exceptions.FailureHint.Reason.UserBadEmailAddress)
                 {
-                    MessageBox.Show("Bad Email-Address! Check if your Email-Address is in valid format.", "Bad Email", MessageBoxButton.OK, MessageBoxImage.Information);
+                    box = new WindowMessageBox("Bad Email", "Bad Email-Address! Check if your Email-Address is in valid format.");
+                    box.ShowDialog();
                     Logger.logger.Debug($"Bad Email: {TextBoxEmail.Text}");
                     return;
                 }
                 else if (ex.Reason is Supabase.Gotrue.Exceptions.FailureHint.Reason.UserTooManyRequests)
                 {
                     Logger.logger.Debug($"Too many requests {TextBoxEmail.Text}");
-                    MessageBox.Show("Too many requests! Please try again later.", "Too many requests.", MessageBoxButton.OK, MessageBoxImage.Information);
+                    box = new WindowMessageBox("Too many requests.", "Too many requests! Please try again later.");
+                    box.ShowDialog();
                     return;
                 }
                 LoadingScreen.Visibility = Visibility.Hidden;
-                MessageBox.Show(ex.ToString());
+                box = new WindowMessageBox("Unknown", ex.ToString());
+                box.ShowDialog();
             }
         }
 

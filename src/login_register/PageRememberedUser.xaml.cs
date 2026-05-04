@@ -53,9 +53,11 @@ namespace MarkIt.login_register
             }
             catch(Exception ex)
             {
-                File.Delete("sources/remembered.json");
+                _sessions.Remove(session);
+                WindowUserLogin.UserManager.RemoveFromRememberedUsers(session);
                 LoadingScreen.Visibility = Visibility.Hidden;
-                MessageBox.Show("Our server caused a fatal error. Please relogin!", "Relogin", MessageBoxButton.OK, MessageBoxImage.Information);
+                var box = new WindowMessageBox("Relogin", "Our server caused a fatal error. Please relogin!");
+                box.ShowDialog();
                 Logger.logger.Debug($"Remembered Users: {ex.Message}");
                 WindowUserLogin.Navigate("Remembered", "PageLogin");
             }

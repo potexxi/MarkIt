@@ -33,11 +33,19 @@ namespace MarkIt
             No
         }
 
+        public WindowMessageBox(string heading, string content)
+        {
+            InitializeComponent();
+            LabelHeading.Content = heading;
+            LabelContent.Text = content;
+            DrawButtons(ButtonType.Okay);
+        }
+
         public WindowMessageBox(string heading, string content, ButtonType buttonType)
         {
             InitializeComponent();
             LabelHeading.Content = heading;
-            LabelContent.Content = content;
+            LabelContent.Text = content;
             DrawButtons(buttonType);
         }
 
@@ -50,6 +58,7 @@ namespace MarkIt
                 button.Width = 200;
                 button.Height = 40;
                 button.Cursor = Cursors.Hand;
+                button.Margin = new Thickness(30, 0, 0, 0);
                 button.FontSize = 18;
                 button.FontFamily = new FontFamily("Leelawadee UI");
                 button.Click += Okay_Click;
@@ -63,6 +72,7 @@ namespace MarkIt
                 button1.Height = 40;
                 button1.Cursor = Cursors.Hand;
                 button1.FontSize = 18;
+                button1.Margin = new Thickness(30,0,0,0);
                 button1.FontFamily = new FontFamily("Leelawadee UI");
                 button1.Click += Yes_Click;
                 StackPanelButtons.Children.Add(button1);

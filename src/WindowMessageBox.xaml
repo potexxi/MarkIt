@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MarkIt"
         mc:Ignorable="d"
-        Title="WindowMessageBox" Height="200" Width="400">
+        Title="WindowMessageBox" Height="220" Width="410" ResizeMode="NoResize">
     <Grid Background="#FF1F4572">
         <StackPanel Orientation="Horizontal">
             <Image Source="/images/markit-logo.png" Width="120"></Image>
             <StackPanel Orientation="Vertical" Width="281">
                 <Label x:Name="LabelHeading" Content="Test" Margin="0,0,0,0" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Leelawadee UI" FontSize="30" FontWeight="Bold"/>
-                <Label x:Name="LabelContent" Content="test" Margin="0,0,0,0" Width="261" HorizontalContentAlignment="Left" Foreground="White" FontFamily="Leelawadee UI" FontSize="18"/>
-                <StackPanel x:Name="StackPanelButtons" Orientation="Horizontal">
+                <TextBlock x:Name="LabelContent" Text="test" TextWrapping="Wrap" Margin="0,0,0,0" Width="261" Foreground="White" FontFamily="Leelawadee UI" FontSize="16" Height="78"/>
+                <StackPanel Width="260" Height="46" x:Name="StackPanelButtons" Orientation="Horizontal">
 
                 </StackPanel>
             </StackPanel>

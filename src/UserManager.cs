@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Net.Http;
+using Supabase.Gotrue;
 
 namespace MarkIt
 {
@@ -24,6 +25,7 @@ namespace MarkIt
         }
         public async Task<ErrorType> SignInAndHandleErrors(string email, string password, Grid loadingScreen)
         {
+            WindowMessageBox box;
             loadingScreen.Visibility = Visibility.Visible;
             try
             {
@@ -37,7 +39,8 @@ namespace MarkIt
                 loadingScreen.Visibility = Visibility.Hidden;
                 if (ex.InnerException is HttpRequestException)
                 {
-                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                    box = new WindowMessageBox("Server offline", "Currently our server is offline, please try again later or continue as guest.");
+                    box.ShowDialog();
                     Logger.logger.Error($"Server unreachable. {ex.Message}");
                     return ErrorType.ServerUnreachable;
                 }
@@ -47,7 +50,8 @@ namespace MarkIt
             catch(Exception ex)
             {
                 loadingScreen.Visibility = Visibility.Hidden;
-                MessageBox.Show("Our server caused a fatal error, please try again later.", "Unknown Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                box = new WindowMessageBox("Unknown Error", "Our server caused a fatal error, please try again later.");
+                box.ShowDialog();
                 Logger.logger.Fatal($"Unknown Error: {ex.Message}");
                 return ErrorType.OK;
             }
@@ -56,6 +60,7 @@ namespace MarkIt
         public async Task<ErrorType> SignUpAndHandleErrors(string email, string password, Grid loadingScreen)
         {
             loadingScreen.Visibility = Visibility.Visible;
+            WindowMessageBox box;
             try
             {
                 await MainWindow.supabase.Auth.SignUp(email, password);
@@ -69,19 +74,22 @@ namespace MarkIt
                 loadingScreen.Visibility = Visibility.Hidden;
                 if(ex.InnerException is HttpRequestException)
                 {
-                    MessageBox.Show("Currently our server is offline, please try again later or continue as guest.", "Server offline", MessageBoxButton.OK, MessageBoxImage.Question);
+                    box = new WindowMessageBox("Server offline", "Currently our server is offline, please try again later or continue as guest.");
+                    box.ShowDialog();
                     Logger.logger.Error($"Server unreachable. {ex.Message}");
                     return ErrorType.ServerUnreachable;
                 }
                 else if(ex.Reason is Supabase.Gotrue.Exceptions.FailureHint.Reason.UserBadPassword)
                 {
-                    MessageBox.Show("Bad Password! Password should be least 6 characters.", "Bad Password", MessageBoxButton.OK, MessageBoxImage.Information);
+                    box = new WindowMessageBox("Bad Password", "Bad Password! Password should be least 6 characters.");
+                    box.ShowDialog();
                     Logger.logger.Debug("Bad Password.");
                     return ErrorType.BadPassword;
                 }
                 else if (ex.Reason is Supabase.Gotrue.Exceptions.FailureHint.Reason.UserBadEmailAddress)
                 {
-                    MessageBox.Show("Bad Email-Address! Check if your Email-Address is in valid format.", "Bad Email", MessageBoxButton.OK, MessageBoxImage.Information);
+                    box = new WindowMessageBox("Bad Email", "Bad Email-Address! Check if your Email-Address is in valid format.");
+                    box.ShowDialog();
                     Logger.logger.Debug($"Bad Email: {email}");
                     return ErrorType.BadEmail;
                 }
@@ -93,18 +101,20 @@ namespace MarkIt
                 else if (ex.Reason is Supabase.Gotrue.Exceptions.FailureHint.Reason.UserTooManyRequests)
                 {
                     Logger.logger.Debug($"Too many requests {email}");
-                    MessageBox.Show("Too many requests! Please try again later.", "Too many requests.", MessageBoxButton.OK, MessageBoxImage.Information);
+                    box = new WindowMessageBox("Too many requests.", "Too many requests! Please try again later.");
+                    box.ShowDialog();
                     return ErrorType.Requests;
                 }
                 loadingScreen.Visibility = Visibility.Hidden;
-                MessageBox.Show("Our server caused a fatal error, please try again later.", "Unknown Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                box = new WindowMessageBox("Unknown Error", "Our server caused a fatal error, please try again later.");
                 Logger.logger.Fatal($"Unknown Error: {ex.Message}");
                 return ErrorType.Unknown;
             }
             catch (Exception ex)
             {
                 loadingScreen.Visibility = Visibility.Hidden;
-                MessageBox.Show("Our server caused a fatal error, please try again later.", "Unknown Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                box = new WindowMessageBox("Unknown Error", "Our server caused a fatal error, please try again later.");
+                box.ShowDialog();
                 Logger.logger.Fatal($"Unknown Error: {ex.Message}");
                 return ErrorType.Unknown;
             }
@@ -146,6 +156,24 @@ namespace MarkIt
                 WriteIndented = true
             };
             sessions.Add(currentSession);
+            using (StreamWriter writer = new StreamWriter("sources/remembered.json"))
+            {
+                writer.Write(JsonSerializer.Serialize(sessions, options: options));
+            }
+        }
+
+        public void RemoveFromRememberedUsers(Session session)
+        {
+            List<Supabase.Gotrue.Session>? sessions = GetRemeberedUsers();
+            if (sessions == null)
+            {
+                return;
+            }
+            sessions.Remove(session);
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
             using (StreamWriter writer = new StreamWriter("sources/remembered.json"))
             {
                 writer.Write(JsonSerializer.Serialize(sessions, options: options));
