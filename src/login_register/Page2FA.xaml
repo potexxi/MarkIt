@@ -7,7 +7,7 @@
       xmlns:gif="http://wpfanimatedgif.codeplex.com"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="600"
-      Title="Page2FA">
+      Title="Page2FA" KeyDown="Page_KeyDown">
 
     <Grid>
         <StackPanel Background="#FF1F4572" Margin="0,0,0,0">

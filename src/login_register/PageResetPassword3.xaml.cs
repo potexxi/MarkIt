@@ -27,6 +27,7 @@ namespace MarkIt.login_register
 
         private async void ButtonReset_Click(object sender, RoutedEventArgs e)
         {
+            if (Password1.Password == "" && Password2.Password == "") return;
             WindowMessageBox box;
             if (Password1.Password != Password2.Password)
             {
@@ -78,6 +79,14 @@ namespace MarkIt.login_register
             Password2.BorderBrush = Brushes.Gray;
             Password2.BorderThickness = new Thickness(1);
             LabelPasswordFalse2.Visibility = Visibility.Hidden;
+        }
+
+        private void Page_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                ButtonReset_Click(sender, e);
+            }
         }
     }
 }

@@ -59,6 +59,7 @@ namespace MarkIt.login_register
 
         private async void ButtonOK_Click(object sender, RoutedEventArgs e)
         {
+            if (TextBoxCode.Text == "") return;
             try
             {
                 // ChatGPT anfang
@@ -91,6 +92,14 @@ namespace MarkIt.login_register
             TextBoxCode.BorderThickness = new Thickness(1);
             TextBoxCode.BorderBrush = Brushes.Gray;
             LabelFalse.Visibility= Visibility.Hidden;
+        }
+
+        private void Page_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                ButtonOK_Click(sender, e);
+            }
         }
     }
 }

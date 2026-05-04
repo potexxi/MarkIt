@@ -32,6 +32,7 @@ namespace MarkIt.login_register
 
         private async void ButtonRegister_Click(object sender, RoutedEventArgs e)
         {
+            if (TextBoxEmail.Text == "" && TextBoxPassword1.Password == "" && TextBoxPassword2.Password == "") return;
             if(TextBoxPassword1.Password == TextBoxPassword2.Password)
             {
                 var errortype = await WindowUserLogin.UserManager.SignUpAndHandleErrors(TextBoxEmail.Text, TextBoxPassword2.Password, LoadingScreen);
@@ -75,6 +76,14 @@ namespace MarkIt.login_register
             LabelEmail.Visibility = Visibility.Hidden;
             TextBoxEmail.BorderBrush = Brushes.Gray;
             TextBoxEmail.BorderThickness = new Thickness(1);
+        }
+
+        private void Page_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                ButtonRegister_Click(sender, e);
+            }
         }
     }
 }
