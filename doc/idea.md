@@ -157,6 +157,17 @@ class WorksheetUtilities{
     + ...
 }
 
+class WindowMessageBox{
+    + returnType: ReturnType {get ; private set}
+    + ReturnType: enum
+    + ButtonType: enum
+    --
+    + WindowMessageBox(heading: string, content: string)
+    + WindowMessageBox(heading: string, content: string, buttonType: ButtonType)
+    --
+    - DrawButtons(buttonType: ButtonType): void
+}
+
 
 
 ' ChatGPT Anfang
@@ -172,5 +183,6 @@ Settings -[hidden]-> ToolBar
 ToolBar -[hidden]-> Worksheet
 Worksheet -[hidden]-> Page
 Page -[hidden]-> WorksheetUtilities
+WorksheetUtilities -[hidden]-> WindowMessageBox
 
 @enduml
