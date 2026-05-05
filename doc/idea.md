@@ -125,18 +125,33 @@ class ClassUser{
     + ClassUser(email: string, password:string)
 }
 
-class Settings{
+class GeneralSettings{
     - Width: double {get ; set}
     - Height: double {get ; set}
-    - Color: Color {get ; set}
+    - Color: Brush {get ; set}
+    - Colors: List<Brush>
     --
-    + Settings()
+    + GeneralSettings()
+    + GeneralSettings(width: double, height: double, color: Brush)
     --
     + LoadString(): Settings
     + SaveString(): string
-    + AllColors(): List<Color>
+    + GetAllColors(): List<Brush>
     + ChangeColors(): void
+    + GetCurrentColor(): Brush
+    + GetCurrentHeight(): double
+    + GetCurrentWidth(): double
 }
+
+class ColorTheme{
+    + MenuBarColor: string
+    + IconsColor: string
+    + HoverColor: string
+    + BackgroundColor: string
+    + SliderColor: string
+}
+
+GeneralSettings ..> ColorTheme
 
 class ToolBar{
     - GridToolBar: Grid {get ; set}
