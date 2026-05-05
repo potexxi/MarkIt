@@ -6,9 +6,10 @@
              xmlns:local="clr-namespace:MarkIt.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="50">
-    <Grid>
+    <Grid x:Name="GridInfo">
         <Rectangle HorizontalAlignment="Center" Height="30" Margin="0,20,0,0" Fill="Black" VerticalAlignment="Top" Width="14"/>
-        <Ellipse HorizontalAlignment="Center" Height="14" Margin="0,3,0,0" Fill="Black" VerticalAlignment="Top" Width="14"/>
+        <Ellipse x:Name="EllispeI" HorizontalAlignment="Center" Height="14" Margin="0,2,0,0" Fill="Black" VerticalAlignment="Top" Width="14"/>
 
+        <Rectangle HorizontalAlignment="Center" Height="50" Fill="Transparent" VerticalAlignment="Center" Width="50" MouseEnter="Rectangle_MouseEnter" MouseLeave="Rectangle_MouseLeave"/>
     </Grid>
 </UserControl>
