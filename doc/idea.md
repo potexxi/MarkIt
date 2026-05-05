@@ -126,21 +126,20 @@ class ClassUser{
 }
 
 class GeneralSettings{
-    - Width: double {get ; set}
-    - Height: double {get ; set}
-    - Color: Brush {get ; set}
-    - Colors: List<Brush>
+    + Width: double {get ; private set}
+    + Height: double {get ; private set}
+    + Color: Brush {get ; private set}
+    + Colors: List<Brush> {get ; private set}
     --
     + GeneralSettings()
     + GeneralSettings(width: double, height: double, color: Brush)
     --
-    + LoadString(): Settings
-    + SaveString(): string
+    <u>+ LoadFromFile(filename: string): GeneralSettings
+    + SaveToFile(filename: string): void
     + GetAllColors(): List<Brush>
-    + ChangeColors(): void
-    + GetCurrentColor(): Brush
-    + GetCurrentHeight(): double
-    + GetCurrentWidth(): double
+    + ChangeColor(color: Brush): void
+    + ChangeSize(width: double, height: double): void
+    - setColorsFromFile(): void
 }
 
 class ColorTheme{
@@ -149,12 +148,14 @@ class ColorTheme{
     + HoverColor: string
     + BackgroundColor: string
     + SliderColor: string
+    --
+    + ColorTheme(menuBarColor: string, iconsColor: string. hoverColor: string, backgroundColor:string, sliderColor: string)
 }
 
 GeneralSettings ..> ColorTheme
 
 class ToolBar{
-    - GridToolBar: Grid {get ; set}
+    - gridToolBar: Grid {get ; set}
     --
     + ToolBar()
     --
@@ -165,8 +166,8 @@ class ToolBar{
 
 class Worksheet{
     - pages: List<Page> {get ; set}
-    - Zoom: double {get ; set}
-    - GirdWorksheet: Grid {get ; set}
+    - zoom: double {get ; set}
+    - gridWorksheet: Grid {get ; set}
     --
     + Worksheet(GridWorksheet)
     --

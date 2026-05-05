@@ -10,7 +10,7 @@ namespace MarkIt
 {
     public class GeneralSettings
     {
-        private double width {  get; set; }
+        public double width {  get; private set; }
         private double height { get; set; }
         private Brush color {  get; set; }
         private List<Brush> colors {  get; set; }
@@ -23,6 +23,39 @@ namespace MarkIt
             this.height = height;
             this.color = color;
             this.colors = colors;
+        }
+
+        public static GeneralSettings LoadFromFile(string filename)
+        {
+            // TODO
+            return null;
+        }
+
+        public void SaveToFile(string filename)
+        {
+            // TODO
+        }
+
+        public List<Brush> GetAllColors()
+        {
+            // TODO
+            return [];
+        }
+
+        public void ChangeColor(Brush color)
+        {
+            this.color = color;
+        }
+
+        public void ChangeSize(double width, double height)
+        {
+            this.width = width;
+            this.height = height;
+        }
+
+        private void setColorsFromFile()
+        {
+            // TODO
         }
     }
 }
