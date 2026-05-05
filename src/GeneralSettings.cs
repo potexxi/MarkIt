@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -12,39 +14,54 @@ namespace MarkIt
     {
         public double width {  get; private set; }
         private double height { get; set; }
-        private Brush color {  get; set; }
-        private List<Brush> colors {  get; set; }
+        private ColorTheme? currentColorTheme {  get; set; }
+        private List<ColorTheme>? colorThemes {  get; set; }
 
         public GeneralSettings() { }
 
-        public GeneralSettings(double width, double height, Brush color, List<Brush> colors)
+        public GeneralSettings(double width, double height, ColorTheme color)
         {
+            setColorsFromFile();
             this.width = width;
             this.height = height;
-            this.color = color;
-            this.colors = colors;
+            this.currentColorTheme = color;
         }
 
-        public static GeneralSettings LoadFromFile(string filename)
+        public static GeneralSettings? LoadFromFile(string filename)
         {
-            // TODO
-            return null;
+            try
+            {
+                using (StreamReader sr = new StreamReader(filename))
+                {
+                    return JsonSerializer.Deserialize<GeneralSettings>(sr.ReadToEnd());
+                }
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public void SaveToFile(string filename)
         {
-            // TODO
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+            using(StreamWriter sw = new StreamWriter(filename))
+            {
+                sw.Write(JsonSerializer.Serialize(this, options));
+            }
         }
 
-        public List<Brush> GetAllColors()
+        public List<ColorTheme>? GetAllColors()
         {
-            // TODO
-            return [];
+            return colorThemes;
         }
 
-        public void ChangeColor(Brush color)
+        public void ChangeColor(ColorTheme color)
         {
-            this.color = color;
+            this.currentColorTheme = color;
         }
 
         public void ChangeSize(double width, double height)
@@ -55,7 +72,21 @@ namespace MarkIt
 
         private void setColorsFromFile()
         {
-            // TODO
+            try
+            {
+                using (StreamReader sr = new StreamReader("sources/options/color-themes.json"))
+                {
+                    colorThemes = JsonSerializer.Deserialize<List<ColorTheme>>(sr.ReadToEnd());
+                    Logger.logger.Debug("Loaded all color themes.");
+                }
+            }
+            catch
+            {
+                Logger.logger.Warning("No file color-themes.json found!");
+                var box = new WindowMessageBox("Load error!", "A unexpected error forced the application to stop.");
+                box.ShowDialog();
+                Application.Current.Shutdown();
+            }
         }
     }
 }
