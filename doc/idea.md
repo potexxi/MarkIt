@@ -1,19 +1,20 @@
 # MarkIt
+<img src="images/MarkItLogo.png" width="250">
 
 - [MarkIt](#markit)
     - [Unsere Idee](#unsere-idee)
     - [Must-Haves](#must-haves)
     - [Nice-To-Haves](#nice-to-haves)
     - [Aufgabenteilung (circa)](#aufgabenteilung-circa)
-    - [Cloud-Syncs/Work-Togheter](#cloud-syncswork-togheter)
-    - [User-Accounts](#user-accounts)
+        - [Roadmap](#roadmap)
+    - [Server-Funktionen](#server-funktionen)
     - [Skizzen](#skizzen)
     - [Klassen-UML](#klassen-uml)
 
 ### Unsere Idee
 
 **MarkIt** ist ein Texteditor für Markdown-Dateien. Als Grundprinzip orientieren wir uns an **MS Word**. Man kann ganz normal Dateien öffnen, schreiben und wieder speichern.
-Man kann außerdem die **Basic-Markdown-Syntax** anwenden: Wenn man zum Beispiel auf einen Button klickt, wird der Text zu `**bold**`.
+Man kann außerdem die **Basic-Markdown-Syntax** anwenden: Wenn man zum Beispiel auf einen Button klickt, wird der Text zu `**bold**`. Zu anderen Editoren unterscheidet sich unserer in einem wichtigen Punkt: JSON. Bei uns kann man mit einem Klick direkt das JSON-Format uebernehmen, also die {} oder [{}, {}]. 
 
 ### Must-Haves
 
@@ -22,15 +23,15 @@ Man kann außerdem die **Basic-Markdown-Syntax** anwenden: Wenn man zum Beispiel
 * Schreiben von Markdown-, Text- und JSON-Dateien
 * Basic-Settings (Farbschema, Bildgröße, Textgröße, Speicherpfade, ...)
 * Datei-Verlauf: Welche Dateien wurden zuletzt geöffnet/verwendet?
+* Real-Time-Rendering
+* Verschiedene User-Accounts (Supabase)
+* 2-Faktor-Authentifizierung (Supabase)
 
 ### Nice-To-Haves
 
-* Verschiedene User-Accounts
-* Work-Together
-* 2-Faktor-Authentifizierung
+* Work-Together (Supabase)
 * Bilder importieren (wie in VS Code)
-* Cloud-Sync
-* Real-Time-Rendering
+* Cloud-Sync (Supabase)
 
 ### Aufgabenteilung (circa)
 
@@ -44,28 +45,26 @@ Man kann außerdem die **Basic-Markdown-Syntax** anwenden: Wenn man zum Beispiel
 | Work-Together              | Work-Together           |
 | Real-Time-Rendering        | Real-Time-Rendering     |
 
-### Cloud-Syncs/Work-Togheter
+##### [Roadmap](https://github.com/users/potexxi/projects/4/views/4)
 
-Mit einem eigenen physischen Server, auf dem Ubuntu Server läuft, wollen wir im Code alle Funktionen mit dem Server verbinden. Bei Cloud-Saves verbindet sich die App mit dem Server und lädt die Dateien hoch bzw. herunter.
+### Server-Funktionen
+Alle Server Sachen (Cloud-Sync, Userprofile, Work-Togheter...) machen wir alles ueber Supabase auf unserem eigenen Server. Supabase hat das ganze Backend fuer diese Funktionen schon. Wir haben nur Supabase installiert und aufgesetzt (Docker und die API).
 
-### User-Accounts
-
-User-Accounts wollen wir entweder mit einer kleinen SQL-Datenbank verwalten oder eine Datei auf dem Server erstellen, in der die Accounts und Passwörter gespeichert sind (das ist zeitlich realistischer).
 
 ### Skizzen
 
 ![alt text](images/main-window.png)
 ![alt text](images/settings.png)
+![alt text](images/login-window.png)
 
 ### Klassen-UML
 
 @startuml
 top to bottom direction
-
 skinparam classAttributeIconSize 0
 
 class UserManager {
-    + ErrorType : enum
+    + errorType : ErrorType
     --
     + UserManager()
     --
@@ -74,6 +73,19 @@ class UserManager {
     + GetRememberedUsers(): List<Session>
     + WriteToRememberedUsers(currentSession: session): void
 }
+
+enum ErrorType{
+    Unknown
+    OK
+    ServerUnreachable
+    PasswordFalse
+    BadPassword
+    BadEmail
+    EmailExists
+    Requests
+}
+
+UserManager ..> ErrorType
 
 class Logger {
     + Logger : ILogger
@@ -89,13 +101,22 @@ class ServerSettings {
 }
 
 class ServerManager{
-    + ServerStatus: enum
+    + serverStatus: ServerStatus
     --
     + ServerManager()
     --
     + InitSupabaseClient(): void
     + GetStatus(): ServerStatus
 }
+
+enum ServerStatus{
+    On
+    Off
+    Unknown
+}
+
+ServerManager ..> ServerSettings
+ServerManager ..> ServerStatus
 
 class ClassUser{
     + Email: string {get ; set}
@@ -105,9 +126,9 @@ class ClassUser{
 }
 
 class Settings{
-    + With: double {get ; set}
-    + Height: double {get ; set}
-    + Color: Color {get ; set}
+    - Width: double {get ; set}
+    - Height: double {get ; set}
+    - Color: Color {get ; set}
     --
     + Settings()
     --
@@ -118,31 +139,30 @@ class Settings{
 }
 
 class ToolBar{
-    + GridToolBar: Grid {get ; set}
+    - GridToolBar: Grid {get ; set}
     --
     + ToolBar()
     --
-    + Init(): void
+    - Init(): void
     + SetColorSchem(foreground:Color, background:Color): void
     + ButtonClick(): void
-    + ...
 }
 
 class Worksheet{
-    + pages: List<Page> {get ; set}
-    + Zoom: double {get ; set}
-    + GirdWorksheet: Grid {get ; set}
+    - pages: List<Page> {get ; set}
+    - Zoom: double {get ; set}
+    - GirdWorksheet: Grid {get ; set}
     --
     + Worksheet(GridWorksheet)
     --
     + Render():void
-    + findCurrentPage():void
-    + Init()
+    - findCurrentPage():void
+    - Init()
 }
 
 class Page{
-    + lines: List<string> {get ; set}
-    + TextBoxesPage: List<Textbox>
+    - lines: List<string> {get ; set}
+    - TextBoxesPage: List<Textbox>
     --
     + Page()
     + Page(contente: string)
@@ -154,13 +174,11 @@ class Page{
 class WorksheetUtilities{
     --
     <u>+ findSymbole(content:string, symbole:char):List<char>
-    + ...
 }
 
 class WindowMessageBox{
     + returnType: ReturnType {get ; private set}
-    + ReturnType: enum
-    + ButtonType: enum
+    + buttonType: ButtonType {get ; private set}
     --
     + WindowMessageBox(heading: string, content: string)
     + WindowMessageBox(heading: string, content: string, buttonType: ButtonType)
@@ -168,7 +186,22 @@ class WindowMessageBox{
     - DrawButtons(buttonType: ButtonType): void
 }
 
+enum ReturnType{
+    Okay
+    Yes
+    No
+}
 
+enum ButtonType{
+    Okay
+    Yes
+    No
+}
+
+WindowMessageBox ..> ReturnType
+WindowMessageBox ..> ButtonType
+
+Worksheet ..> Page
 
 ' ChatGPT Anfang
 ' prompt: wie kann ich in plantuml diagramme untereinenader machen
