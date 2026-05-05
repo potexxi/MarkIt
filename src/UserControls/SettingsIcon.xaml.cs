@@ -25,6 +25,7 @@ namespace MarkIt.UserControls
     public partial class SettingsIcon : UserControl
     {
         private double rotation { get; set; } = 0;
+        private double speed { get; set; } = 1;
         private bool hover = false;
         public SettingsIcon()
         {
@@ -39,7 +40,7 @@ namespace MarkIt.UserControls
         {
             if (hover)
             {
-                rotation += 1;
+                rotation += speed;
                 Rect3.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5); // chatgpt weil ursprung von rect 3 und rect 4 nicht passen
                 Rect4.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5); // chat gpt ende
                 Rect1.RenderTransform = new RotateTransform(rotation);// chatgpt this line promt: how do I make a rotation in wpf backend
@@ -51,13 +52,12 @@ namespace MarkIt.UserControls
 
         private void RectSettingsIcon_MouseEnter(object sender, MouseEventArgs e)
         {
-            Rect1.Fill = Brushes.White;
+            speed = 1;
             hover = true;
         }
 
         private void RectSettingsIcon_MouseLeave(object sender, MouseEventArgs e)
         {
-            Rect1.Fill = Brushes.Black;
             hover = false;
         }
     }

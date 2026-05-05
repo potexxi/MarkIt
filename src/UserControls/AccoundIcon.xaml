@@ -9,6 +9,6 @@
     <Grid>
         <Ellipse x:Name="ElliepseBody" HorizontalAlignment="Center" Height="50" Margin="0,30,0,0" Fill="Black" VerticalAlignment="Top" Width="43"/>
         <Ellipse x:Name="ElliepseHead" HorizontalAlignment="Center" Height="25" Fill="Black" VerticalAlignment="Top" Width="25" Margin="0,2,0,0"/>
-        <Rectangle x:Name="RectHover" Width="50" Height="50" MouseEnter="RectHover_MouseEnter" MouseLeave="RectHover_MouseLeave"/>
+        <Rectangle x:Name="RectHover" Width="50" Height="50" Fill="Transparent" MouseEnter="RectHover_MouseEnter" MouseLeave="RectHover_MouseLeave"/>
     </Grid>
 </UserControl>

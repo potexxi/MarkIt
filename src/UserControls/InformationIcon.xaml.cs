@@ -72,14 +72,16 @@ namespace MarkIt.UserControls
 
         private void Rectangle_MouseEnter(object sender, MouseEventArgs e)
         {
+            EllispeI.Fill = Brushes.DarkGray;
+            RectBody.Fill = Brushes.DarkGray;
             hover = true;
-            EllispeI.Fill = Brushes.White;
         }
 
         private void Rectangle_MouseLeave(object sender, MouseEventArgs e)
         {
-            hover = false;
             EllispeI.Fill = Brushes.Black;
+            RectBody.Fill = Brushes.Black;
+            hover = false;
         }
     }
 }

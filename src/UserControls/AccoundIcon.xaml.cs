@@ -22,6 +22,7 @@ namespace MarkIt.UserControls
     public partial class AccoundIcon : UserControl
     {
         private bool hover = false;
+        public double position { get; set; } = 0;
         public AccoundIcon()
         {
             InitializeComponent();
@@ -35,17 +36,31 @@ namespace MarkIt.UserControls
         {
             if (hover)
             {
-                ElliepseBody.Margin = new Thickness(0, 0, 0, 0);
+                ElliepseHead.Margin = new Thickness(0, position, 0, 0); // new thinkness von chatgpt
+                ElliepseBody.Height = 25 + position*2;
+                if(position > -3)
+                    position -= 0.15;
+            }
+            else if (position < 0)
+            {
+                position += 0.15;
+                ElliepseHead.Margin = new Thickness(0, position, 0, 0); // new thinkness von chatgpt
+
+                ElliepseBody.Height = 25 + position*2;
             }
         }
 
         private void RectHover_MouseEnter(object sender, MouseEventArgs e)
         {
+            ElliepseBody.Fill = Brushes.LightGray;
+            ElliepseHead.Fill = Brushes.LightGray;
             hover = true;
         }
 
         private void RectHover_MouseLeave(object sender, MouseEventArgs e)
         {
+            ElliepseBody.Fill = Brushes.Black;
+            ElliepseHead.Fill = Brushes.Black;
             hover = false;
         }
     }
