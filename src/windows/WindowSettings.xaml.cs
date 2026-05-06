@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace MarkIt.windows
 {
@@ -19,9 +20,22 @@ namespace MarkIt.windows
     /// </summary>
     public partial class WindowSettings : Window
     {
+        private DispatcherTimer timer = new DispatcherTimer();
         public WindowSettings()
         {
             InitializeComponent();
+            timer.Interval = TimeSpan.FromMicroseconds(15);
+            timer.Tick += Timer_Tick;
+            timer.Start();
+        }
+
+        private void Timer_Tick(object? sender, EventArgs e)
+        {
+        }
+
+        private void SwitchSlider_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            bool test = AnimationSetting.IsOn; // to test if it works (it does!)
         }
     }
 }

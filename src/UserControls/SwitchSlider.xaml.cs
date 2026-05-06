@@ -22,14 +22,13 @@ namespace MarkIt.UserControls
     public partial class SwitchSlider : UserControl
     {
         private double position = 40;
-        private bool IsOn = false;
+        private DispatcherTimer timer = new DispatcherTimer();
+        public bool IsOn { get; private set; } = false;
+        private bool hover;
         public SwitchSlider()
         {
             InitializeComponent();
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromTicks(52000);
-            timer.Tick += Timer_Tick;
-            timer.Start();
+            timer.Interval = TimeSpan.FromMilliseconds(15);
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
@@ -37,13 +36,18 @@ namespace MarkIt.UserControls
             RectDisplay.Margin = new Thickness(position, 0, 0, 0);
             if (position < 110 && IsOn)
             {
-                position += 5;
+                position += 6;
                 RectDisplay.Fill = new SolidColorBrush(Color.FromRgb(0, 255, 0));
             }
-            else if (position > 40 && !IsOn)
+            else if (position > 35 && !IsOn)
             {
-                position -= 7;
+                position -= 6;
                 RectDisplay.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+            }
+            else if(!hover)
+            {
+                timer.Tick -= Timer_Tick;
+                timer.Stop();
             }
         }
 
@@ -55,12 +59,16 @@ namespace MarkIt.UserControls
 
         private void Rectangle_MouseEnter(object sender, MouseEventArgs e)
         {
+            hover = true;
             RectBackground.Fill = Brushes.DarkGray;
             RectBorder.Stroke = Brushes.LightGray;
+            timer.Tick += Timer_Tick;
+            timer.Start();
         }
 
         private void Rectangle_MouseLeave(object sender, MouseEventArgs e)
         {
+            hover = false;
             RectBackground.Fill = Brushes.LightGray;
             RectBorder.Stroke = Brushes.Black;
         }

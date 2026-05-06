@@ -23,7 +23,11 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Icon Animations" FontSize="20" FontWeight="Bold"/>
-                            <uc:SwitchSlider Width="160" Margin="50,0,0,0"/>
+                            <uc:SwitchSlider x:Name="AnimationSetting" Width="160" Margin="50,0,0,0" MouseDown="SwitchSlider_MouseDown"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Animation FPS*" FontSize="20" FontWeight="Bold"/>
+                            <uc:CustomTextBox Width="120" Height="33" Margin="90,0,0,0"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
@@ -33,7 +37,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Desine" Width="170">
+            <TabItem Header="Design" Width="170">
                 <Grid Background="#FFE5E5E5">
                     <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
                         <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save"/>

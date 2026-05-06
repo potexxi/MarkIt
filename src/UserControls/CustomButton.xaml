@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="100">
     <Grid>
-        <Rectangle x:Name="RectButton" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="LightGray" Stroke="Black" StrokeThickness="3" RadiusX="15" RadiusY="15"/>
+        <Rectangle x:Name="RectButton" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="LightGray" Stroke="Black" StrokeThickness="2" RadiusX="15" RadiusY="15"/>
         <Label x:Name="ButtonContent" Content="Button" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20" FontFamily="Leelawadee UI"/>
 
         <Rectangle VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="Transparent" MouseEnter="Rectangle_MouseEnter" MouseLeave="Rectangle_MouseLeave"/>

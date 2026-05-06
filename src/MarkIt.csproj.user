@@ -29,6 +29,9 @@
     <Compile Update="UserControls\CustomButton.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\CustomTextBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\InformationIcon.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

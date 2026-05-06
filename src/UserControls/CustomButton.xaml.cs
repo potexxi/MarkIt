@@ -35,6 +35,7 @@ namespace MarkIt.UserControls
                 else return "null";
             }
         }
+        public bool clicked {private set; get ;}
 
         private void Rectangle_MouseEnter(object sender, MouseEventArgs e)
         {

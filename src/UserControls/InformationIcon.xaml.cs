@@ -38,7 +38,7 @@ namespace MarkIt.UserControls
                 if (value)
                 {
                     _animation = true;
-                    timer.Interval = TimeSpan.FromTicks(50000);
+                    timer.Interval = TimeSpan.FromMilliseconds(15);
                     timer.Tick += Timer_Tick;
                     timer.Start();
                 }
