@@ -32,6 +32,6 @@
         <Rectangle x:Name="Rect4" HorizontalAlignment="Center" Height="10" Fill="Black" VerticalAlignment="Center" Width="46"/>
         <Ellipse x:Name="EllipseBack" HorizontalAlignment="Center" Height="19" Fill="Gray" VerticalAlignment="Center" Width="20" StrokeThickness="10"/>
         <!--Background /\ -->
-            <Rectangle x:Name="RectSettingsIcon" Width="50" Height="50" Fill="Transparent" MouseEnter="RectSettingsIcon_MouseEnter" MouseLeave="RectSettingsIcon_MouseLeave"/>
+            <Rectangle x:Name="RectSettingsIcon" Width="50" Height="50" Fill="Transparent" MouseEnter="RectSettingsIcon_MouseEnter" MouseLeave="RectSettingsIcon_MouseLeave" MouseDown="RectSettingsIcon_MouseDown"/>
     </Grid>
 </UserControl>

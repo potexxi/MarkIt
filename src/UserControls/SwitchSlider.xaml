@@ -1,0 +1,14 @@
+﻿<UserControl x:Class="MarkIt.UserControls.SwitchSlider"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MarkIt.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="80">
+    <Grid>
+        <Rectangle Height="30" Fill="LightGray" Width="70" RadiusX="12" RadiusY="12" />
+        <Rectangle x:Name="RectDisplay" Height="30" Fill="red" Width="30" RadiusX="11" RadiusY="11" StrokeThickness="3" Margin="-30,0,0,0"/>
+        <Rectangle Width="70" Height="30" Stroke="Black" Fill="Transparent" RadiusX="10" RadiusY="10" StrokeThickness="3" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown"/>
+    </Grid>
+</UserControl>

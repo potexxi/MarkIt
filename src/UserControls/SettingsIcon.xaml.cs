@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MarkIt.windows;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
@@ -102,6 +103,12 @@ namespace MarkIt.UserControls
 
                 hover = false;
             }
+        }
+
+        private void RectSettingsIcon_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowSettings ws = new WindowSettings();
+            ws.ShowDialog();
         }
     }
 }

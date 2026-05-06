@@ -35,7 +35,13 @@
     <Compile Update="login_register\WindowUserLogin.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\SwitchSlider.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="WindowMessageBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="windows\WindowSettings.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
