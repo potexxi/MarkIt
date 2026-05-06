@@ -27,7 +27,7 @@ namespace MarkIt.UserControls
         {
             InitializeComponent();
             DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromTicks(50000);
+            timer.Interval = TimeSpan.FromTicks(52000);
             timer.Tick += Timer_Tick;
             timer.Start();
         }
@@ -37,7 +37,7 @@ namespace MarkIt.UserControls
             RectDisplay.Margin = new Thickness(position, 0, 0, 0);
             if (position < 110 && IsOn)
             {
-                position += 7;
+                position += 5;
                 RectDisplay.Fill = new SolidColorBrush(Color.FromRgb(0, 255, 0));
             }
             else if (position > 40 && !IsOn)

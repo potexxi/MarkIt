@@ -6,28 +6,50 @@
         xmlns:local="clr-namespace:MarkIt.windows"
         xmlns:uc="clr-namespace:MarkIt.UserControls"
         mc:Ignorable="d"
-        Title="Settings" Height="450" Width="800">
+        Title="Settings" Height="400" Width="700">
     <Grid>
         <TabControl>
-            <TabItem Header="Document">
-                <Grid Background="#FFE5E5E5"/>
+            <TabItem Header="Document" Width="170">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save"/>
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Reset"/>
+                    </StackPanel>
+                </Grid>
             </TabItem>
-            <TabItem Header="Performance">
-                <Grid Background="#FFE5E5E5"/>
+
+            <TabItem Header="Performance" Width="170">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Icon Animations" FontSize="20" FontWeight="Bold"/>
+                            <uc:SwitchSlider Width="160" Margin="50,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save"/>
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Reset"/>
+                    </StackPanel>
+                </Grid>
             </TabItem>
-            <TabItem Header="Desine">
-                <Grid Background="#FFE5E5E5"/>
+
+            <TabItem Header="Desine" Width="170">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save"/>
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Reset"/>
+                    </StackPanel>
+                </Grid>
             </TabItem>
-            <TabItem Header="Accound">
-                <Grid Background="#FFE5E5E5"/>
+
+            <TabItem Header="Accound"  Width="170">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save"/>
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Reset"/>
+                    </StackPanel>
+                </Grid>
             </TabItem>
         </TabControl>
-        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-            <uc:SwitchSlider Width="160" Height="40"/>
-        </StackPanel>
-        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
-            <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save"/>
-            <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Reset"/>
-        </StackPanel>
     </Grid>
 </Window>

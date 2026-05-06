@@ -38,8 +38,8 @@ namespace MarkIt.UserControls
 
         private void Rectangle_MouseEnter(object sender, MouseEventArgs e)
         {
-            RectButton.Fill = Brushes.DarkGray;
-            RectButton.Stroke = Brushes.LightGray;
+            RectButton.Fill = Brushes.LightGray;
+            RectButton.Stroke = Brushes.DarkGray;
         }
 
         private void Rectangle_MouseLeave(object sender, MouseEventArgs e)
