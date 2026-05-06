@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection.Metadata;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MarkIt.worksheet
 {
@@ -33,6 +35,15 @@ namespace MarkIt.worksheet
             return this.page;
         }
 
+        public void SplitToTextboxes()
+        {
+            MessageBox.Show("test");
+        }
+
+        private void AddOnClossing()
+        {
+            
+        }
 
         public List<List<int>> locateFormat()
         // sees if the Program can find formatations
@@ -62,14 +73,19 @@ namespace MarkIt.worksheet
             }
             return found;
         }
-        public int AmountSymbelChainsPerLine(List<List<int>> found)
+        public List<int> AmountSymbelChainsPerLine(List<List<int>> found, string txt)
         {
-            int[] lines = [];
-            foreach(List<int> line in found)
+            List<int> lines = [];
+            string[] splited;
+            if (txt != null)
             {
-                lines[line[2]] = 2;
+                splited = txt.Split("\n");
+                for (int i = 0; i < splited.Count(); i++)
+                    lines.Add(-1);
             }
-            return 1;
+            foreach(List<int> line in found)
+                lines[line[2]] += 1;
+            return lines;
         }
 
         public List<List<int>> findSymbole(string txt, char symbol)

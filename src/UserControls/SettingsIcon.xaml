@@ -7,8 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="50">
     <Grid >
-        <Ellipse HorizontalAlignment="Center" Height="35" Stroke="Black" VerticalAlignment="Center" Width="35" StrokeThickness="10"/>
-        <Rectangle HorizontalAlignment="Left" Height="16" Margin="8,6,0,0" Fill="Black" VerticalAlignment="Top" Width="11" RenderTransformOrigin="0.5,0.5">
+        <Ellipse x:Name="EllipseCenter" HorizontalAlignment="Center" Height="35" Fill="Black" VerticalAlignment="Center" Width="35" StrokeThickness="10"/>
+        <Rectangle x:Name="Rect1" HorizontalAlignment="Center" Height="46" Fill="Black" VerticalAlignment="Center" Width="10" RenderTransformOrigin="0.5,0.5">
             <Rectangle.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -18,7 +18,7 @@
                 </TransformGroup>
             </Rectangle.RenderTransform>
         </Rectangle>
-        <Rectangle HorizontalAlignment="Left" Height="15" Margin="31,6,0,0" Fill="Black" VerticalAlignment="Top" Width="11" RenderTransformOrigin="0.5,0.5">
+        <Rectangle x:Name="Rect2" HorizontalAlignment="Center" Height="49" Fill="Black" VerticalAlignment="Center" Width="10" RenderTransformOrigin="0.5,0.5">
             <Rectangle.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -28,49 +28,10 @@
                 </TransformGroup>
             </Rectangle.RenderTransform>
         </Rectangle>
-        <Rectangle HorizontalAlignment="Left" Height="16" Margin="9,29,0,0" Fill="Black" VerticalAlignment="Top" Width="11" RenderTransformOrigin="0.5,0.5">
-            <Rectangle.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="45"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Rectangle.RenderTransform>
-        </Rectangle>
-        <Rectangle HorizontalAlignment="Left" Height="16" Margin="31,28,0,0" Fill="Black" VerticalAlignment="Top" Width="11" RenderTransformOrigin="0.5,0.5">
-            <Rectangle.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-45"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Rectangle.RenderTransform>
-        </Rectangle>
-        <Rectangle HorizontalAlignment="Left" Height="16" Margin="4,0,0,0" Fill="Black" VerticalAlignment="Center" Width="11" RenderTransformOrigin="0.5,0.5">
-            <Rectangle.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="90
-                                     "/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Rectangle.RenderTransform>
-        </Rectangle>
-        <Rectangle HorizontalAlignment="Center" Height="16" Margin="0,1,0,0" Fill="Black" VerticalAlignment="Top" Width="11"/>
-        <Rectangle HorizontalAlignment="Center" Height="16" Margin="0,33,0,0" Fill="Black" VerticalAlignment="Top" Width="11"/>
-        <Rectangle HorizontalAlignment="Left" Height="16" Margin="35,0,0,0" Fill="Black" VerticalAlignment="Center" Width="11" RenderTransformOrigin="0.5,0.5">
-            <Rectangle.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="90"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Rectangle.RenderTransform>
-        </Rectangle>
-
+        <Rectangle x:Name="Rect3" HorizontalAlignment="Center" Height="46" Fill="Black" VerticalAlignment="Center" Width="10"/>
+        <Rectangle x:Name="Rect4" HorizontalAlignment="Center" Height="10" Fill="Black" VerticalAlignment="Center" Width="46"/>
+        <Ellipse x:Name="EllipseBack" HorizontalAlignment="Center" Height="19" Fill="Gray" VerticalAlignment="Center" Width="20" StrokeThickness="10"/>
+        <!--Background /\ -->
+            <Rectangle x:Name="RectSettingsIcon" Width="50" Height="50" Fill="Transparent" MouseEnter="RectSettingsIcon_MouseEnter" MouseLeave="RectSettingsIcon_MouseLeave"/>
     </Grid>
 </UserControl>
