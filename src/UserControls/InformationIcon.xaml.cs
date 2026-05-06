@@ -25,13 +25,40 @@ namespace MarkIt.UserControls
         private double position { get; set; } = 0;
         private bool hover = false;
         private bool up = true;
+        private DispatcherTimer timer = new DispatcherTimer();
+        private bool _animation = false;
+        public bool animation
+        {
+            get
+            {
+                return _animation;
+            }
+            set
+            {
+                if (value)
+                {
+                    _animation = true;
+                    timer.Interval = TimeSpan.FromTicks(50000);
+                    timer.Tick += Timer_Tick;
+                    timer.Start();
+                }
+                else
+                {
+                    _animation = false;
+                    if (timer.IsEnabled)
+                        timer.Stop();
+                }
+            }
+        }
+
+        static public SolidColorBrush hovercolor = Brushes.LightGray; // autocomplition
+        static public SolidColorBrush defaultcolor = Brushes.Black;
+        static public SolidColorBrush Backgroundcolor = Brushes.Gray;
+
         public InformationIcon()
         {
             InitializeComponent();
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromTicks(50000);
-            timer.Tick += Timer_Tick;
-            timer.Start();
+            animation = true;
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
@@ -72,16 +99,21 @@ namespace MarkIt.UserControls
 
         private void Rectangle_MouseEnter(object sender, MouseEventArgs e)
         {
-            EllispeI.Fill = Brushes.DarkGray;
-            RectBody.Fill = Brushes.DarkGray;
-            hover = true;
+            if (animation){
+                EllispeI.Fill = hovercolor;
+                RectBody.Fill = hovercolor;
+                hover = true;
+            }
         }
 
         private void Rectangle_MouseLeave(object sender, MouseEventArgs e)
         {
-            EllispeI.Fill = Brushes.Black;
-            RectBody.Fill = Brushes.Black;
-            hover = false;
+            if (animation)
+            {
+                EllispeI.Fill = defaultcolor;
+                RectBody.Fill = defaultcolor;
+                hover = false;
+            }
         }
     }
 }
