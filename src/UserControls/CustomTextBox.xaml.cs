@@ -20,11 +20,15 @@ namespace MarkIt.UserControls
     /// </summary>
     public partial class CustomTextBox : UserControl
     {
+        public int MaxCharLength
+        {
+            get{ return TextBoxCustom.MaxLength; }
+            set{ TextBoxCustom.MaxLength = value; }
+        }
         public CustomTextBox()
         {
             InitializeComponent();
         }
-
 
         private void TextBox_MouseEnter(object sender, MouseEventArgs e)
         {

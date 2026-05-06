@@ -8,6 +8,6 @@
              d:DesignHeight="50" d:DesignWidth="100">
     <Grid>
         <Rectangle x:Name="RectTextbox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="LightGray" Stroke="Black" RadiusX="15" RadiusY="15" StrokeThickness="2"/>
-        <TextBox VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MouseEnter="TextBox_MouseEnter" MouseLeave="TextBox_MouseLeave" FontSize="15" FontWeight="Light"/>
+        <TextBox x:Name="TextBoxCustom" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MouseEnter="TextBox_MouseEnter" MouseLeave="TextBox_MouseLeave" FontSize="15" FontWeight="Light"/>
     </Grid>
 </UserControl>

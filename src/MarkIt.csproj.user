@@ -26,6 +26,12 @@
     <Compile Update="UserControls\AccoundIcon.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\usercontrolsColor\ColorPercentage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\usercontrolsColor\ColorPicker.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\CustomButton.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -42,6 +48,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControls\SwitchSlider.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="windows\WindowColorpicker.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="windows\WindowMessageBox.xaml.cs">
