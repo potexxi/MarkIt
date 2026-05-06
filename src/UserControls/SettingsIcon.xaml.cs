@@ -27,81 +27,59 @@ namespace MarkIt.UserControls
     public partial class SettingsIcon : UserControl
     {
         private double rotation { get; set; } = 0;
-        private bool hover = false;
         private DispatcherTimer timer = new DispatcherTimer();
         private bool _animation = false;
-        public bool animation
-        {
-            get
-            {
-                return _animation;
-            }
-            set
-            {
-                if (value)
-                {
-                    _animation = true;
-                    timer.Interval = TimeSpan.FromTicks(50000);
-                    timer.Tick += Timer_Tick;
-                    timer.Start();
-                }
-                else
-                {
-                    _animation = false;
-                    if (timer.IsEnabled)
-                        timer.Stop();
-                }
-            }
-        }
+        //chatgpt
+        private RotateTransform rotation1;
+        //chatgpt ende
         static public SolidColorBrush hovercolor = Brushes.LightGray; // autocomplition
         static public SolidColorBrush defaultcolor = Brushes.Black;
         static public SolidColorBrush Backgroundcolor = Brushes.Gray;
         public SettingsIcon()
         {
             InitializeComponent();
+            timer.Interval = TimeSpan.FromMilliseconds(15);
+            timer.Tick -= Timer_Tick;
+            timer.Tick += Timer_Tick;
+
+            HoleGrid.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5); // chatgpt weil ursprung von grid nichtmehr passt
+            //chatgpt to improve performance
+            rotation1 = new RotateTransform(0);
+            HoleGrid.RenderTransform = rotation1;
+            //chatgpt end
             EllipseBack.Fill = Backgroundcolor; // might be changed later on
-            animation = true;
+            _animation = true;
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
         {
-            if (hover)
-            {
-                rotation += 1;
-                Rect3.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5); // chatgpt weil ursprung von rect 3 und rect 4 nicht passen
-                Rect4.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5); // chat gpt ende
-                Rect1.RenderTransform = new RotateTransform(rotation);// chatgpt this line promt: how do I make a rotation in wpf backend
-                Rect2.RenderTransform = new RotateTransform(rotation + 90);
-                Rect4.RenderTransform = new RotateTransform(rotation + 45);
-                Rect3.RenderTransform = new RotateTransform(rotation + 45);
-            }
+            rotation = (rotation + 3) % 360; // the % 360 is also from chatgpt
+            rotation1.Angle = rotation;//chatgpt um performence zu verbessern & max
         }
 
         private void RectSettingsIcon_MouseEnter(object sender, MouseEventArgs e)
         {
-            if (animation)
+            if (_animation)
             {
                 EllipseCenter.Fill = hovercolor;
                 Rect1.Fill = hovercolor;
                 Rect2.Fill = hovercolor;
                 Rect3.Fill = hovercolor;
                 Rect4.Fill = hovercolor;
-
-                hover = true;
+                timer.Start();
             }
         }
 
         private void RectSettingsIcon_MouseLeave(object sender, MouseEventArgs e)
         {
-            if (animation)
+            if (_animation)
             {
                 EllipseCenter.Fill = defaultcolor;
                 Rect1.Fill = defaultcolor;
                 Rect2.Fill = defaultcolor;
                 Rect3.Fill = defaultcolor;
                 Rect4.Fill = defaultcolor;
-
-                hover = false;
+                timer.Stop();
             }
         }
 
