@@ -8,6 +8,26 @@
         mc:Ignorable="d"
         Title="Settings" Height="450" Width="800">
     <Grid>
-        <uc:SwitchSlider Width="70" Height="40"/>
+        <TabControl>
+            <TabItem Header="Document">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Performance">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Desine">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Accound">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+            <uc:SwitchSlider Width="160" Height="40"/>
+        </StackPanel>
+        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
+            <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save"/>
+            <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Reset"/>
+        </StackPanel>
     </Grid>
 </Window>

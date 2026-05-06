@@ -5,10 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MarkIt.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="80">
+             d:DesignHeight="40" d:DesignWidth="160">
     <Grid>
-        <Rectangle Height="30" Fill="LightGray" Width="70" RadiusX="12" RadiusY="12" />
-        <Rectangle x:Name="RectDisplay" Height="30" Fill="red" Width="30" RadiusX="11" RadiusY="11" StrokeThickness="3" Margin="-30,0,0,0"/>
-        <Rectangle Width="70" Height="30" Stroke="Black" Fill="Transparent" RadiusX="10" RadiusY="10" StrokeThickness="3" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown"/>
+        <Rectangle x:Name="RectBackground" Height="30" Fill="LightGray" Width="70" RadiusX="12" RadiusY="12" Margin="80,5,7,5" />
+        <Rectangle x:Name="RectDisplay" Height="30" Fill="red" Width="30" RadiusX="11" RadiusY="11" StrokeThickness="3" Margin="40,0,0,0"/>
+        <Rectangle x:Name="RectBorder" Width="70" Height="30" Stroke="Black" Fill="Transparent" RadiusX="10" RadiusY="10" StrokeThickness="3" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown" Margin="80,5,7,5" MouseEnter="Rectangle_MouseEnter" MouseLeave="Rectangle_MouseLeave"/>
+        <Label x:Name="LabelDisplay" Content="OFF" HorizontalAlignment="Left" Margin="31,0,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="20" FontFamily="Leelawadee UI"/>
     </Grid>
 </UserControl>
