@@ -37,5 +37,23 @@ namespace MarkIt.windows
         {
             bool test = AnimationSetting.IsOn; // to test if it works (it does!)
         }
+
+        private void Background_CustomButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowColorpicker cp = new WindowColorpicker();
+            cp.ShowDialog();
+        }
+
+        private void Middle_CustomButton_MouseDown_1(object sender, MouseButtonEventArgs e)
+        {
+            WindowColorpicker cp = new WindowColorpicker();
+            cp.ShowDialog();
+        }
+
+        private void Forground_CustomButton_MouseDown_2(object sender, MouseButtonEventArgs e)
+        {
+            WindowColorpicker cp = new WindowColorpicker();
+            cp.ShowDialog();
+        }
     }
 }
