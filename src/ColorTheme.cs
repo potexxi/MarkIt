@@ -14,9 +14,10 @@ namespace MarkIt
         public string HoverColor {  get; private set; }
         public string BackgroundColor {  get; private set; }
         public string SliderColor {  get; private set; }
+        public string Foreground {  get; private set; }
 
         public ColorTheme() { }
-        public ColorTheme(string name, string menubarcolor, string iconscolor, string hovercolor, string backgroundcolor, string slidercolor)
+        public ColorTheme(string name, string menubarcolor, string iconscolor, string hovercolor, string backgroundcolor, string slidercolor, string foreground)
         {
             Name = name;
             MenuBarColor = menubarcolor;
@@ -24,6 +25,7 @@ namespace MarkIt
             HoverColor = hovercolor;
             BackgroundColor = backgroundcolor;
             SliderColor = slidercolor;
+            Foreground = foreground;
         }
     }
 }

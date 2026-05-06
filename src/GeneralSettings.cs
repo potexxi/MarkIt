@@ -14,7 +14,7 @@ namespace MarkIt
     {
         public double width {  get; private set; }
         private double height { get; set; }
-        private ColorTheme? currentColorTheme {  get; set; }
+        public ColorTheme? currentColorTheme {  get; private set; }
         private List<ColorTheme>? colorThemes {  get; set; }
 
         public GeneralSettings() { }

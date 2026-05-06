@@ -26,6 +26,9 @@
     <Compile Update="UserControls\AccoundIcon.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\FileBar.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\InformationIcon.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
