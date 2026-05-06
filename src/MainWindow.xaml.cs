@@ -29,13 +29,15 @@ namespace MarkIt
         public static ServerManager ServerManager;
         public static FileManager FileManager;
         public static GeneralSettings GeneralSettings;
+        private FileBar filebar;
         public MainWindow()
         {
             InitializeComponent();
             Logger.Init();
             ServerManager = new ServerManager();
             var colorthemeBlue = new ColorTheme("blue", "#FF01021C", "#97D5C8", "#FFEA00", "#FF1F4572", "#97D5C8", "#FFFFFF");
-            //GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, colorthemeBlue);
+            GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight);
+            GeneralSettings.SaveColorsToFile();
             ServerManager.InitSupabaseClient();
             WindowUserLogin window = new WindowUserLogin();
             window.ShowDialog();
@@ -48,8 +50,13 @@ namespace MarkIt
             ClassWorksheet CurrentWorkSheet = new ClassWorksheet(GridWorksheet);
             CurrentWorkSheet.Init();
 
-            var uc = new FileBar(FileManager.FileHistory, colorthemeBlue);
-            GridMain.Children.Add(uc);
+            filebar = new FileBar(FileManager.FileHistory);
+            GridMain.Children.Add(filebar);
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            filebar.SetSize(this.ActualWidth, this.ActualHeight);
         }
     }
 }

@@ -42,16 +42,14 @@ namespace MarkIt
         {
             if (File.Exists(userPath + "/file-history.json"))
             {
-                using(StreamReader rd = new StreamReader(userPath + "/file-history.json"))
+                string json = File.ReadAllText(userPath + "/file-history.json");
+                if(json == "")
                 {
-                    string json = rd.ReadToEnd();
-                    if(json == "")
-                    {
-                        FileHistory = new List<string>();
-                        return;
-                    }
-                    FileHistory = JsonSerializer.Deserialize<List<string>>(json);
+                    FileHistory = new List<string>();
+                    return;
                 }
+                FileHistory = JsonSerializer.Deserialize<List<string>>(json);
+                return;
             }
             else
             {

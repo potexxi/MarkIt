@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MarkIt"
         xmlns:uc="clr-namespace:MarkIt.UserControls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Icon="/images/markit-logo.png">
+        Title="MainWindow" Height="450" Width="800" SizeChanged="Window_SizeChanged" MinWidth="600" MinHeight="400" Icon="/images/markit-logo.png">
     <Grid x:Name="GridMain">
         <StackPanel x:Name="StackPanelMainWindow" Orientation="Vertical">
             <StackPanel x:Name="StackPanelNavigationBar" Background="Gray" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="120">

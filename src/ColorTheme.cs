@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace MarkIt
 {
     public class ColorTheme
     {
-        public string Name {  get; private set; }
-        public string MenuBarColor {  get; private set; }
-        public string IconsColor {  get; private set; }
-        public string HoverColor {  get; private set; }
-        public string BackgroundColor {  get; private set; }
-        public string SliderColor {  get; private set; }
-        public string Foreground {  get; private set; }
+        public string Name { get; init; }
+        public string MenuBarColor {  get; init; }
+        public string IconsColor {  get; init; }
+        public string HoverColor {  get; init; }
+        public string BackgroundColor {  get; init; }
+        public string SliderColor {  get; init; }
+        public string Foreground {  get; init; }
 
         public ColorTheme() { }
         public ColorTheme(string name, string menubarcolor, string iconscolor, string hovercolor, string backgroundcolor, string slidercolor, string foreground)
