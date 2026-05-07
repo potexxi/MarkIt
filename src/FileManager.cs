@@ -6,6 +6,7 @@ using System.Security.RightsManagement;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MarkIt
 {
@@ -13,6 +14,7 @@ namespace MarkIt
     {
         private string userEmail;
         private string userPath;
+        public string LastContent {  get; private set; }
         public List<string> FileHistory { get; private set; }
         public string? CurrentFilePath;
         public FileManager(string userEmail) 
@@ -40,20 +42,36 @@ namespace MarkIt
 
         private void setFileHistory()
         {
-            if (File.Exists(userPath + "/file-history.json"))
+            try
             {
-                string json = File.ReadAllText(userPath + "/file-history.json");
-                if(json == "")
+                if (!File.Exists(userPath + "/file-history.json"))
                 {
+                    using (File.Create(userPath + "/file-history.json")) { }
                     FileHistory = new List<string>();
+                }
+                else
+                {
+                    string json = File.ReadAllText(userPath + "/file-history.json");
+                    if (json == "")
+                    {
+                        FileHistory = new List<string>();
+                        return;
+                    }
+                    FileHistory = JsonSerializer.Deserialize<List<string>>(json);
+                    foreach (string path in FileHistory)
+                    {
+                        if (!File.Exists(path))
+                        {
+                            FileHistory.Remove(path);
+                        }
+                    }
                     return;
                 }
-                FileHistory = JsonSerializer.Deserialize<List<string>>(json);
-                return;
             }
-            else
+            catch
             {
-                File.Create(userPath + "/file-history.json");
+                File.Delete(userPath + "/file-history.json");
+                using (File.Create(userPath + "/file-history.json")) { }
                 FileHistory = new List<string>();
             }
         }
@@ -78,7 +96,10 @@ namespace MarkIt
                 {
                     CurrentFilePath = userPath + $"/{filename}";
                     AddToHistory(userPath + $"/{filename}");
-                    return sr.ReadToEnd();
+                    string content =  sr.ReadToEnd();
+                    LastContent = content;
+                    sr.Close();
+                    return content;
                 }
             }
             catch
@@ -86,6 +107,11 @@ namespace MarkIt
                 Logger.logger.Debug($"File not found: {userPath}/{filename}");
                 return null;
             }
+        }
+
+        public string GetAbsolutPath(string filename)
+        {
+            return (userPath + $"/{filename}");
         }
 
         public void AddToHistory(string filepath)
@@ -105,16 +131,19 @@ namespace MarkIt
             saveHistory();
         }
 
+        public void RemoveFromHistory(string filepath)
+        {
+            if (FileHistory.Contains(filepath))
+                FileHistory.Remove(filepath);
+        }
+
         private void saveHistory()
         {
             var options = new JsonSerializerOptions
             {
                 WriteIndented = true
             };
-            using(StreamWriter sw = new StreamWriter(userPath + "/file-history.json"))
-            {
-                sw.Write(JsonSerializer.Serialize(FileHistory, options));
-            }
+            File.WriteAllText(userPath + "/file-history.json", JsonSerializer.Serialize(FileHistory, options));
         }
     }
 }

@@ -44,8 +44,6 @@ namespace MarkIt
 
             FileManager = new FileManager(currentUser.Email);
 
-            FileManager.SaveToFile("test/test/test/test6.json", "adsfd");
-
             // zum Testen
             ClassWorksheet CurrentWorkSheet = new ClassWorksheet(GridWorksheet);
             CurrentWorkSheet.Init();

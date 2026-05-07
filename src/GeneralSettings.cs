@@ -87,7 +87,7 @@ namespace MarkIt
                 Logger.logger.Warning("No file color-themes.json found!");
                 var box = new WindowMessageBox("Load error!", "A unexpected error forced the application to stop.");
                 box.ShowDialog();
-                Application.Current.Shutdown();
+                Environment.Exit(0);
             }
         }
 

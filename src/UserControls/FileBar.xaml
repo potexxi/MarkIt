@@ -21,8 +21,8 @@
                         </TreeView>
                     </StackPanel>
                 </ScrollViewer>
-                <Button Margin="0,20,0,0" Content="Delete"></Button>
-                <Button Content="Open"></Button>
+                <Button Cursor="Hand" x:Name="ButtonDel" Margin="0,20,0,0" Content="Delete" Click="ButtonDel_Click"></Button>
+                <Button Cursor="Hand" x:Name="ButtonOpen" Content="Open" Click="ButtonOpen_Click"></Button>
             </StackPanel>
         </Border>
     </Canvas>
