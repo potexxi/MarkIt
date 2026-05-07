@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,24 +8,25 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using static Microsoft.IO.RecyclableMemoryStreamManager;
 
 namespace MarkIt
 {
     public class GeneralSettings
     {
         public double width {  get; private set; }
-        private double height { get; set; }
-        private ColorTheme? currentColorTheme {  get; set; }
+        public double height { get; private set; }
+        public ColorTheme? currentColorTheme {  get; private set; }
         private List<ColorTheme>? colorThemes {  get; set; }
 
         public GeneralSettings() { }
 
-        public GeneralSettings(double width, double height, ColorTheme color)
+        public GeneralSettings(double width, double height)
         {
             setColorsFromFile();
             this.width = width;
             this.height = height;
-            this.currentColorTheme = color;
+            currentColorTheme = colorThemes[0];
         }
 
         public static GeneralSettings? LoadFromFile(string filename)
@@ -85,8 +87,19 @@ namespace MarkIt
                 Logger.logger.Warning("No file color-themes.json found!");
                 var box = new WindowMessageBox("Load error!", "A unexpected error forced the application to stop.");
                 box.ShowDialog();
-                Application.Current.Shutdown();
+                Environment.Exit(0);
             }
+        }
+
+        public void SaveColorsToFile()
+        {
+            var path = Directory.GetDirectoryRoot("sources/options/color-themes.json");
+            Directory.CreateDirectory(path);
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+            File.WriteAllText("sources/options/color-themes.json", JsonSerializer.Serialize(colorThemes, options));
         }
     }
 }

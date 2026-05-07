@@ -219,6 +219,22 @@ WindowMessageBox ..> ButtonType
 
 Worksheet ..> Page
 
+class FileManager{
+    - userEmail: string
+    - userPath: string
+    + FileHistory: List<string> {get ; private set}
+    + CurrentFilePath: string
+    --
+    + FileManager(userEmail: string)
+    --
+    - createUserFolder(): void
+    - setFileHistory(): void
+    + SaveToFile(filepath: string, content: string): void
+    + LoadFromFile(filepath: string): string
+    + AddToHistory(filepath: string): void
+    - saveHistory(): void
+}
+
 ' ChatGPT Anfang
 ' prompt: wie kann ich in plantuml diagramme untereinenader machen
 UserManager -[hidden]-> Logger

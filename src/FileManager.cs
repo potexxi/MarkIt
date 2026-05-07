@@ -1,0 +1,149 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.RightsManagement;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Windows;
+
+namespace MarkIt
+{
+    public class FileManager
+    {
+        private string userEmail;
+        private string userPath;
+        public string LastContent {  get; private set; }
+        public List<string> FileHistory { get; private set; }
+        public string? CurrentFilePath;
+        public FileManager(string userEmail) 
+        { 
+            if(userEmail == "guest")
+                this.userEmail = "guest@guest";
+            else
+                this.userEmail = userEmail;
+            createUserFolder();
+            setFileHistory();
+            Logger.logger.Debug("Initialized FileManager");
+        }
+
+        private void createUserFolder()
+        {
+            string folderName = userEmail.Split("@")[0];
+            userPath = "files/" + folderName;
+            if (Directory.Exists(userPath))
+            {
+                return;
+            }
+            Directory.CreateDirectory(userPath);
+            Logger.logger.Debug($"Created {userPath}");
+        }
+
+        private void setFileHistory()
+        {
+            try
+            {
+                if (!File.Exists(userPath + "/file-history.json"))
+                {
+                    using (File.Create(userPath + "/file-history.json")) { }
+                    FileHistory = new List<string>();
+                }
+                else
+                {
+                    string json = File.ReadAllText(userPath + "/file-history.json");
+                    if (json == "")
+                    {
+                        FileHistory = new List<string>();
+                        return;
+                    }
+                    FileHistory = JsonSerializer.Deserialize<List<string>>(json);
+                    foreach (string path in FileHistory)
+                    {
+                        if (!File.Exists(path))
+                        {
+                            FileHistory.Remove(path);
+                        }
+                    }
+                    return;
+                }
+            }
+            catch
+            {
+                File.Delete(userPath + "/file-history.json");
+                using (File.Create(userPath + "/file-history.json")) { }
+                FileHistory = new List<string>();
+            }
+        }
+
+        public void SaveToFile(string filename, string content)
+        {
+            string folder = Path.GetDirectoryName(userPath + $"/{filename}");
+            Directory.CreateDirectory(folder);
+            using (StreamWriter rd = new StreamWriter(userPath + $"/{filename}"))
+            {
+                rd.Write(content);
+            }
+            CurrentFilePath = userPath + $"/{filename}";
+            AddToHistory(userPath + $"/{filename}");
+        }
+
+        public string? LoadFromFile(string filename)
+        {
+            try
+            {
+                using(StreamReader sr = new StreamReader(userPath + $"/{filename}"))
+                {
+                    CurrentFilePath = userPath + $"/{filename}";
+                    AddToHistory(userPath + $"/{filename}");
+                    string content =  sr.ReadToEnd();
+                    LastContent = content;
+                    sr.Close();
+                    return content;
+                }
+            }
+            catch
+            {
+                Logger.logger.Debug($"File not found: {userPath}/{filename}");
+                return null;
+            }
+        }
+
+        public string GetAbsolutPath(string filename)
+        {
+            return (userPath + $"/{filename}");
+        }
+
+        public void AddToHistory(string filepath)
+        {
+            if(filepath == "" || filepath == null)
+            {
+                Logger.logger.Debug("Wanted to save empty FilePath.");
+                return;
+            }
+            if (FileHistory.Contains(filepath))
+                FileHistory.Remove(filepath);
+            FileHistory.Insert(0, filepath);
+            if(FileHistory.Count > 5)
+            {
+                FileHistory.RemoveAt(5);
+            }
+            saveHistory();
+        }
+
+        public void RemoveFromHistory(string filepath)
+        {
+            if (FileHistory.Contains(filepath))
+                FileHistory.Remove(filepath);
+        }
+
+        private void saveHistory()
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+            File.WriteAllText(userPath + "/file-history.json", JsonSerializer.Serialize(FileHistory, options));
+        }
+    }
+}
