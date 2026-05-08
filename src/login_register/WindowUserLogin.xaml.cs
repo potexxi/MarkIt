@@ -50,7 +50,7 @@ namespace MarkIt
         private void Window_Closed(object sender, EventArgs e)
         {
             if(!Guest)
-                Application.Current.Shutdown();
+                Environment.Exit(0);
         }
 
         public static void Navigate(string currentpage, string nextpage)

@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace MarkIt
 {
@@ -144,6 +145,39 @@ namespace MarkIt
                 WriteIndented = true
             };
             File.WriteAllText(userPath + "/file-history.json", JsonSerializer.Serialize(FileHistory, options));
+        }
+
+        public async Task<bool> UploadToServer(Grid loadingscreen)
+        {
+            loadingscreen.Visibility = Visibility.Visible;
+            string filepath = CurrentFilePath;
+            return await Upload(filepath, loadingscreen);
+        }
+
+        public async Task<bool> UploadToServer(string filename, Grid loadingscreen)
+        {
+            loadingscreen.Visibility = Visibility.Visible;
+            string filepath = userPath + $"/{filename}";
+            return await Upload(filepath, loadingscreen);
+        }
+
+        private async Task<bool> Upload(string path, Grid loadingscreen)
+        {
+            byte[] bytes = await File.ReadAllBytesAsync(path);
+            try
+            {
+                await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, "uploads/image.png");
+                loadingscreen.Visibility = Visibility.Hidden;
+                return true;
+            }
+            catch(Exception ex)
+            {
+                loadingscreen.Visibility = Visibility.Hidden;
+                Logger.logger.Warning($"Couldn't upload file: {ex.Message}");
+                var box = new WindowMessageBox("Upload error", "File could not be uploaded. Plesae try again later.");
+                box.ShowDialog();
+                return false;
+            }
         }
     }
 }
