@@ -20,6 +20,11 @@ namespace MarkIt.UserControls
     /// </summary>
     public partial class CustomTextBox : UserControl
     {
+        public string CustomContent
+        {
+            get { return TextBoxCustom.Text; }
+            set { TextBoxCustom.Text = value; }
+        }
         public int MaxCharLength
         {
             get{ return TextBoxCustom.MaxLength; }
@@ -39,6 +44,12 @@ namespace MarkIt.UserControls
         {
             RectTextbox.Fill = Brushes.LightGray;
             RectTextbox.Stroke = Brushes.Black;
+        }
+
+        public event TextChangedEventHandler TextChanged; // custom event with help from chatgpt (this line)
+        private void TextBoxCustom_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextChanged(sender, e);
         }
     }
 }

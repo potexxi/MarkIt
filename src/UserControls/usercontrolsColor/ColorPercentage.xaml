@@ -8,16 +8,20 @@
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="300">
     <Grid>
-        <uc:CustomTextBox Width="100" HorizontalAlignment="Stretch" Margin="-150,0,0,0"/>
-        <Rectangle VerticalAlignment="Stretch" Width="130" Stroke="Black" StrokeThickness="2" Margin="100,0,0,0">
-            <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="1,0" StartPoint="0, 0">
-                    <GradientStop Color="White" Offset="0"/>
-                    <GradientStop Color="White"/>
-                    <GradientStop Color="White"/>
-                    <GradientStop Color="Red" Offset="0.996"/>
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
+        <uc:CustomTextBox x:Name="Percentage" Width="100" HorizontalAlignment="Stretch" Margin="-150,0,0,0" TextChanged="Percentage_TextChanged"/>
+        <Canvas>
+            <Rectangle VerticalAlignment="Center" Width="130" Stroke="Black" StrokeThickness="2" HorizontalAlignment="Left" Height="40" Canvas.Left="135">
+                <Rectangle.Fill>
+                    <LinearGradientBrush EndPoint="1,0" StartPoint="0, 0">
+                        <GradientStop Color="White" Offset="0"/>
+                        <GradientStop Color="White"/>
+                        <GradientStop Color="White"/>
+                        <GradientStop Color="Red" Offset="0.996"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle x:Name="Selection" Width="12" Height="40" Fill="Transparent" Stroke="BLack" StrokeThickness="4" RadiusX="2" RadiusY="2" HorizontalAlignment="Left" Canvas.Left="194" VerticalAlignment="Center"/>
+            <Rectangle  x:Name="RectSelection" Fill="Transparent" Height="40" Width="130" HorizontalAlignment="Center" Canvas.Left="135" VerticalAlignment="Top"  MouseUp="RectSelection_MouseUp" MouseDown="Rectangle_MouseDown" MouseEnter="RectSelection_MouseEnter" MouseLeave="RectSelection_MouseLeave"/>
+        </Canvas>
     </Grid>
 </UserControl>

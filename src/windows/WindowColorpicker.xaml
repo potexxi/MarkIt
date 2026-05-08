@@ -7,7 +7,7 @@
         xmlns:uc="clr-namespace:MarkIt.UserControls"
         xmlns:ucColors="clr-namespace:MarkIt.UserControls.usercontrolsColor"
         mc:Ignorable="d"
-        Title="WindowColorpicker" Height="500" Width="350">
+        Title="WindowColorpicker" Height="500" Width="370">
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0">
             <ucColors:ColorDisplay Width="300" Height="100"/>
