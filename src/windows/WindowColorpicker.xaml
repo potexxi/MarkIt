@@ -7,18 +7,17 @@
         xmlns:uc="clr-namespace:MarkIt.UserControls"
         xmlns:ucColors="clr-namespace:MarkIt.UserControls.usercontrolsColor"
         mc:Ignorable="d"
-        Title="WindowColorpicker" Height="500" Width="370">
-    <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0">
-            <ucColors:ColorDisplay x:Name="ColorDisplay" Width="300" Height="100"/>
-            <ucColors:ColorPercentage Width="300" Height="40" Margin="0, 30" ColorRect="Black"/>
-            <ucColors:ColorPercentage x:Name="r" Width="300" Height="40" Margin="5" ColorRect="Red"/>
+        Title="WindowColorpicker" Height="420" Width="370">
+    <Grid Margin="0,0,0,-16">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" >
+            <ucColors:ColorDisplay x:Name="ColorDisplay" Width="300" Height="150" Margin="0,10,0,0"/>
+            <ucColors:ColorPercentage x:Name="r" Width="300" Height="40"  ColorRect="Red" Margin="5,20,5,5"/>
             <ucColors:ColorPercentage x:Name="g" Width="300" Height="40" Margin="5" ColorRect="Green"/>
             <ucColors:ColorPercentage x:Name="b" Width="300" Height="40" Margin="5" ColorRect="Blue"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Margin="30">
             <uc:CustomButton CustomContent="Apply" Width="140"/>
-            <uc:CustomButton CustomContent="Back" Width="140" Margin="5,0,0,0"/>
+            <uc:CustomButton CustomContent="Back" Width="140" Margin="5,0,0,0" PreviewMouseLeftButtonDown="CustomButton_PreviewMouseLeftButtonDown"/>
         </StackPanel>
     </Grid>
 </Window>

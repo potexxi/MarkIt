@@ -46,11 +46,25 @@ namespace MarkIt.UserControls.usercontrolsColor
                 }
             }
         }
-        public double Value
+        public double Value // this should be made better beacouse its very laggy but it works
         {
             get
             {
-                return Convert.ToDouble(Percentage.CustomContent);
+                if (RectColor.Fill != Brushes.Red)
+                    try
+                    {
+                        int converted = Convert.ToInt32(Percentage.CustomContent);
+                        if (converted >= 0 && converted <= 255)
+                            return converted;
+                        else
+                            return 0;
+                    }
+                    catch
+                    {
+                        return 0;
+                    }
+                else
+                    return 0; // falls keine Farbe / invalide
             }
         }
         public ColorPercentage()
@@ -66,7 +80,7 @@ namespace MarkIt.UserControls.usercontrolsColor
         private void RectSelection_MouseEnter(object sender, MouseEventArgs e)
         {
             MouseDown = false;
-            timer.Interval = TimeSpan.FromMilliseconds(1);
+            timer.Interval = TimeSpan.FromMilliseconds(15);
             timer.Tick += Timer_Tick;
             timer.Start();
         }
@@ -112,13 +126,13 @@ namespace MarkIt.UserControls.usercontrolsColor
                     return true;
                 else
                 {
-                    Percentage.CustomBackground = Brushes.Coral;
+                    Percentage.CustomBackground = Brushes.Red;
                     return false;
                 }
             }
             catch
             {
-                Percentage.CustomBackground = Brushes.Coral;
+                Percentage.CustomBackground = Brushes.Red;
                 return false;
             }
         }

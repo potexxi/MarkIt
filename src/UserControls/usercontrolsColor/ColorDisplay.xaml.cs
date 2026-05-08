@@ -22,6 +22,10 @@ namespace MarkIt.UserControls.usercontrolsColor
     {
         public Brush ChangeColor
         {
+            get
+            {
+                return RectDisplay.Fill;
+            }
             set
             {
                 //chatgpt begin

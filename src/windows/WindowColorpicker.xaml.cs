@@ -38,5 +38,10 @@ namespace MarkIt.windows
             byte bc = Convert.ToByte(Convert.ToInt32(Math.Round(b.Value, 0)));
             ColorDisplay.ChangeColor = new SolidColorBrush(System.Windows.Media.Color.FromRgb(rc,gc,bc));
         }
+
+        private void CustomButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Close();
+        }
     }
 }
