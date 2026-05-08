@@ -62,6 +62,9 @@ Alle Server Sachen (Cloud-Sync, Userprofile, Work-Togheter...) machen wir alles 
 @startuml
 top to bottom direction
 skinparam classAttributeIconSize 0
+skinparam padding 1
+skinparam nodesep 60
+skinparam ranksep 60
 
 class UserManager {
     + errorType : ErrorType
@@ -218,6 +221,22 @@ WindowMessageBox ..> ReturnType
 WindowMessageBox ..> ButtonType
 
 Worksheet ..> Page
+
+class FileManager{
+    - userEmail: string
+    - userPath: string
+    + FileHistory: List<string> {get ; private set}
+    + CurrentFilePath: string
+    --
+    + FileManager(userEmail: string)
+    --
+    - createUserFolder(): void
+    - setFileHistory(): void
+    + SaveToFile(filepath: string, content: string): void
+    + LoadFromFile(filepath: string): string
+    + AddToHistory(filepath: string): void
+    - saveHistory(): void
+}
 
 ' ChatGPT Anfang
 ' prompt: wie kann ich in plantuml diagramme untereinenader machen
