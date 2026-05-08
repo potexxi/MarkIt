@@ -1,0 +1,92 @@
+﻿<Window x:Class="MarkIt.windows.WindowSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MarkIt.windows"
+        xmlns:uc="clr-namespace:MarkIt.UserControls"
+        xmlns:ucColors="clr-namespace:MarkIt.UserControls.usercontrolsColor"
+        mc:Ignorable="d"
+        Title="Settings" Height="400" Width="700">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Document" Width="170">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Width" FontSize="20" FontWeight="Bold"/>
+                            <uc:CustomTextBox Width="120" Height="33" Margin="477,0,0,0" MaxCharLength="5"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Height" FontSize="20" FontWeight="Bold"/>
+                            <uc:CustomTextBox Width="120" Height="33" Margin="470,0,0,0" MaxCharLength="5"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save"/>
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Reset"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Performance" Width="170">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Icon Animations" FontSize="20" FontWeight="Bold"/>
+                            <uc:SwitchSlider x:Name="AnimationSetting" Width="160" Margin="350,0,0,0" MouseDown="SwitchSlider_MouseDown"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Live Rendering" FontSize="20" FontWeight="Bold"/>
+                            <uc:SwitchSlider x:Name="LiveRender" Width="160" Margin="363,0,0,0" MouseDown="SwitchSlider_MouseDown"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Animation FPS*" FontSize="20" FontWeight="Bold"/>
+                            <uc:CustomTextBox Width="120" Height="33" Margin="390,0,0,0" MaxCharLength="5"/>
+                        </StackPanel>
+                        
+                    </StackPanel>
+                    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save"/>
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Reset"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Design" Width="170">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Background Color" FontSize="20" FontWeight="Bold"/>
+                            <uc:CustomButton Width="200" CustomContent="Select Color" Margin="220,30,0,10" MouseDown="Background_CustomButton_MouseDown"/>
+                            <ucColors:ColorDisplay Width="60" Height="60" Margin="10,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Middle Color" FontSize="20" FontWeight="Bold"/>
+                            <uc:CustomButton Width="200" CustomContent="Select Color" Margin="267,30,0,10" MouseDown="Middle_CustomButton_MouseDown_1"/>
+                            <ucColors:ColorDisplay Width="60" Height="60" Margin="10,0,0,0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Forground Color" FontSize="20" FontWeight="Bold"/>
+                            <uc:CustomButton Width="200" CustomContent="Select Color" Margin="234,30,0,10" MouseDown="Forground_CustomButton_MouseDown_2"/>
+                            <ucColors:ColorDisplay Width="60" Height="60" Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save"/>
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Reset"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Accound"  Width="170">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save"/>
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Reset"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
