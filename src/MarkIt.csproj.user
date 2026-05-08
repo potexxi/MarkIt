@@ -38,10 +38,13 @@
     <Compile Update="UserControls\CustomButton.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControls\CustomTextBox.xaml.cs">
-    <Compile Update="UserControls\FileBar.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
+	  <Compile Update="UserControls\CustomTextBox.xaml.cs">
+    <SubType>Code</SubType>
+	  </Compile>
+	<Compile Update="UserControls\FileBar.xaml.cs">
+		<!--I used ChatGPT somewhere here to fix compilation problems-->
+	  <SubType>Code</SubType>
+	</Compile>
     <Compile Update="UserControls\InformationIcon.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
