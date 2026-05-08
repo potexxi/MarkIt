@@ -62,6 +62,9 @@ Alle Server Sachen (Cloud-Sync, Userprofile, Work-Togheter...) machen wir alles 
 @startuml
 top to bottom direction
 skinparam classAttributeIconSize 0
+skinparam padding 1
+skinparam nodesep 60
+skinparam ranksep 60
 
 class UserManager {
     + errorType : ErrorType
