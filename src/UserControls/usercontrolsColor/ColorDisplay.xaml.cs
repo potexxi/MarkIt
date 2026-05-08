@@ -20,6 +20,19 @@ namespace MarkIt.UserControls.usercontrolsColor
     /// </summary>
     public partial class ColorDisplay : UserControl
     {
+        public Brush ChangeColor
+        {
+            set
+            {
+                //chatgpt begin
+                //promt: how can I make sure value is a brush
+                if (value is SolidColorBrush brush)
+                //chatgpt ende
+                {
+                    RectDisplay.Fill = value;
+                }
+            }
+        }
         public ColorDisplay()
         {
             InitializeComponent();

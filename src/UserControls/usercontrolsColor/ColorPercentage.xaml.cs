@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,9 +24,40 @@ namespace MarkIt.UserControls.usercontrolsColor
     {
         private DispatcherTimer timer = new();
         private bool MouseDown = false;
+
+        public Brush Color
+        {
+            get
+            {
+                return Percentage.CustomBackground;
+            }
+            private set { }
+        }
+        public Brush ColorRect
+        {
+            set
+            {
+                //chatgpt begin
+                //promt: how can I make sure value is a brush
+                if (value is SolidColorBrush brush)
+                //chatgpt ende
+                {
+                    SelColor.Color = brush.Color;
+                }
+            }
+        }
+        public double Value
+        {
+            get
+            {
+                return Convert.ToDouble(Percentage.CustomContent);
+            }
+        }
         public ColorPercentage()
         {
             InitializeComponent();
+            Percentage.disableHover = true;
+            Percentage.CustomContent = "125";
         }
 
         private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e){ MouseDown = true; }
@@ -70,10 +102,31 @@ namespace MarkIt.UserControls.usercontrolsColor
             return value / 255 * 125;
         }
 
+        private bool OnlyNumbers()
+        {
+            try
+            {
+                int i = Convert.ToInt32(Percentage.CustomContent);
+                Percentage.CustomBackground = Brushes.LightGreen;
+                if (i >= 0  && i <= 255)
+                    return true;
+                else
+                {
+                    Percentage.CustomBackground = Brushes.Coral;
+                    return false;
+                }
+            }
+            catch
+            {
+                Percentage.CustomBackground = Brushes.Coral;
+                return false;
+            }
+        }
+
         private void Percentage_TextChanged(object sender, TextChangedEventArgs e)
         {
             double x = 0;
-            if (Percentage.CustomContent != null && Percentage.CustomContent != "")
+            if (Percentage.CustomContent != null && Percentage.CustomContent != "" && OnlyNumbers())
                x = Convert.ToDouble(Percentage.CustomContent);
             Canvas.SetLeft(Selection, CalcPos(x) + 125);
         }

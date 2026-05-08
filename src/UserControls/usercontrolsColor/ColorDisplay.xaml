@@ -7,6 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="100">
     <Grid>
-        <Rectangle Fill="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stroke="Black" RadiusX="10" RadiusY="10" StrokeThickness="2"/>
+        <Rectangle x:Name="RectDisplay" Fill="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stroke="Black" RadiusX="10" RadiusY="10" StrokeThickness="2"/>
     </Grid>
 </UserControl>

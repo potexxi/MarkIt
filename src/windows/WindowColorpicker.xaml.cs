@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MarkIt.UserControls.usercontrolsColor;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace MarkIt.windows
 {
@@ -19,9 +22,21 @@ namespace MarkIt.windows
     /// </summary>
     public partial class WindowColorpicker : Window
     {
+        DispatcherTimer timer = new();
         public WindowColorpicker()
         {
             InitializeComponent();
+            timer.Interval = TimeSpan.FromMilliseconds(15);
+            timer.Tick += Timer_Tick;
+            timer.Start();
+        }
+
+        private void Timer_Tick(object? sender, EventArgs e)
+        {
+            byte rc = Convert.ToByte(Convert.ToInt32(Math.Round(r.Value,0)));
+            byte gc = Convert.ToByte(Convert.ToInt32(Math.Round(g.Value, 0)));
+            byte bc = Convert.ToByte(Convert.ToInt32(Math.Round(b.Value, 0)));
+            ColorDisplay.ChangeColor = new SolidColorBrush(System.Windows.Media.Color.FromRgb(rc,gc,bc));
         }
     }
 }

@@ -10,13 +10,13 @@
     <Grid>
         <uc:CustomTextBox x:Name="Percentage" Width="100" HorizontalAlignment="Stretch" Margin="-150,0,0,0" TextChanged="Percentage_TextChanged"/>
         <Canvas>
-            <Rectangle VerticalAlignment="Center" Width="130" Stroke="Black" StrokeThickness="2" HorizontalAlignment="Left" Height="40" Canvas.Left="135">
+            <Rectangle x:Name="RectColor" VerticalAlignment="Center" Width="130" Stroke="Black" StrokeThickness="2" HorizontalAlignment="Left" Height="40" Canvas.Left="135">
                 <Rectangle.Fill>
                     <LinearGradientBrush EndPoint="1,0" StartPoint="0, 0">
                         <GradientStop Color="White" Offset="0"/>
                         <GradientStop Color="White"/>
                         <GradientStop Color="White"/>
-                        <GradientStop Color="Red" Offset="0.996"/>
+                        <GradientStop  x:Name="SelColor" Color="Red" Offset="0.996"/>
                     </LinearGradientBrush>
                 </Rectangle.Fill>
             </Rectangle>

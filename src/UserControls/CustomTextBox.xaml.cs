@@ -20,6 +20,7 @@ namespace MarkIt.UserControls
     /// </summary>
     public partial class CustomTextBox : UserControl
     {
+        // user usable funktions values chnages
         public string CustomContent
         {
             get { return TextBoxCustom.Text; }
@@ -27,8 +28,21 @@ namespace MarkIt.UserControls
         }
         public int MaxCharLength
         {
-            get{ return TextBoxCustom.MaxLength; }
-            set{ TextBoxCustom.MaxLength = value; }
+            get { return TextBoxCustom.MaxLength; }
+            set { TextBoxCustom.MaxLength = value; }
+        }
+        public Brush CustomBackground
+        {
+            get { return RectTextbox.Fill; }
+            set { RectTextbox.Fill = value; }
+        }
+
+        public bool disableHover { get; set; } = false;
+
+        public event TextChangedEventHandler TextChanged; // custom event with help from chatgpt (this line)
+        private void TextBoxCustom_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextChanged(sender, e);
         }
         public CustomTextBox()
         {
@@ -37,19 +51,20 @@ namespace MarkIt.UserControls
 
         private void TextBox_MouseEnter(object sender, MouseEventArgs e)
         {
-            RectTextbox.Fill = Brushes.DarkGray;
-            RectTextbox.Stroke = Brushes.LightGray;
+            if (!disableHover)
+            {
+                RectTextbox.Fill = Brushes.DarkGray;
+                RectTextbox.Stroke = Brushes.LightGray;
+            }
         }
         private void TextBox_MouseLeave(object sender, MouseEventArgs e)
         {
-            RectTextbox.Fill = Brushes.LightGray;
-            RectTextbox.Stroke = Brushes.Black;
+            if (!disableHover)
+            {
+                RectTextbox.Fill = Brushes.LightGray;
+                RectTextbox.Stroke = Brushes.Black;
+            }
         }
 
-        public event TextChangedEventHandler TextChanged; // custom event with help from chatgpt (this line)
-        private void TextBoxCustom_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextChanged(sender, e);
-        }
     }
 }
