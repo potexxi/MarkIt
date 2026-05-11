@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.RightsManagement;
-using System.Text;
+﻿using System.IO;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -119,7 +113,7 @@ namespace MarkIt
         {
             if(filepath == "" || filepath == null)
             {
-                Logger.logger.Debug("Wanted to save empty FilePath.");
+                Logger.logger.Debug("Tried to save empty FilePath.");
                 return;
             }
             if (FileHistory.Contains(filepath))
@@ -150,6 +144,11 @@ namespace MarkIt
         public async Task<bool> UploadToServer(Grid loadingscreen)
         {
             loadingscreen.Visibility = Visibility.Visible;
+            if(CurrentFilePath == null || CurrentFilePath == "")
+            {
+                loadingscreen.Visibility = Visibility.Hidden;
+                return false;
+            }
             string filepath = CurrentFilePath;
             return await Upload(filepath, loadingscreen);
         }
