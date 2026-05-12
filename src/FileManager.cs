@@ -13,6 +13,7 @@ namespace MarkIt
         public string LastContent {  get; private set; }
         public List<string> FileHistory { get; private set; }
         public string? CurrentFilePath;
+        public List<string> CloudFiles {  get; private set; }
         public FileManager(string userEmail) 
         { 
             if(userEmail == "guest")
@@ -163,10 +164,15 @@ namespace MarkIt
 
         private async Task<bool> Upload(string path, Grid loadingscreen)
         {
-            byte[] bytes = await File.ReadAllBytesAsync(path);
             try
             {
+<<<<<<< Updated upstream
                 await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, path);
+=======
+                byte[] bytes = await File.ReadAllBytesAsync(path);
+                var options = new Supabase.Storage.FileOptions { Upsert = true };
+                await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, path, options);
+>>>>>>> Stashed changes
                 loadingscreen.Visibility = Visibility.Hidden;
                 return true;
             }
@@ -180,6 +186,7 @@ namespace MarkIt
             }
         }
 
+<<<<<<< Updated upstream
         public async Task<string>? Download(string filename, Grid loadingscreen)
         {
             loadingscreen.Visibility = Visibility.Visible;
@@ -198,6 +205,11 @@ namespace MarkIt
                 box.ShowDialog();
                 return null;
             }
+=======
+        private void GetAllCloudPath()
+        {
+            
+>>>>>>> Stashed changes
         }
     }
 }

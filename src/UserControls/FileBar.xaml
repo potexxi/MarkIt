@@ -16,8 +16,12 @@
                         <StackPanel x:Name="StackPanelHistory">
                             
                         </StackPanel>
-                        <TreeView x:Name="TreeViewMain">
+                        <TreeView x:Name="TreeViewLocal">
                             
+                        </TreeView>
+                        <Separator/>
+                        <TreeView x:Name="TreeViewCloud">
+
                         </TreeView>
                     </StackPanel>
                 </ScrollViewer>
