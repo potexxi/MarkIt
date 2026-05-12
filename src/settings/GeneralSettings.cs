@@ -10,7 +10,7 @@ using System.Windows;
 using System.Windows.Media;
 using static Microsoft.IO.RecyclableMemoryStreamManager;
 
-namespace MarkIt
+namespace MarkIt.settings
 {
     public class GeneralSettings
     {
@@ -63,7 +63,7 @@ namespace MarkIt
 
         public void ChangeColor(ColorTheme color)
         {
-            this.currentColorTheme = color;
+            currentColorTheme = color;
         }
 
         public void ChangeSize(double width, double height)

@@ -1,4 +1,5 @@
-﻿using MarkIt.UserControls.usercontrolsColor;
+﻿using MarkIt.settings;
+using MarkIt.UserControls.usercontrolsColor;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -33,7 +34,7 @@ namespace MarkIt.windows
 
         private void Timer_Tick(object? sender, EventArgs e)
         {
-            byte rc = Convert.ToByte(Convert.ToInt32(Math.Round(r.Value,0)));
+            byte rc = Convert.ToByte(Convert.ToInt32(Math.Round(r.Value,0))); // autocompletion
             byte gc = Convert.ToByte(Convert.ToInt32(Math.Round(g.Value, 0)));
             byte bc = Convert.ToByte(Convert.ToInt32(Math.Round(b.Value, 0)));
             ColorDisplay.ChangeColor = new SolidColorBrush(System.Windows.Media.Color.FromRgb(rc,gc,bc));
@@ -41,6 +42,7 @@ namespace MarkIt.windows
 
         private void CustomButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            MessageBox.Show(ColorTheme.RGBToHEX(Convert.ToInt32(r.Value), Convert.ToInt32(g.Value), Convert.ToInt32(b.Value)));
             Close();
         }
     }
