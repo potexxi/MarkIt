@@ -73,6 +73,15 @@ namespace MarkIt.login_register
                 TextBoxEmail.BorderThickness = new Thickness(3);
                 TextBoxEmail.BorderBrush = Brushes.LightCoral;
             }
+            else if(errortype == UserManager.ErrorType.Confirmation)
+            {
+                WindowUserLogin.Navigate("PageLogin", "Page2FA");
+                Page2FA.TimerResend.Start();
+                Page2FA.TimerCheckVerified.Start();
+                MainWindow.currentUser = new ClassUser(TextBoxEmail.Text, PasswordBoxPassword.Password);
+                Supabase.Gotrue.SignInWithPasswordlessEmailOptions options = new Supabase.Gotrue.SignInWithPasswordlessEmailOptions(email: MainWindow.currentUser.Email);
+                await MainWindow.supabase.Auth.SignInWithOtp(options);
+            }
         }
         private void ButtonGuest_Click(object sender, RoutedEventArgs e)
         {

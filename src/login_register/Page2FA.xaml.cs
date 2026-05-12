@@ -44,8 +44,8 @@ namespace MarkIt.login_register
                 WindowUserLogin.Guest = true;
                 TimerResend.Stop();
                 TimerCheckVerified.Stop();
-                LabelTimer.Content = $"Resend Code in: {timerCount}s";
                 timerCount = 90;
+                LabelTimer.Content = $"Resend Code in: {timerCount}s";
                 WindowUserLogin.window.Close();
             }
             catch(Supabase.Gotrue.Exceptions.GotrueException ex)
