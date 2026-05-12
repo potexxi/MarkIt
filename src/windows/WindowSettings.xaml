@@ -59,17 +59,17 @@
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Background Color" FontSize="20" FontWeight="Bold"/>
                             <uc:CustomButton Width="200" CustomContent="Select Color" Margin="220,30,0,10" MouseDown="Background_CustomButton_MouseDown"/>
-                            <ucColors:ColorDisplay Width="60" Height="60" Margin="10,0,0,0"/>
+                            <ucColors:ColorDisplay x:Name="CD_Backgorund" Width="60" Height="60" Margin="10,0,0,0"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Middle Color" FontSize="20" FontWeight="Bold"/>
                             <uc:CustomButton Width="200" CustomContent="Select Color" Margin="267,30,0,10" MouseDown="Middle_CustomButton_MouseDown_1"/>
-                            <ucColors:ColorDisplay Width="60" Height="60" Margin="10,0,0,0"/>
+                            <ucColors:ColorDisplay x:Name="CD_Middle" Width="60" Height="60" Margin="10,0,0,0"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Forground Color" FontSize="20" FontWeight="Bold"/>
                             <uc:CustomButton Width="200" CustomContent="Select Color" Margin="234,30,0,10" MouseDown="Forground_CustomButton_MouseDown_2"/>
-                            <ucColors:ColorDisplay Width="60" Height="60" Margin="10,0,0,0"/>
+                            <ucColors:ColorDisplay x:Name="CD_Forground" Width="60" Height="60" Margin="10,0,0,0"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">

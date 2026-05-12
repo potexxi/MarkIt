@@ -85,9 +85,9 @@ namespace MarkIt.settings
             catch
             {
                 Logger.logger.Warning("No file color-themes.json found!");
-                var box = new WindowMessageBox("Load error!", "A unexpected error forced the application to stop.");
-                box.ShowDialog();
-                Environment.Exit(0);
+                ColorTheme colortheme = new ColorTheme("default", "#FFEA00", "#FF1F4572", "#FFFFFF");
+                colorThemes.Add(colortheme);
+                currentColorTheme = colortheme;
             }
         }
 

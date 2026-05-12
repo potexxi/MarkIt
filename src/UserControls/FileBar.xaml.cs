@@ -67,7 +67,7 @@ namespace MarkIt.UserControls
                 label1.Background = Brushes.Transparent;
             }
             Label label = (Label)sender;
-            label.Background = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.IconsColor);
+            label.Background = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
             selectedPath = label.Content.ToString();
             ButtonDel.IsEnabled = false;
         }

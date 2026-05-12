@@ -16,8 +16,8 @@
             <ucColors:ColorPercentage x:Name="b" Width="300" Height="40" Margin="5" ColorRect="Blue"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Margin="30">
-            <uc:CustomButton CustomContent="Apply" Width="140"/>
-            <uc:CustomButton CustomContent="Back" Width="140" Margin="5,0,0,0" PreviewMouseLeftButtonDown="CustomButton_PreviewMouseLeftButtonDown"/>
+            <uc:CustomButton CustomContent="Apply" Width="140" PreviewMouseLeftButtonDown="CustomButton_PreviewMouseLeftButtonDown1"/>
+            <uc:CustomButton CustomContent="Back" Width="140" Margin="5,0,0,0" PreviewMouseLeftButtonDown="CustomButton_PreviewMouseLeftButtonDown2"/>
         </StackPanel>
     </Grid>
 </Window>

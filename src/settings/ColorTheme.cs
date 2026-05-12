@@ -12,26 +12,21 @@ namespace MarkIt.settings
     public class ColorTheme
     {
         public string Name { get; init; }
-        public string MenuBarColor {  get; init; }
-        public string IconsColor {  get; init; }
         public string HoverColor {  get; init; }
         public string BackgroundColor {  get; init; }
-        public string SliderColor {  get; init; }
         public string Foreground {  get; init; }
 
         public ColorTheme() { }
-        public ColorTheme(string name, string menubarcolor, string iconscolor, string hovercolor, string backgroundcolor, string slidercolor, string foreground)
+        public ColorTheme(string name, string hovercolor, string backgroundcolor, string foreground)
         {
             Name = name;
-            MenuBarColor = menubarcolor;
-            IconsColor = iconscolor;
             HoverColor = hovercolor;
             BackgroundColor = backgroundcolor;
-            SliderColor = slidercolor;
             Foreground = foreground;
         }
 
         static private string tohex(int dez)
+        // dez zu hex
         {
             string[] HEX = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
             string hex1 = "";
@@ -56,7 +51,7 @@ namespace MarkIt.settings
         static public string RGBToHEX(int red, int green, int blue)
         // # RR GG BB
         {
-            string hex = "#FF";
+            string hex = "#";
             hex += ColorTheme.tohex(red);
             hex += ColorTheme.tohex(green);
             hex += ColorTheme.tohex(blue);
