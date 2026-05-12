@@ -21,9 +21,9 @@ namespace MarkIt.windows
     public partial class WindowSettings : Window
     {
         private DispatcherTimer timer = new DispatcherTimer();
-        static public string color_Background = "";
-        static public string color_Middle = "";
-        static public string color_Forground = "";
+        static public string color_Background = "#FFFFFF";
+        static public string color_Middle = "#FFFFFF";
+        static public string color_Forground = "#FFFFFF";
 
         public WindowSettings()
         {
@@ -70,6 +70,30 @@ namespace MarkIt.windows
             WindowColorpicker cp = new WindowColorpicker(2);
             cp.ShowDialog();
             updateColorDisplays();
+        }
+
+        private void Button_Save_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (CT_Height.CustomContent != null)
+                MainWindow.GeneralSettings.height = Convert.ToDouble(CT_Height.CustomContent);
+            if (CT_Width.CustomContent != null)
+                MainWindow.GeneralSettings.width = Convert.ToDouble(CT_Width.CustomContent);
+            if (CT_Animation_FPS.CustomContent != null)
+                MainWindow.GeneralSettings.width = Convert.ToDouble(CT_Animation_FPS.CustomContent);
+
+            MainWindow.GeneralSettings.iconAnimations = AnimationSetting.IsOn;
+            MainWindow.GeneralSettings.iconAnimations = LiveRender.IsOn;
+
+            MainWindow.GeneralSettings.currentColorTheme = new settings.ColorTheme("user", color_Background, color_Forground, color_Middle);
+
+            Logger.logger.Verbose("Settings closed with saving");
+            Close();
+        }
+
+        private void Button_Back_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Logger.logger.Verbose("Settings closed without saving");
+            Close();
         }
     }
 }

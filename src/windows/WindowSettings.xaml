@@ -15,16 +15,16 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Width" FontSize="20" FontWeight="Bold"/>
-                            <uc:CustomTextBox Width="120" Height="33" Margin="477,0,0,0" MaxCharLength="5"/>
+                            <uc:CustomTextBox x:Name="CT_Width" Width="120" Height="33" Margin="477,0,0,0" MaxCharLength="5"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Height" FontSize="20" FontWeight="Bold"/>
-                            <uc:CustomTextBox Width="120" Height="33" Margin="470,0,0,0" MaxCharLength="5"/>
+                            <uc:CustomTextBox x:Name="CT_Height" Width="120" Height="33" Margin="470,0,0,0" MaxCharLength="5"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
-                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save"/>
-                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Reset"/>
+                        <uc:CustomButton x:Name="Button_Save" Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save" MouseDown="Button_Save_MouseDown"/>
+                        <uc:CustomButton x:Name="Button_Back" Width="100" Height="50" Margin="0,0,10,0" CustomContent="Back" MouseDown="Button_Back_MouseDown"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
@@ -42,7 +42,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Animation FPS*" FontSize="20" FontWeight="Bold"/>
-                            <uc:CustomTextBox Width="120" Height="33" Margin="390,0,0,0" MaxCharLength="5"/>
+                            <uc:CustomTextBox x:Name="CT_Animation_FPS" Width="120" Height="33" Margin="390,0,0,0" MaxCharLength="5"/>
                         </StackPanel>
                         
                     </StackPanel>

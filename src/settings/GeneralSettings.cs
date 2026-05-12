@@ -14,18 +14,25 @@ namespace MarkIt.settings
 {
     public class GeneralSettings
     {
-        public double width {  get; private set; }
-        public double height { get; private set; }
-        public ColorTheme? currentColorTheme {  get; private set; }
+        public double width {  get; set; }
+        public double height { get; set; }
+        public bool iconAnimations { get; set; }
+        public bool liveRendering { get; set; }
+        public string animationFPS { get; set; }
+        public ColorTheme? currentColorTheme {  get; set; }
         private List<ColorTheme>? colorThemes {  get; set; }
 
         public GeneralSettings() { }
 
-        public GeneralSettings(double width, double height)
+        public GeneralSettings(double width, double height, bool iconAnimaition, bool liveRendering, string animationFPS)
         {
             setColorsFromFile();
             this.width = width;
             this.height = height;
+            this.iconAnimations = iconAnimaition;
+            this.liveRendering = liveRendering;
+            this.animationFPS = animationFPS;
+
             currentColorTheme = colorThemes[0];
         }
 

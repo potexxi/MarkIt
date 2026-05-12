@@ -36,7 +36,7 @@ namespace MarkIt
             InitializeComponent();
             Logger.Init();
             ServerManager = new ServerManager();
-            GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight);
+            GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, true, false, "12");
             GeneralSettings.SaveColorsToFile();
             ServerManager.InitSupabaseClient();
             WindowUserLogin window = new WindowUserLogin();
