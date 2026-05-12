@@ -54,13 +54,14 @@ namespace MarkIt.login_register
         private async void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
             if (TextBoxEmail.Text == "" && PasswordBoxPassword.Password == "") return;
-            var errortype =  await WindowUserLogin.UserManager.SignInAndHandleErrors(TextBoxEmail.Text, PasswordBoxPassword.Password.ToString(), LoadingScreen);
+            UserManager.ErrorType errortype =  await WindowUserLogin.UserManager.SignInAndHandleErrors(TextBoxEmail.Text, PasswordBoxPassword.Password.ToString(), LoadingScreen);
             if(errortype == UserManager.ErrorType.OK)
             {
                 if(CheckBoxRemember.IsChecked == true)
                 {
                     WindowUserLogin.UserManager.WriteToRememberedUsers(MainWindow.supabase.Auth.CurrentSession);
                 }
+                MainWindow.currentUser = new ClassUser(TextBoxEmail.Text, PasswordBoxPassword.Password);
                 WindowUserLogin.Guest = true;
                 WindowUserLogin.window.Close();
             }

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
@@ -134,7 +135,7 @@ namespace MarkIt
 
         private void saveHistory()
         {
-            var options = new JsonSerializerOptions
+            JsonSerializerOptions options = new JsonSerializerOptions
             {
                 WriteIndented = true
             };
@@ -165,7 +166,7 @@ namespace MarkIt
             byte[] bytes = await File.ReadAllBytesAsync(path);
             try
             {
-                await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, "uploads/image.png");
+                await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, path);
                 loadingscreen.Visibility = Visibility.Hidden;
                 return true;
             }
@@ -173,9 +174,29 @@ namespace MarkIt
             {
                 loadingscreen.Visibility = Visibility.Hidden;
                 Logger.logger.Warning($"Couldn't upload file: {ex.Message}");
-                var box = new WindowMessageBox("Upload error", "File could not be uploaded. Plesae try again later.");
+                WindowMessageBox box = new WindowMessageBox("Upload error", "File could not be uploaded. Plesae try again later.");
                 box.ShowDialog();
                 return false;
+            }
+        }
+
+        public async Task<string>? Download(string filename, Grid loadingscreen)
+        {
+            loadingscreen.Visibility = Visibility.Visible;
+            try
+            {
+                string path = userPath + $"/{filename}";
+                byte[] content_byte = await MainWindow.supabase.Storage.From("MarkIt").Download(path, null);
+                loadingscreen.Visibility = Visibility.Hidden;
+                return Encoding.UTF8.GetString(content_byte);
+            }
+            catch(Exception ex)
+            {
+                loadingscreen.Visibility = Visibility.Hidden;
+                Logger.logger.Warning($"Download file: {ex.Message}");
+                WindowMessageBox box = new WindowMessageBox("Download Error", "File could not be downloaded. Please try again later.");
+                box.ShowDialog();
+                return null;
             }
         }
     }

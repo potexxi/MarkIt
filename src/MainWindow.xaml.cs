@@ -35,7 +35,7 @@ namespace MarkIt
             InitializeComponent();
             Logger.Init();
             ServerManager = new ServerManager();
-            var colorthemeBlue = new ColorTheme("blue", "#FF01021C", "#97D5C8", "#FFEA00", "#FF1F4572", "#97D5C8", "#FFFFFF");
+            ColorTheme colorthemeBlue = new ColorTheme("blue", "#FF01021C", "#97D5C8", "#FFEA00", "#FF1F4572", "#97D5C8", "#FFFFFF");
             GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight);
             GeneralSettings.SaveColorsToFile();
             ServerManager.InitSupabaseClient();
