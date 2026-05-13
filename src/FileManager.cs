@@ -166,13 +166,10 @@ namespace MarkIt
         {
             try
             {
-<<<<<<< Updated upstream
-                await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, path);
-=======
                 byte[] bytes = await File.ReadAllBytesAsync(path);
-                var options = new Supabase.Storage.FileOptions { Upsert = true };
+                await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, path);
+                Supabase.Storage.FileOptions options = new Supabase.Storage.FileOptions { Upsert = true };
                 await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, path, options);
->>>>>>> Stashed changes
                 loadingscreen.Visibility = Visibility.Hidden;
                 return true;
             }
@@ -186,7 +183,6 @@ namespace MarkIt
             }
         }
 
-<<<<<<< Updated upstream
         public async Task<string>? Download(string filename, Grid loadingscreen)
         {
             loadingscreen.Visibility = Visibility.Visible;
@@ -197,7 +193,7 @@ namespace MarkIt
                 loadingscreen.Visibility = Visibility.Hidden;
                 return Encoding.UTF8.GetString(content_byte);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 loadingscreen.Visibility = Visibility.Hidden;
                 Logger.logger.Warning($"Download file: {ex.Message}");
@@ -205,11 +201,11 @@ namespace MarkIt
                 box.ShowDialog();
                 return null;
             }
-=======
+        }
+
         private void GetAllCloudPath()
         {
-            
->>>>>>> Stashed changes
+           
         }
     }
 }
