@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media;
-using static Microsoft.IO.RecyclableMemoryStreamManager;
 
 namespace MarkIt
 {
@@ -46,7 +37,7 @@ namespace MarkIt
 
         public void SaveToFile(string filename)
         {
-            var options = new JsonSerializerOptions
+            JsonSerializerOptions options = new JsonSerializerOptions
             {
                 WriteIndented = true
             };
@@ -85,7 +76,7 @@ namespace MarkIt
             catch
             {
                 Logger.logger.Warning("No file color-themes.json found!");
-                var box = new WindowMessageBox("Load error!", "A unexpected error forced the application to stop.");
+                WindowMessageBox box = new WindowMessageBox("Load error!", "A unexpected error forced the application to stop.");
                 box.ShowDialog();
                 Environment.Exit(0);
             }
@@ -93,9 +84,9 @@ namespace MarkIt
 
         public void SaveColorsToFile()
         {
-            var path = Directory.GetDirectoryRoot("sources/options/color-themes.json");
+            string path = Directory.GetDirectoryRoot("sources/options/color-themes.json");
             Directory.CreateDirectory(path);
-            var options = new JsonSerializerOptions
+            JsonSerializerOptions options = new JsonSerializerOptions
             {
                 WriteIndented = true
             };

@@ -56,7 +56,7 @@ namespace MarkIt.login_register
                 _sessions.Remove(session);
                 WindowUserLogin.UserManager.RemoveFromRememberedUsers(session);
                 LoadingScreen.Visibility = Visibility.Hidden;
-                var box = new WindowMessageBox("Relogin", "Our server caused a fatal error. Please relogin!");
+                WindowMessageBox box = new WindowMessageBox("Relogin", "Our server caused a fatal error. Please relogin!");
                 box.ShowDialog();
                 Logger.logger.Debug($"Remembered Users: {ex.Message}");
                 WindowUserLogin.Navigate("Remembered", "PageLogin");

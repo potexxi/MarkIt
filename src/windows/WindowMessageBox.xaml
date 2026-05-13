@@ -8,10 +8,10 @@
         Title="WindowMessageBox" Height="220" Width="410" ResizeMode="NoResize">
     <Grid Background="#FF1F4572">
         <StackPanel Orientation="Horizontal">
-            <Image Source="/images/markit-logo.png" Width="120"></Image>
+            <Image Source="/images/markit-logo.png" Width="100"></Image>
             <StackPanel Orientation="Vertical" Width="281">
-                <Label x:Name="LabelHeading" Content="Test" Margin="0,0,0,0" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Leelawadee UI" FontSize="30" FontWeight="Bold"/>
-                <TextBlock x:Name="LabelContent" Text="test" TextWrapping="Wrap" Margin="0,0,0,0" Width="261" Foreground="White" FontFamily="Leelawadee UI" FontSize="16" Height="78"/>
+                <Label x:Name="LabelHeading" Content="Test" Margin="0,0,0,0" HorizontalContentAlignment="Center" Foreground="White" FontFamily="Leelawadee UI" FontSize="25" FontWeight="Bold"/>
+                <TextBlock x:Name="LabelContent" Text="test" TextWrapping="Wrap" Margin="0,0,0,0" Width="259" Foreground="White" FontFamily="Leelawadee UI" FontSize="16" Height="78"/>
                 <StackPanel Width="260" Height="46" x:Name="StackPanelButtons" Orientation="Horizontal">
 
                 </StackPanel>

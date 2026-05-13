@@ -35,7 +35,7 @@ namespace MarkIt.login_register
             if (TextBoxEmail.Text == "" && TextBoxPassword1.Password == "" && TextBoxPassword2.Password == "") return;
             if(TextBoxPassword1.Password == TextBoxPassword2.Password)
             {
-                var errortype = await WindowUserLogin.UserManager.SignUpAndHandleErrors(TextBoxEmail.Text, TextBoxPassword2.Password, LoadingScreen);
+                UserManager.ErrorType errortype = await WindowUserLogin.UserManager.SignUpAndHandleErrors(TextBoxEmail.Text, TextBoxPassword2.Password, LoadingScreen);
                 if(errortype == UserManager.ErrorType.OK)
                 {
                     WindowUserLogin.Navigate("PageRegister", "Page2FA");

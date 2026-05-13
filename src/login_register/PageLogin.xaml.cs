@@ -54,13 +54,14 @@ namespace MarkIt.login_register
         private async void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
             if (TextBoxEmail.Text == "" && PasswordBoxPassword.Password == "") return;
-            var errortype =  await WindowUserLogin.UserManager.SignInAndHandleErrors(TextBoxEmail.Text, PasswordBoxPassword.Password.ToString(), LoadingScreen);
+            UserManager.ErrorType errortype =  await WindowUserLogin.UserManager.SignInAndHandleErrors(TextBoxEmail.Text, PasswordBoxPassword.Password.ToString(), LoadingScreen);
             if(errortype == UserManager.ErrorType.OK)
             {
                 if(CheckBoxRemember.IsChecked == true)
                 {
                     WindowUserLogin.UserManager.WriteToRememberedUsers(MainWindow.supabase.Auth.CurrentSession);
                 }
+                MainWindow.currentUser = new ClassUser(TextBoxEmail.Text, PasswordBoxPassword.Password);
                 WindowUserLogin.Guest = true;
                 WindowUserLogin.window.Close();
             }
@@ -71,6 +72,15 @@ namespace MarkIt.login_register
                 PasswordBoxPassword.BorderBrush = Brushes.LightCoral;
                 TextBoxEmail.BorderThickness = new Thickness(3);
                 TextBoxEmail.BorderBrush = Brushes.LightCoral;
+            }
+            else if(errortype == UserManager.ErrorType.Confirmation)
+            {
+                WindowUserLogin.Navigate("PageLogin", "Page2FA");
+                Page2FA.TimerResend.Start();
+                Page2FA.TimerCheckVerified.Start();
+                MainWindow.currentUser = new ClassUser(TextBoxEmail.Text, PasswordBoxPassword.Password);
+                Supabase.Gotrue.SignInWithPasswordlessEmailOptions options = new Supabase.Gotrue.SignInWithPasswordlessEmailOptions(email: MainWindow.currentUser.Email);
+                await MainWindow.supabase.Auth.SignInWithOtp(options);
             }
         }
         private void ButtonGuest_Click(object sender, RoutedEventArgs e)

@@ -21,7 +21,8 @@ namespace MarkIt
             BadPassword,
             BadEmail,
             EmailExists,
-            Requests
+            Requests,
+            Confirmation
         }
         public async Task<ErrorType> SignInAndHandleErrors(string email, string password, Grid loadingScreen)
         {
@@ -43,6 +44,11 @@ namespace MarkIt
                     box.ShowDialog();
                     Logger.logger.Error($"Server unreachable. {ex.Message}");
                     return ErrorType.ServerUnreachable;
+                }
+                else if(ex.Reason is Supabase.Gotrue.Exceptions.FailureHint.Reason.UserEmailNotConfirmed)
+                {
+                    Logger.logger.Debug("User Email not confirmed.");
+                    return ErrorType.Confirmation;
                 }
                 Logger.logger.Debug("Invalid password or email.");
                 return ErrorType.PasswordFalse;
