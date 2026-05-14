@@ -40,7 +40,7 @@ namespace MarkIt.login_register
         {
             try
             {
-                Supabase.Gotrue.Session? signin = await MainWindow.supabase.Auth.SignIn(MainWindow.currentUser.Email, MainWindow.currentUser.Password);
+                await MainWindow.supabase.Auth.SignIn(MainWindow.currentUser.Email, MainWindow.currentUser.Password);
                 WindowUserLogin.Guest = true;
                 TimerResend.Stop();
                 TimerCheckVerified.Stop();

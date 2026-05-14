@@ -94,7 +94,6 @@ namespace MarkIt.login_register
                 WindowUserLogin.Navigate("PageLogin", "Page2FA");
                 Page2FA.TimerCheckVerified.Start();
                 Page2FA.TimerResend.Start();
-                MainWindow.currentUser = new ClassUser(TextBoxEmail.Text, PasswordBoxPassword.Password);
             }
         }
         private void ButtonGuest_Click(object sender, RoutedEventArgs e)
