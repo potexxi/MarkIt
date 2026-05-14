@@ -54,6 +54,7 @@ namespace MarkIt.login_register
         private async void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
             if (TextBoxEmail.Text == "" && PasswordBoxPassword.Password == "") return;
+            MainWindow.currentUser = new ClassUser(TextBoxEmail.Text, PasswordBoxPassword.Password);
             UserManager.ErrorType errortype =  await WindowUserLogin.UserManager.SignInAndHandleErrors(TextBoxEmail.Text, PasswordBoxPassword.Password.ToString(), LoadingScreen);
             if(errortype == UserManager.ErrorType.OK)
             {
@@ -61,7 +62,6 @@ namespace MarkIt.login_register
                 {
                     WindowUserLogin.UserManager.WriteToRememberedUsers(MainWindow.supabase.Auth.CurrentSession);
                 }
-                MainWindow.currentUser = new ClassUser(TextBoxEmail.Text, PasswordBoxPassword.Password);
                 WindowUserLogin.Guest = true;
                 WindowUserLogin.window.Close();
             }
@@ -75,12 +75,25 @@ namespace MarkIt.login_register
             }
             else if(errortype == UserManager.ErrorType.Confirmation)
             {
-                WindowUserLogin.Navigate("PageLogin", "Page2FA");
-                Page2FA.TimerResend.Start();
-                Page2FA.TimerCheckVerified.Start();
-                MainWindow.currentUser = new ClassUser(TextBoxEmail.Text, PasswordBoxPassword.Password);
+                LoadingScreen.Visibility = Visibility.Visible;
                 Supabase.Gotrue.SignInWithPasswordlessEmailOptions options = new Supabase.Gotrue.SignInWithPasswordlessEmailOptions(email: MainWindow.currentUser.Email);
-                await MainWindow.supabase.Auth.SignInWithOtp(options);
+                bool error = true;
+                while (error)
+                {
+                    try
+                    {
+                        await MainWindow.supabase.Auth.SignInWithOtp(options);
+                        error = false;
+                    }
+                    catch
+                    {
+                        error = true;
+                    }
+                }
+                LoadingScreen.Visibility = Visibility.Hidden;
+                WindowUserLogin.Navigate("PageLogin", "Page2FA");
+                Page2FA.TimerCheckVerified.Start();
+                Page2FA.TimerResend.Start();
             }
         }
         private void ButtonGuest_Click(object sender, RoutedEventArgs e)

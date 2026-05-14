@@ -17,7 +17,7 @@ namespace MarkIt
 
         public ServerManager() 
         {
-            ServerSettings.Init(10223, "potexxi.duckdns.org");
+            ServerSettings.Init(10223, "potexxi.ddns.net");
         }
 
         public void InitSupabaseClient()
