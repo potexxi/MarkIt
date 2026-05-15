@@ -10,7 +10,7 @@
         Title="Settings" Height="400" Width="700">
     <Grid>
         <TabControl>
-            <TabItem Header="Document" Width="170">
+            <TabItem Header="Document" Width="220">
                 <Grid Background="#FFE5E5E5">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
@@ -23,13 +23,13 @@
                         </StackPanel>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
-                        <uc:CustomButton x:Name="Button_Save" Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save" MouseDown="Button_Save_MouseDown"/>
-                        <uc:CustomButton x:Name="Button_Back" Width="100" Height="50" Margin="0,0,10,0" CustomContent="Back" MouseDown="Button_Back_MouseDown"/>
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save" MouseDown="Button_Save_MouseDown"/>
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Back" MouseDown="Button_Back_MouseDown"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Performance" Width="170">
+            <TabItem Header="Performance" Width="220">
                 <Grid Background="#FFE5E5E5">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
@@ -42,18 +42,18 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Animation FPS*" FontSize="20" FontWeight="Bold"/>
-                            <uc:CustomTextBox x:Name="CT_Animation_FPS" Width="120" Height="33" Margin="390,0,0,0" MaxCharLength="5"/>
+                            <uc:CustomTextBox x:Name="CT_Animation_FPS" Width="120" Height="33" Margin="390,0,0,0" MaxCharLength="5" />
                         </StackPanel>
                         
                     </StackPanel>
                     <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
-                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save"/>
-                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Reset"/>
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save" MouseDown="Button_Save_MouseDown"/>
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Back" MouseDown="Button_Back_MouseDown"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Design" Width="170">
+            <TabItem Header="Design" Width="220">
                 <Grid Background="#FFE5E5E5">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
@@ -73,17 +73,8 @@
                         </StackPanel>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
-                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save"/>
-                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Reset"/>
-                    </StackPanel>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="Accound"  Width="170">
-                <Grid Background="#FFE5E5E5">
-                    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
-                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save"/>
-                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Reset"/>
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save" MouseDown="Button_Save_MouseDown"/>
+                        <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Back" MouseDown="Button_Back_MouseDown"/>
                     </StackPanel>
                 </Grid>
             </TabItem>

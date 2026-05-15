@@ -23,7 +23,23 @@ namespace MarkIt.UserControls
     {
         private double position = 40;
         private DispatcherTimer timer = new DispatcherTimer();
-        public bool IsOn { get; private set; } = false;
+        public bool _ison = false;
+        public bool IsOn {
+            get
+            {
+                return _ison;
+            }
+            set
+            {
+                _ison = value;
+                if (_ison) {
+                    LabelDisplay.Content = "OFF";
+                    timer.Tick += Timer_Tick;
+                    timer.Start();
+                }
+                else if (!_ison) { LabelDisplay.Content = "ON"; }
+            } 
+        }
         private bool hover;
         public SwitchSlider()
         {
@@ -34,12 +50,12 @@ namespace MarkIt.UserControls
         private void Timer_Tick(object? sender, EventArgs e)
         {
             RectDisplay.Margin = new Thickness(position, 0, 0, 0);
-            if (position < 110 && IsOn)
+            if (position < 110 && _ison)
             {
                 position += 6;
                 RectDisplay.Fill = new SolidColorBrush(Color.FromRgb(0, 255, 0));
             }
-            else if (position > 35 && !IsOn)
+            else if (position > 35 && !_ison)
             {
                 position -= 6;
                 RectDisplay.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
@@ -53,8 +69,8 @@ namespace MarkIt.UserControls
 
         private void Rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (IsOn) { IsOn = false; LabelDisplay.Content = "OFF"; }
-            else if (!IsOn) { IsOn = true; LabelDisplay.Content = "ON"; }
+            if (_ison) { _ison = false; LabelDisplay.Content = "OFF"; }
+            else if (!_ison) { _ison = true; LabelDisplay.Content = "ON"; }
         }
 
         private void Rectangle_MouseEnter(object sender, MouseEventArgs e)

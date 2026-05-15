@@ -8,7 +8,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using static Microsoft.IO.RecyclableMemoryStreamManager;
 
 namespace MarkIt.settings
 {

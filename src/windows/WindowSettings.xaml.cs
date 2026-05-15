@@ -1,5 +1,8 @@
-﻿using System;
+﻿using MarkIt.settings;
+using MarkIt.UserControls;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,12 +28,51 @@ namespace MarkIt.windows
         static public string color_Middle = "#FFFFFF";
         static public string color_Forground = "#FFFFFF";
 
+        private void CheckIfInt(TextBox customtextbox)
+        {
+            try
+            {
+                Convert.ToInt32(customtextbox.Text);
+            }
+            catch
+            {
+                customtextbox.Text = "0";
+            }
+        }
+
         public WindowSettings()
         {
             InitializeComponent();
+            load();
+            CT_Animation_FPS.TextChanged += CT_TextChanged;
+            CT_Height.TextChanged += CT_TextChanged;
+            CT_Width.TextChanged += CT_TextChanged;
+
             timer.Interval = TimeSpan.FromMicroseconds(15);
             timer.Tick += Timer_Tick;
             timer.Start();
+        }
+
+        private void CT_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox cb = (TextBox)sender;
+            CheckIfInt(cb);
+        }
+
+        public void load()
+        {
+            if (File.Exists("sources/options/generalSettings.json")){
+                GeneralSettings.LoadFromFile("sources/options/generalSettings.json");
+                LiveRender.IsOn = MainWindow.GeneralSettings.liveRendering;
+                AnimationSetting.IsOn = MainWindow.GeneralSettings.iconAnimations;
+                CT_Animation_FPS.CustomContent = MainWindow.GeneralSettings.animationFPS;
+                CT_Height.CustomContent = Convert.ToString(MainWindow.GeneralSettings.height);
+                CT_Width.CustomContent = Convert.ToString(MainWindow.GeneralSettings.width);
+                color_Background = MainWindow.GeneralSettings.currentColorTheme.BackgroundColor;
+                color_Middle = MainWindow.GeneralSettings.currentColorTheme.HoverColor;
+                color_Forground = MainWindow.GeneralSettings.currentColorTheme.Foreground;
+                updateColorDisplays();
+            }
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
@@ -82,10 +124,11 @@ namespace MarkIt.windows
                 MainWindow.GeneralSettings.width = Convert.ToDouble(CT_Animation_FPS.CustomContent);
 
             MainWindow.GeneralSettings.iconAnimations = AnimationSetting.IsOn;
-            MainWindow.GeneralSettings.iconAnimations = LiveRender.IsOn;
+            MainWindow.GeneralSettings.liveRendering = LiveRender.IsOn;
 
-            MainWindow.GeneralSettings.currentColorTheme = new settings.ColorTheme("user", color_Background, color_Forground, color_Middle);
+            MainWindow.GeneralSettings.currentColorTheme = new settings.ColorTheme("user", color_Middle, color_Background, color_Forground);
 
+            MainWindow.GeneralSettings.SaveToFile("sources/options/generalSettings.json");
             Logger.logger.Verbose("Settings closed with saving");
             Close();
         }
