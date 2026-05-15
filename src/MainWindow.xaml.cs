@@ -56,5 +56,11 @@ namespace MarkIt
         {
             filebar.SetSize(this.ActualWidth, this.ActualHeight);
         }
+
+        private void InformationIcon_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            windows.WindowInfoTab infoTab = new windows.WindowInfoTab();
+            infoTab.ShowDialog();
+        }
     }
 }
