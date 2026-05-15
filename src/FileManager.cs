@@ -9,7 +9,7 @@ namespace MarkIt
     public class FileManager
     {
         private string userEmail;
-        private string userPath;
+        public string userPath {  get; private set; }
         public string LastContent {  get; private set; }
         public List<string> FileHistory { get; private set; }
         public string? CurrentFilePath;

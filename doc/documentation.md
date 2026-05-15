@@ -25,3 +25,8 @@
 | Max | 08.05. | Start Cloud-Sync |
 | Karim | 12.05. | Settings Window and Colorpicker |
 | Max | 12.05. | Cloud-Sync | 
+| Karim | 13.05. | details in settings window |
+| Max | 13.05. | bug-fixes in login an registration |
+| Max | 14.05. | file-tree-views in file-bar |
+| Karim | 15.05. | settings apply in all other windows |
+| Max | 15.05. | Info-window and file-bar |

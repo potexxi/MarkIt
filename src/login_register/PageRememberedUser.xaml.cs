@@ -47,6 +47,7 @@ namespace MarkIt.login_register
             {
                 LoadingScreen.Visibility = Visibility.Visible;
                 await MainWindow.supabase.Auth.SetSession(session.AccessToken, session.RefreshToken);
+                MainWindow.currentUser = new ClassUser(MainWindow.currentSession.User.Email, "not set");
                 LoadingScreen.Visibility = Visibility.Hidden;
                 WindowUserLogin.Guest = true;
                 WindowUserLogin.window.Close();
@@ -54,6 +55,7 @@ namespace MarkIt.login_register
             catch(Exception ex)
             {
                 _sessions.Remove(session);
+                MainWindow.currentSession = null;
                 WindowUserLogin.UserManager.RemoveFromRememberedUsers(session);
                 LoadingScreen.Visibility = Visibility.Hidden;
                 WindowMessageBox box = new WindowMessageBox("Relogin", "Our server caused a fatal error. Please relogin!");
