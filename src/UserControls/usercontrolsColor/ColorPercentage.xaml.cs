@@ -50,21 +50,21 @@ namespace MarkIt.UserControls.usercontrolsColor
         {
             get
             {
-                if (RectColor.Fill != Brushes.Red)
-                    try
-                    {
-                        int converted = Convert.ToInt32(Percentage.CustomContent);
-                        if (converted >= 0 && converted <= 255)
-                            return converted;
-                        else
-                            return 0;
-                    }
-                    catch
-                    {
+                try
+                {
+
+                    int converted = Convert.ToInt32(Percentage.CustomContent);
+                    if (converted >= 0 && converted <= 255)
+                        return converted;
+                    else 
+                        Percentage.CustomContent = "0";
                         return 0;
-                    }
-                else
-                    return 0; // falls keine Farbe / invalide
+                }
+                catch
+                {
+                    Percentage.CustomContent = "0";
+                    return 0;
+                }
             }
         }
         public ColorPercentage()
