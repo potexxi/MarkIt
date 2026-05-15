@@ -54,5 +54,8 @@
     <Compile Update="login_register\WindowUserLogin.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="windows\WindowInfoTab.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>
