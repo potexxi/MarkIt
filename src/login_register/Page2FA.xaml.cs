@@ -40,12 +40,12 @@ namespace MarkIt.login_register
         {
             try
             {
-                var signin = await MainWindow.supabase.Auth.SignIn(MainWindow.currentUser.Email, MainWindow.currentUser.Password);
+                await MainWindow.supabase.Auth.SignIn(MainWindow.currentUser.Email, MainWindow.currentUser.Password);
                 WindowUserLogin.Guest = true;
                 TimerResend.Stop();
                 TimerCheckVerified.Stop();
-                LabelTimer.Content = $"Resend Code in: {timerCount}s";
                 timerCount = 90;
+                LabelTimer.Content = $"Resend Code in: {timerCount}s";
                 WindowUserLogin.window.Close();
             }
             catch(Supabase.Gotrue.Exceptions.GotrueException ex)
@@ -73,7 +73,7 @@ namespace MarkIt.login_register
             {
                 // ChatGPT anfang
                 // Prompt: c# supabase checken ob ein code == code in verify email ist
-                var result = await MainWindow.supabase.Auth.VerifyOTP(
+                Supabase.Gotrue.Session? result = await MainWindow.supabase.Auth.VerifyOTP(
                     email: MainWindow.currentUser.Email,
                     token: TextBoxCode.Text,
                     type: Supabase.Gotrue.Constants.EmailOtpType.Email);
@@ -100,7 +100,7 @@ namespace MarkIt.login_register
             if (timerCount <= 0)
             {
                 timerCount = 90;
-                var options = new Supabase.Gotrue.SignInWithPasswordlessEmailOptions(email: MainWindow.currentUser.Email);
+                Supabase.Gotrue.SignInWithPasswordlessEmailOptions options = new Supabase.Gotrue.SignInWithPasswordlessEmailOptions(email: MainWindow.currentUser.Email);
                 await MainWindow.supabase.Auth.SignInWithOtp(options);
             }
             LabelTimer.Content = $"Resend Code in: {timerCount}s";

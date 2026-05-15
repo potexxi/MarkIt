@@ -32,7 +32,7 @@ namespace MarkIt.login_register
         // veraendert wurde
         public static async void StartPasswordListener()
         {
-            var listener = new HttpListener();
+            HttpListener listener = new HttpListener();
             listener.Prefixes.Add("http://localhost:9876/password-changed/");
             listener.Start();
 

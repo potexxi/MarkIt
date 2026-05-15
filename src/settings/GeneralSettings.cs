@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
@@ -52,7 +47,7 @@ namespace MarkIt.settings
 
         public void SaveToFile(string filename)
         {
-            var options = new JsonSerializerOptions
+            JsonSerializerOptions options = new JsonSerializerOptions
             {
                 WriteIndented = true
             };
@@ -99,9 +94,9 @@ namespace MarkIt.settings
 
         public void SaveColorsToFile()
         {
-            var path = Directory.GetDirectoryRoot("sources/options/color-themes.json");
+            string path = Directory.GetDirectoryRoot("sources/options/color-themes.json");
             Directory.CreateDirectory(path);
-            var options = new JsonSerializerOptions
+            JsonSerializerOptions options = new JsonSerializerOptions
             {
                 WriteIndented = true
             };

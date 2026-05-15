@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.RightsManagement;
+﻿using System.IO;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace MarkIt
 {
@@ -17,6 +13,7 @@ namespace MarkIt
         public string LastContent {  get; private set; }
         public List<string> FileHistory { get; private set; }
         public string? CurrentFilePath;
+        public List<string> CloudFiles {  get; private set; }
         public FileManager(string userEmail) 
         { 
             if(userEmail == "guest")
@@ -118,7 +115,7 @@ namespace MarkIt
         {
             if(filepath == "" || filepath == null)
             {
-                Logger.logger.Debug("Wanted to save empty FilePath.");
+                Logger.logger.Debug("Tried to save empty FilePath.");
                 return;
             }
             if (FileHistory.Contains(filepath))
@@ -139,11 +136,76 @@ namespace MarkIt
 
         private void saveHistory()
         {
-            var options = new JsonSerializerOptions
+            JsonSerializerOptions options = new JsonSerializerOptions
             {
                 WriteIndented = true
             };
             File.WriteAllText(userPath + "/file-history.json", JsonSerializer.Serialize(FileHistory, options));
+        }
+
+        public async Task<bool> UploadToServer(Grid loadingscreen)
+        {
+            loadingscreen.Visibility = Visibility.Visible;
+            if(CurrentFilePath == null || CurrentFilePath == "")
+            {
+                loadingscreen.Visibility = Visibility.Hidden;
+                return false;
+            }
+            string filepath = CurrentFilePath;
+            return await Upload(filepath, loadingscreen);
+        }
+
+        public async Task<bool> UploadToServer(string filename, Grid loadingscreen)
+        {
+            loadingscreen.Visibility = Visibility.Visible;
+            string filepath = userPath + $"/{filename}";
+            return await Upload(filepath, loadingscreen);
+        }
+
+        private async Task<bool> Upload(string path, Grid loadingscreen)
+        {
+            try
+            {
+                byte[] bytes = await File.ReadAllBytesAsync(path);
+                await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, path);
+                Supabase.Storage.FileOptions options = new Supabase.Storage.FileOptions { Upsert = true };
+                await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, path, options);
+                loadingscreen.Visibility = Visibility.Hidden;
+                return true;
+            }
+            catch(Exception ex)
+            {
+                loadingscreen.Visibility = Visibility.Hidden;
+                Logger.logger.Warning($"Couldn't upload file: {ex.Message}");
+                WindowMessageBox box = new WindowMessageBox("Upload error", "File could not be uploaded. Plesae try again later.");
+                box.ShowDialog();
+                return false;
+            }
+        }
+
+        public async Task<string>? Download(string filename, Grid loadingscreen)
+        {
+            loadingscreen.Visibility = Visibility.Visible;
+            try
+            {
+                string path = userPath + $"/{filename}";
+                byte[] content_byte = await MainWindow.supabase.Storage.From("MarkIt").Download(path, null);
+                loadingscreen.Visibility = Visibility.Hidden;
+                return Encoding.UTF8.GetString(content_byte);
+            }
+            catch (Exception ex)
+            {
+                loadingscreen.Visibility = Visibility.Hidden;
+                Logger.logger.Warning($"Download file: {ex.Message}");
+                WindowMessageBox box = new WindowMessageBox("Download Error", "File could not be downloaded. Please try again later.");
+                box.ShowDialog();
+                return null;
+            }
+        }
+
+        private void GetAllCloudPath()
+        {
+           
         }
     }
 }

@@ -23,3 +23,5 @@
 | Karim | 06.05. | Custom Colorpicker |
 | Karim | 08.05. | finished Custom Textboxes and Ruleset |
 | Max | 08.05. | Start Cloud-Sync |
+| Karim | 12.05. | Settings Window and Colorpicker |
+| Max | 12.05. | Cloud-Sync | 
