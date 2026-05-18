@@ -56,5 +56,11 @@ namespace MarkIt
         {
             filebar.SetSize(this.ActualWidth, this.ActualHeight);
         }
+
+        private void MenuItemClose_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Logger.logger.Information("Closed programm");
+            Environment.Exit(0);
+        }
     }
 }
