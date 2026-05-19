@@ -87,7 +87,7 @@ namespace MarkIt.UserControls
         {
             Label label = (Label)sender;
             selectedPath = label.Content.ToString();
-            MainWindow.FileManager.LoadFromFile(selectedPath);
+            MainWindow.FileManager.LoadFromFile(selectedPath, false);
             if (this.Parent is Panel panel)
             {
                 panel.Children.Remove(this);
@@ -188,7 +188,7 @@ namespace MarkIt.UserControls
         {
             if(selectedPath != "" && selectedPath != null)
             {
-                MainWindow.FileManager.LoadFromFile(selectedPath);
+                // TODO: Read file
                 if (this.Parent is Panel panel)
                 {
                     panel.Children.Remove(this);
@@ -253,7 +253,12 @@ namespace MarkIt.UserControls
 
         private void Fileitem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            
+            TreeViewItem item = (TreeViewItem)sender;
+            MainWindow.FileManager.LoadFromFile(item.Tag.ToString(), true);
+            if (this.Parent is Panel panel)
+            {
+                panel.Children.Remove(this);
+            }
         }
 
         private void ScrollViewerMain_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

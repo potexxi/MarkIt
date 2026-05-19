@@ -85,13 +85,16 @@ namespace MarkIt
             AddToHistory(userPath + $"/{filename}");
         }
 
-        public string? LoadFromFile(string filename)
+        public string? LoadFromFile(string filename, bool isabsolut)
         {
             try
             {
                 using(StreamReader sr = new StreamReader(userPath + $"/{filename}"))
                 {
-                    CurrentFilePath = userPath + $"/{filename}";
+                    if (!isabsolut)
+                        CurrentFilePath = userPath + $"/{filename}";
+                    else
+                        CurrentFilePath = filename;
                     AddToHistory(userPath + $"/{filename}");
                     string content =  sr.ReadToEnd();
                     LastContent = content;
