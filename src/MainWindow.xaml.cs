@@ -1,5 +1,6 @@
 ﻿using MarkIt.login_register;
 using MarkIt.UserControls;
+using MarkIt.windows;
 using MarkIt.worksheet;
 using Serilog;
 using Serilog.Core;
@@ -57,10 +58,24 @@ namespace MarkIt
             filebar.SetSize(this.ActualWidth, this.ActualHeight);
         }
 
-        private void MenuItemClose_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void MenuItemWorkspace_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            Logger.logger.Information("Closed programm");
+            filebar.UpdateColors();
+            filebar.UpdateFileTreeLocal();
+            GridMain.Children.Add(filebar);
+        }
+
+        private void MenuItem_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowSettings settings = new WindowSettings();
+            settings.ShowDialog();
+        }
+
+        private void MenuItemExit_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Logger.logger.Information("Closed application.");
             Environment.Exit(0);
         }
+
     }
 }
