@@ -1,8 +1,12 @@
-﻿using System.IO;
+﻿using Supabase;
+using Supabase.Storage;
+using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MarkIt
 {
@@ -146,6 +150,22 @@ namespace MarkIt
             File.WriteAllText(userPath + "/file-history.json", JsonSerializer.Serialize(FileHistory, options));
         }
 
+        public async Task<bool> DeleteFromServer(string path, Grid loadingScreen)
+        {
+            try
+            {
+                // Von Supabase DOCS:  https://supabase.com/docs/reference/csharp/storage-from-download
+                await MainWindow.supabase.Storage.From("MarkIt").Remove(new List<string> { path });
+                // Ende
+                return true;
+            }
+            catch (Exception ex) 
+            {
+                Logger.logger.Error(ex.ToString());
+                return false;
+            }
+        }
+
         public async Task<bool> UploadToServer(Grid loadingscreen)
         {
             loadingscreen.Visibility = Visibility.Visible;
@@ -204,11 +224,6 @@ namespace MarkIt
                 box.ShowDialog();
                 return null;
             }
-        }
-
-        private void GetAllCloudPath()
-        {
-           
         }
     }
 }

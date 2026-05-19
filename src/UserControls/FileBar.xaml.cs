@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Supabase.Storage;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace MarkIt.UserControls
             DrawHistory(history);
             UpdateFileTreeLocal();
             UpdateColors();
+            UpdateFileTreeCloud();
         }
 
         public void UpdateColors()
@@ -148,13 +150,21 @@ namespace MarkIt.UserControls
                     {
                         RemoveItem(TreeViewCloud, selectedTreeViewItem);
                     }
-                    if (Directory.Exists(selectedTreeViewItem.Tag.ToString()))
+                    // TODO: Do the delete thing here
+                    try
                     {
-                        Directory.Delete(selectedTreeViewItem.Tag.ToString(), true);
+                        if (Directory.Exists(selectedTreeViewItem.Tag.ToString()))
+                        {
+                            Directory.Delete(selectedTreeViewItem.Tag.ToString(), true);
+                        }
+                        else if (File.Exists(selectedTreeViewItem.Tag.ToString()))
+                        {
+                            File.Delete(selectedTreeViewItem.Tag.ToString());
+                        }
                     }
-                    else if (File.Exists(selectedTreeViewItem.Tag.ToString()))
+                    finally
                     {
-                        File.Delete(selectedTreeViewItem.Tag.ToString());
+                        MainWindow.FileManager.DeleteFromServer(selectedTreeViewItem.Tag.ToString(), LoadingScreen);
                     }
                     selectedTreeViewItem = null;
                 }
@@ -196,6 +206,21 @@ namespace MarkIt.UserControls
             }
         }
 
+        public async Task UpdateFileTreeCloud()
+        {
+            if(MainWindow.currentUser.Email != "guest")
+            {
+                TreeViewItem item = await GetAllCloudPath(MainWindow.FileManager.userPath);
+                TreeViewCloud.Items.Add(item);
+            }
+            else
+            {
+                TreeViewItem item = new TreeViewItem();
+                item.Header = "Guest";
+                TreeViewCloud.Items.Add(item);
+            }
+        }
+
         public void UpdateFileTreeLocal()
         {
             string path = MainWindow.FileManager.userPath;
@@ -210,21 +235,21 @@ namespace MarkIt.UserControls
                 TreeViewLocal.IsHitTestVisible = false;
                 return;
             }
-            TreeViewLocal.Items.Add(CreateTreeViewItem(userInfo));
+            TreeViewLocal.Items.Add(GetAllLocalPath(userInfo));
 
         }
 
-        private TreeViewItem CreateTreeViewItem(DirectoryInfo info)
+        private TreeViewItem GetAllLocalPath(DirectoryInfo info)
         {
             TreeViewItem item = new TreeViewItem { Header = $"📁{info.Name}" };
             item.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
             item.FontSize = 14;
-            item.Tag = "root";
+            item.Tag = info.Name;
             item.PreviewMouseDown += Fileitem_PreviewMouseDown;
 
             foreach (DirectoryInfo underfolder in info.GetDirectories())
             {
-                TreeViewItem folderitem = CreateTreeViewItem(underfolder);
+                TreeViewItem folderitem = GetAllLocalPath(underfolder);
                 folderitem.PreviewMouseDown += Fileitem_PreviewMouseDown;
                 folderitem.Tag = underfolder.FullName;
                 item.Items.Add(folderitem);
@@ -244,6 +269,46 @@ namespace MarkIt.UserControls
                 }
             }
             return item;
+        }
+
+
+        public async Task<TreeViewItem> GetAllCloudPath(string userpath)
+        {
+            TreeViewItem big = new TreeViewItem();
+            big.Tag = userpath;
+            big.FontSize = 14;
+            big.Header = $"📁 {userpath.Split('/')[^1]}";
+            big.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+
+            List<FileObject>? storageitems = await MainWindow.supabase.Storage.From("MarkIt").List(userpath);
+            if (storageitems == null || storageitems.Count == 0)
+            {
+                return big;
+            }
+
+            foreach (FileObject item in storageitems)
+            {
+                if (item.IsFolder)
+                {
+                    TreeViewItem underfolder = await GetAllCloudPath($"{userpath}/{item.Name}");
+                    underfolder.FontSize = 14;
+                    underfolder.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+                    big.Items.Add(underfolder);
+                }
+                else
+                {
+                    TreeViewItem small = new TreeViewItem();
+                    small.Tag = $"{userpath}/{item.Name}";
+                    small.Header = item.Name;
+                    small.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+                    small.Cursor = Cursors.Hand;
+                    small.PreviewMouseDown += Fileitem_PreviewMouseDown;
+                    small.PreviewMouseDoubleClick += Fileitem_MouseDoubleClick;
+                    small.FontSize = 14;
+                    big.Items.Add(small);
+                }
+            }
+            return big;
         }
 
         private void Fileitem_PreviewMouseDown(object sender, MouseButtonEventArgs e)
