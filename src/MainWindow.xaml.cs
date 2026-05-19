@@ -1,4 +1,5 @@
 ﻿using MarkIt.login_register;
+using MarkIt.settings;
 using MarkIt.UserControls;
 using MarkIt.windows;
 using MarkIt.worksheet;
@@ -36,8 +37,7 @@ namespace MarkIt
             InitializeComponent();
             Logger.Init();
             ServerManager = new ServerManager();
-            ColorTheme colorthemeBlue = new ColorTheme("blue", "#FF01021C", "#97D5C8", "#FFEA00", "#FF1F4572", "#97D5C8", "#FFFFFF");
-            GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight);
+            GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, true, false, "12");
             GeneralSettings.SaveColorsToFile();
             ServerManager.InitSupabaseClient();
             WindowUserLogin window = new WindowUserLogin();
@@ -77,5 +77,16 @@ namespace MarkIt
             Environment.Exit(0);
         }
 
+        private void InformationIcon_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Logger.logger.Debug("Open InfoTab");
+            WindowInfoTab info = new WindowInfoTab();
+            info.ShowDialog();
+        }
+
+        private void MenuItemCredits_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            InformationIcon_PreviewMouseDown(sender, e);
+        }
     }
 }
