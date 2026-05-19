@@ -42,7 +42,8 @@ namespace MarkIt.UserControls
         public event TextChangedEventHandler TextChanged; // custom event with help from chatgpt (this line)
         private void TextBoxCustom_TextChanged(object sender, TextChangedEventArgs e)
         {
-            TextChanged(sender, e);
+            if (TextChanged != null)
+                TextChanged(sender, e);
         }
         public CustomTextBox()
         {
