@@ -30,3 +30,6 @@
 | Max | 14.05. | file-tree-views in file-bar |
 | Karim | 15.05. | settings apply in all other windows |
 | Max | 15.05. | Info-window and file-bar |
+| Karim | 16.05. | Planation, how we will continue... |
+| Max | 17.05. | Local-File-Tree-View in file bar |
+| Max | 19.05. | start Menu-Bar and Cloud-File-Tree-View |
