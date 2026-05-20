@@ -18,9 +18,10 @@ namespace MarkIt
         public ServerManager() 
         {
             ServerSettings.Init(10223, "potexxi.ddns.net");
+            InitSupabaseClient();
         }
 
-        public void InitSupabaseClient()
+        private void InitSupabaseClient()
         {
             MainWindow.supabase = new Supabase.Client(
                 $"http://{ServerSettings.PublicIp}:{ServerSettings.Port}", 

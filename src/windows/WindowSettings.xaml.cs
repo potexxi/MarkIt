@@ -44,6 +44,7 @@ namespace MarkIt.windows
         {
             InitializeComponent();
             load();
+
             CT_Animation_FPS.TextChanged += CT_TextChanged;
             CT_Height.TextChanged += CT_TextChanged;
             CT_Width.TextChanged += CT_TextChanged;
@@ -61,8 +62,8 @@ namespace MarkIt.windows
 
         public void load()
         {
-            if (File.Exists("sources/options/generalSettings.json")){
-                GeneralSettings.LoadFromFile("sources/options/generalSettings.json");
+            if (File.Exists("sources/options/generalSettings.json")) {
+                MainWindow.GeneralSettings = GeneralSettings.LoadFromFile("sources/options/generalSettings.json");
                 LiveRender.IsOn = MainWindow.GeneralSettings.liveRendering;
                 AnimationSetting.IsOn = MainWindow.GeneralSettings.iconAnimations;
                 CT_Animation_FPS.CustomContent = MainWindow.GeneralSettings.animationFPS;
@@ -86,11 +87,11 @@ namespace MarkIt.windows
         private void updateColorDisplays()
         {
             if (color_Background != "")
-                CD_Backgorund.ChangeColor = (Brush)new BrushConverter().ConvertFromString(color_Background); // color
+                CD_Backgorund.ChangeColor = (Brush)new BrushConverter().ConvertFromString(color_Background); // ChatGPT
             if (color_Forground != "")
-                CD_Forground.ChangeColor = (Brush)new BrushConverter().ConvertFromString(color_Forground); // color
+                CD_Forground.ChangeColor = (Brush)new BrushConverter().ConvertFromString(color_Forground); // ChatGPT
             if (color_Middle != "")
-                CD_Middle.ChangeColor = (Brush)new BrushConverter().ConvertFromString(color_Middle); // color
+                CD_Middle.ChangeColor = (Brush)new BrushConverter().ConvertFromString(color_Middle); // ChatGPT
         }
 
         private void Background_CustomButton_MouseDown(object sender, MouseButtonEventArgs e)
@@ -121,7 +122,7 @@ namespace MarkIt.windows
             if (CT_Width.CustomContent != null)
                 MainWindow.GeneralSettings.width = Convert.ToDouble(CT_Width.CustomContent);
             if (CT_Animation_FPS.CustomContent != null)
-                MainWindow.GeneralSettings.width = Convert.ToDouble(CT_Animation_FPS.CustomContent);
+                MainWindow.GeneralSettings.animationFPS = CT_Animation_FPS.CustomContent;
 
             MainWindow.GeneralSettings.iconAnimations = AnimationSetting.IsOn;
             MainWindow.GeneralSettings.liveRendering = LiveRender.IsOn;
@@ -129,6 +130,7 @@ namespace MarkIt.windows
             MainWindow.GeneralSettings.currentColorTheme = new settings.ColorTheme("user", color_Middle, color_Background, color_Forground);
 
             MainWindow.GeneralSettings.SaveToFile("sources/options/generalSettings.json");
+            
             Logger.logger.Verbose("Settings closed with saving");
             Close();
         }

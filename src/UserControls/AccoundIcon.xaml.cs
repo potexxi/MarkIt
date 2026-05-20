@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MarkIt.settings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,9 @@ namespace MarkIt.UserControls
         public double position { get; set; } = 0;
         private DispatcherTimer timer = new DispatcherTimer();
         private bool _animation = false;
+        static public Brush hovercolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.BackgroundColor);
+        static public Brush defaultcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+        static public Brush Backgroundcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
         public bool animation
         {
             get
@@ -48,10 +52,6 @@ namespace MarkIt.UserControls
                 }
             }
         }
-        static public SolidColorBrush hovercolor = Brushes.LightGray; // autocomplition
-        static public SolidColorBrush defaultcolor = Brushes.Black;
-        static public SolidColorBrush Backgroundcolor = Brushes.Gray;
-
         public AccoundIcon()
         {
             InitializeComponent();

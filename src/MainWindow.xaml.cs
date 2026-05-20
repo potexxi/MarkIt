@@ -31,14 +31,15 @@ namespace MarkIt
         public static FileManager FileManager;
         public static GeneralSettings GeneralSettings;
         private FileBar filebar;
+
         public MainWindow()
         {
-            InitializeComponent();
             Logger.Init();
+            GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, true, false, "12"); // has to be infront of init
+            GeneralSettings = GeneralSettings.LoadFromFile("sources/options/generalSettings.json");
+            InitializeComponent();
             ServerManager = new ServerManager();
-            GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, true, false, "12");
-            GeneralSettings.SaveColorsToFile();
-            ServerManager.InitSupabaseClient();
+            updateColors();
             WindowUserLogin window = new WindowUserLogin();
             window.ShowDialog();
 
@@ -50,6 +51,17 @@ namespace MarkIt
 
             filebar = new FileBar(FileManager.FileHistory);
             GridMain.Children.Add(filebar);
+        }
+
+        public void updateColors()
+        {
+            updateColorMain();
+        }
+
+
+        public void updateColorMain()
+        {
+            StackPanelNavigationBar.Background = (Brush)new BrushConverter().ConvertFromString(GeneralSettings.currentColorTheme.BackgroundColor);
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
