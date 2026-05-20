@@ -27,11 +27,12 @@ namespace MarkIt
         public static ServerManager ServerManager;
         public static FileManager FileManager;
         public static GeneralSettings GeneralSettings;
-        private FileBar filebar;
+        public static Grid loadingScreen { get; private set; }
         public MainWindow()
         {
             InitializeComponent();
             Logger.Init();
+            loadingScreen = LoadingScreen;
             ServerManager = new ServerManager();
             GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, true, false, "12");
             GeneralSettings.SaveColorsToFile();
@@ -40,13 +41,11 @@ namespace MarkIt
             window.ShowDialog();
 
             FileManager = new FileManager(currentUser.Email);
-
+            filebar.Show();
+            filebar.Update();
             // zum Testen
             ClassWorksheet CurrentWorkSheet = new ClassWorksheet(GridWorksheet);
             CurrentWorkSheet.Init();
-
-            filebar = new FileBar(FileManager.FileHistory);
-            GridMain.Children.Add(filebar);
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -56,9 +55,8 @@ namespace MarkIt
 
         private void MenuItemWorkspace_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            filebar.UpdateColors();
-            filebar.UpdateFileTreeLocal();
-            GridMain.Children.Add(filebar);
+            filebar.Show();
+            filebar.Update();
         }
 
         private void MenuItem_PreviewMouseDown(object sender, MouseButtonEventArgs e)

@@ -3,13 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:gif="http://wpfanimatedgif.codeplex.com"
              xmlns:local="clr-namespace:MarkIt.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="390" d:DesignWidth="800">
-    <Canvas>
+    <Canvas x:Name="CanvasMain">
         <Rectangle x:Name="RectBackground" Fill="Black" Opacity="0.5" Width="800" Height="390" PreviewMouseDown="Rectangle_PreviewMouseDown"></Rectangle>
         <Border x:Name="BorderMain" Canvas.Left="10" Canvas.Top="10" Background="#FF00006A" Width="250" Height="380" CornerRadius="15,15,15,15">
+            <Border.RenderTransform>
+                <TranslateTransform x:Name="BorderTransform"></TranslateTransform>
+            </Border.RenderTransform>
             <StackPanel>
                 <ScrollViewer x:Name="ScrollViewerMain" Height="300" VerticalScrollBarVisibility="Hidden" PreviewMouseWheel="ScrollViewerMain_PreviewMouseWheel">
                     <StackPanel>
@@ -44,9 +46,5 @@
                 <Button Cursor="Hand" x:Name="ButtonOpen" Content="Open" Click="ButtonOpen_Click"></Button>
             </StackPanel>
         </Border>
-        <Grid Visibility="Hidden" x:Name="LoadingScreen">
-            <Rectangle Fill="#FF1F4572" Opacity="0.6"></Rectangle>
-            <Image Width="100" Visibility="Visible" Height="100" gif:ImageBehavior.AnimatedSource="/images/loading-animation.gif"></Image>
-        </Grid>
     </Canvas>
 </UserControl>

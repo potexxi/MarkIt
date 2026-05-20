@@ -37,6 +37,7 @@
             </StackPanel>
             <Grid x:Name="GridWorksheet" Background="LightGray" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
         </StackPanel>
+        <uc:FileBar Opacity="1" x:Name="filebar"></uc:FileBar>
         <Grid Visibility="Hidden" x:Name="LoadingScreen">
             <Rectangle Fill="#FF1F4572" Opacity="0.6"></Rectangle>
             <Image Width="100" Visibility="Visible" Height="100" gif:ImageBehavior.AnimatedSource="/images/loading-animation.gif"></Image>

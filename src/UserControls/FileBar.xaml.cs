@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -25,17 +26,18 @@ namespace MarkIt.UserControls
     {
         private string selectedPath;
         private TreeViewItem? selectedTreeViewItem;
-        public FileBar(List<string> history)
+        public List<string> history;
+        public FileBar()
         {
             InitializeComponent();
-            DrawHistory(history);
-            UpdateFileTreeLocal();
-            UpdateColors();
-            UpdateFileTreeCloud();
         }
 
-        public void UpdateColors()
+        public void Update()
         {
+            MainWindow.FileManager.setFileHistory();
+            DrawHistory(MainWindow.FileManager.FileHistory);
+            UpdateFileTreeLocal();
+            UpdateFileTreeCloud();
             BorderMain.Background = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.BackgroundColor);
             LabelRecent.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
             LabelLocal.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
@@ -130,9 +132,9 @@ namespace MarkIt.UserControls
 
         private void ButtonDel_Click(object sender, RoutedEventArgs e)
         {
-            if(selectedTreeViewItem != null)
+            if (selectedTreeViewItem != null)
             {
-                if(selectedTreeViewItem.Tag.ToString() == "root")
+                if (selectedTreeViewItem.Tag.ToString() == "root")
                 {
                     WindowMessageBox box1 = new WindowMessageBox("Cannot remove!", "You cannot remove this folder! It is your root folder.");
                     box1.ShowDialog();
@@ -144,9 +146,9 @@ namespace MarkIt.UserControls
                 else
                     box = new WindowMessageBox("Really?", "Do you really want to delete this file?", WindowMessageBox.ButtonType.YesNo);
                 box.ShowDialog();
-                if(box.returnType == WindowMessageBox.ReturnType.Yes)
+                if (box.returnType == WindowMessageBox.ReturnType.Yes)
                 {
-                    if(!RemoveItem(TreeViewLocal, selectedTreeViewItem))
+                    if (!RemoveItem(TreeViewLocal, selectedTreeViewItem))
                     {
                         RemoveItem(TreeViewCloud, selectedTreeViewItem);
                     }
@@ -164,7 +166,7 @@ namespace MarkIt.UserControls
                     }
                     finally
                     {
-                        MainWindow.FileManager.DeleteFromServer(selectedTreeViewItem.Tag.ToString(), LoadingScreen);
+                        MainWindow.FileManager.DeleteFromServer(selectedTreeViewItem.Tag.ToString(), MainWindow.loadingScreen);
                     }
                     selectedTreeViewItem = null;
                 }
@@ -196,18 +198,16 @@ namespace MarkIt.UserControls
 
         private void ButtonOpen_Click(object sender, RoutedEventArgs e)
         {
-            if(selectedPath != "" && selectedPath != null)
+            if (selectedPath != "" && selectedPath != null)
             {
                 // TODO: Read file
-                if (this.Parent is Panel panel)
-                {
-                    panel.Children.Remove(this);
-                }
+                Hide();
             }
         }
 
         public async Task UpdateFileTreeCloud()
         {
+            TreeViewCloud.Items.Clear();
             if(MainWindow.currentUser.Email != "guest")
             {
                 TreeViewItem item = await GetAllCloudPath(MainWindow.FileManager.userPath);
@@ -283,6 +283,8 @@ namespace MarkIt.UserControls
             List<FileObject>? storageitems = await MainWindow.supabase.Storage.From("MarkIt").List(userpath);
             if (storageitems == null || storageitems.Count == 0)
             {
+                big.Header = "No cloud files.";
+                TreeViewCloud.IsHitTestVisible = false;
                 return big;
             }
 
@@ -316,10 +318,46 @@ namespace MarkIt.UserControls
             selectedTreeViewItem = (TreeViewItem)sender;
         }
 
+
+        public void Show()
+        {
+            // Valentin-GPT
+            // prompt: wie hast du das gemacht bei raumwechsel
+            DoubleAnimation animation = new DoubleAnimation
+            {
+                To = 13, // Zielposition
+                Duration = TimeSpan.FromMilliseconds(400),
+                EasingFunction = new CubicEase
+                {
+                    EasingMode = EasingMode.EaseOut
+                }
+            };
+            BorderTransform.BeginAnimation(TranslateTransform.XProperty, animation);
+            // Ende
+        }
+
+        public void Hide()
+        {
+            // Valentin-GPT
+            // prompt: wie hast du das gemacht bei raumwechsel
+            DoubleAnimation animation = new DoubleAnimation
+            {
+                To = -300, // Zielposition
+                Duration = TimeSpan.FromMilliseconds(400),
+                EasingFunction = new CubicEase
+                {
+                    EasingMode = EasingMode.EaseOut
+                }
+            };
+            BorderTransform.BeginAnimation(TranslateTransform.XProperty, animation);
+            // Ende
+        }
+
         private void Fileitem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             TreeViewItem item = (TreeViewItem)sender;
             MainWindow.FileManager.LoadFromFile(item.Tag.ToString(), true);
+            
             if (this.Parent is Panel panel)
             {
                 panel.Children.Remove(this);

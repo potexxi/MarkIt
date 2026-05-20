@@ -33,3 +33,5 @@
 | Karim | 16.05. | Planation, how we will continue... |
 | Max | 17.05. | Local-File-Tree-View in file bar |
 | Max | 19.05. | start Menu-Bar and Cloud-File-Tree-View |
+| Karim | 20.05. | Bug fixes from Max |
+| Max | 20.05. | filebar |

@@ -41,7 +41,7 @@ namespace MarkIt
             Logger.logger.Debug($"Created {userPath}");
         }
 
-        private void setFileHistory()
+        public void setFileHistory()
         {
             try
             {
