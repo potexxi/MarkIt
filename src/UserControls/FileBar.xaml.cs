@@ -1,4 +1,5 @@
-﻿using Supabase.Storage;
+﻿using MarkIt.settings;
+using Supabase.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +17,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace MarkIt.UserControls
 {
@@ -27,9 +29,28 @@ namespace MarkIt.UserControls
         private string selectedPath;
         private TreeViewItem? selectedTreeViewItem;
         public List<string> history;
+        private DispatcherTimer timerBlurOut;
+        private DispatcherTimer timerBlurIn;
+        private DispatcherTimer timerUpdate;
         public FileBar()
         {
             InitializeComponent();
+            timerBlurIn = new DispatcherTimer();
+            timerBlurIn.Interval = TimeSpan.FromMilliseconds(1);
+            timerBlurIn.Tick += TimerBlurIn_Tick;
+
+            timerBlurOut = new DispatcherTimer();
+            timerBlurOut.Interval = TimeSpan.FromMilliseconds(1);
+            timerBlurOut.Tick += TimerBlurOut_Tick;
+
+            timerUpdate = new DispatcherTimer();
+            timerUpdate.Interval = TimeSpan.FromSeconds(6.7);
+            timerUpdate.Tick += TimerUpdate_Tick;
+        }
+
+        private void TimerUpdate_Tick(object? sender, EventArgs e)
+        {
+            Update();
         }
 
         public void Update()
@@ -69,8 +90,9 @@ namespace MarkIt.UserControls
                 label.Cursor = Cursors.Hand;
                 label.FontFamily = new FontFamily("Leelawadee UI");
                 label.FontSize = 14;
-                string[] parts = item.Split("/");
-                label.Content = string.Join("/" ,parts.Skip(2));
+                string[] parts = item.Split(MainWindow.currentUser.Email.Split("@")[0]);
+                label.Content = parts[1];
+                selectedPath = item;
                 StackPanelHistory.Children.Add(label);
             }
         }
@@ -89,13 +111,8 @@ namespace MarkIt.UserControls
 
         private void LabelHistory_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Label label = (Label)sender;
-            selectedPath = label.Content.ToString();
-            MainWindow.FileManager.LoadFromFile(selectedPath, false);
-            if (this.Parent is Panel panel)
-            {
-                panel.Children.Remove(this);
-            }
+            ButtonOpen_Click(sender, e);
+            Hide();
         }
 
         private void Label_MouseLeave(object sender, MouseEventArgs e)
@@ -112,10 +129,7 @@ namespace MarkIt.UserControls
 
         private void Rectangle_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (this.Parent is Panel panel)
-            {
-                panel.Children.Remove(this);
-            }
+            Hide();
         }
 
         public void SetSize(double width, double height)
@@ -128,6 +142,8 @@ namespace MarkIt.UserControls
             BorderMain.Height = 0.97 * height - 50;
             ScrollViewerMain.Height = 0.78 * (0.97 * height - 50);
             ScrollViewerMain.Width = 0.3 * width;
+            if(RectBackground.IsHitTestVisible == false)
+                Canvas.SetLeft(BorderMain, -BorderMain.Width - 20);
         }
 
         private void ButtonDel_Click(object sender, RoutedEventArgs e)
@@ -196,13 +212,34 @@ namespace MarkIt.UserControls
         }
         // ChatGPT-Ende
 
-        private void ButtonOpen_Click(object sender, RoutedEventArgs e)
+        private async void ButtonOpen_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedPath != "" && selectedPath != null)
+            string path;
+            string type;
+            if (selectedTreeViewItem != null)
             {
-                // TODO: Read file
-                Hide();
+                (path, type) = ((string, string))selectedTreeViewItem.Tag;
             }
+            else if(selectedPath != "")
+            {
+                path = selectedPath;
+                type = "local";
+            }
+            else { return; }
+            if (!File.Exists(path))
+            {
+                return;
+            }
+            if (type == "local")
+            {
+                MainWindow.CurrentWorkSheet.LoadFromString(MainWindow.FileManager.LoadFromFile(path));
+            }
+            else
+            {
+                MainWindow.CurrentWorkSheet.LoadFromString(await MainWindow.FileManager.Download(path, MainWindow.loadingScreen));
+            }
+            Hide();
+            selectedPath = "";
         }
 
         public async Task UpdateFileTreeCloud()
@@ -216,7 +253,10 @@ namespace MarkIt.UserControls
             else
             {
                 TreeViewItem item = new TreeViewItem();
-                item.Header = "Guest";
+                item.Header = "You need to be logged in, \nto use this function.";
+                item.FontSize = 14;
+                item.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+                TreeViewCloud.IsHitTestVisible = false;
                 TreeViewCloud.Items.Add(item);
             }
         }
@@ -230,6 +270,7 @@ namespace MarkIt.UserControls
             {
                 Label item = new Label();
                 item.Content = "No local files.";
+                item.FontSize = 14;
                 item.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
                 TreeViewLocal.Items.Add(item);
                 TreeViewLocal.IsHitTestVisible = false;
@@ -244,14 +285,14 @@ namespace MarkIt.UserControls
             TreeViewItem item = new TreeViewItem { Header = $"📁{info.Name}" };
             item.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
             item.FontSize = 14;
-            item.Tag = info.Name;
+            item.Tag = (info.Name, "local");
             item.PreviewMouseDown += Fileitem_PreviewMouseDown;
 
             foreach (DirectoryInfo underfolder in info.GetDirectories())
             {
                 TreeViewItem folderitem = GetAllLocalPath(underfolder);
                 folderitem.PreviewMouseDown += Fileitem_PreviewMouseDown;
-                folderitem.Tag = underfolder.FullName;
+                folderitem.Tag = (underfolder.FullName, "local");
                 item.Items.Add(folderitem);
             }
             foreach(FileInfo file in info.GetFiles())
@@ -264,13 +305,12 @@ namespace MarkIt.UserControls
                     fileitem.Cursor = Cursors.Hand;
                     fileitem.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
                     fileitem.FontSize = 14;
-                    fileitem.Tag = file.FullName;
+                    fileitem.Tag = (file.FullName, "local");
                     item.Items.Add(fileitem);
                 }
             }
             return item;
         }
-
 
         public async Task<TreeViewItem> GetAllCloudPath(string userpath)
         {
@@ -294,13 +334,14 @@ namespace MarkIt.UserControls
                 {
                     TreeViewItem underfolder = await GetAllCloudPath($"{userpath}/{item.Name}");
                     underfolder.FontSize = 14;
+                    underfolder.Tag = (underfolder.Name, "cloud");
                     underfolder.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
                     big.Items.Add(underfolder);
                 }
                 else
                 {
                     TreeViewItem small = new TreeViewItem();
-                    small.Tag = $"{userpath}/{item.Name}";
+                    small.Tag = ($"{userpath}/{item.Name}", "cloud");
                     small.Header = item.Name;
                     small.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
                     small.Cursor = Cursors.Hand;
@@ -321,6 +362,14 @@ namespace MarkIt.UserControls
 
         public void Show()
         {
+            Update();
+            timerUpdate.Start();
+            Canvas.SetLeft(BorderMain, 10);
+            if (MainWindow.GeneralSettings.iconAnimations)
+                timerBlurIn.Start();
+            else
+                RectBackground.Opacity = 0.5;
+            RectBackground.IsHitTestVisible = true;
             // Valentin-GPT
             // prompt: wie hast du das gemacht bei raumwechsel
             DoubleAnimation animation = new DoubleAnimation
@@ -338,11 +387,17 @@ namespace MarkIt.UserControls
 
         public void Hide()
         {
+            timerUpdate.Stop();
+            if (MainWindow.GeneralSettings.iconAnimations)
+                timerBlurOut.Start();
+            else
+                RectBackground.Opacity = 0;
+            RectBackground.IsHitTestVisible = false;
             // Valentin-GPT
             // prompt: wie hast du das gemacht bei raumwechsel
             DoubleAnimation animation = new DoubleAnimation
             {
-                To = -300, // Zielposition
+                To = -BorderMain.Width - 20, // Zielposition
                 Duration = TimeSpan.FromMilliseconds(400),
                 EasingFunction = new CubicEase
                 {
@@ -353,15 +408,28 @@ namespace MarkIt.UserControls
             // Ende
         }
 
+        private void TimerBlurIn_Tick(object? sender, EventArgs e)
+        {
+            RectBackground.Opacity += 0.05;
+            if(RectBackground.Opacity >= 0.5)
+            {
+                timerBlurIn.Stop();
+            }
+        }
+
+        private void TimerBlurOut_Tick(object? sender, EventArgs e)
+        {
+            RectBackground.Opacity -= 0.05;
+            if (RectBackground.Opacity <= 0)
+            {
+                timerBlurOut.Stop();
+            }
+        }
+
         private void Fileitem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            TreeViewItem item = (TreeViewItem)sender;
-            MainWindow.FileManager.LoadFromFile(item.Tag.ToString(), true);
-            
-            if (this.Parent is Panel panel)
-            {
-                panel.Children.Remove(this);
-            }
+            ButtonOpen_Click(sender, e);
+            Hide();
         }
 
         private void ScrollViewerMain_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

@@ -89,17 +89,14 @@ namespace MarkIt
             AddToHistory(userPath + $"/{filename}");
         }
 
-        public string? LoadFromFile(string filename, bool isabsolut)
+        public string? LoadFromFile(string path)
         {
             try
             {
-                using(StreamReader sr = new StreamReader(userPath + $"/{filename}"))
+                using(StreamReader sr = new StreamReader(path))
                 {
-                    if (!isabsolut)
-                        CurrentFilePath = userPath + $"/{filename}";
-                    else
-                        CurrentFilePath = filename;
-                    AddToHistory(userPath + $"/{filename}");
+                    CurrentFilePath = path;
+                    AddToHistory(path);
                     string content =  sr.ReadToEnd();
                     LastContent = content;
                     sr.Close();
@@ -108,7 +105,7 @@ namespace MarkIt
             }
             catch
             {
-                Logger.logger.Debug($"File not found: {userPath}/{filename}");
+                Logger.logger.Debug($"File not found: {path}");
                 return null;
             }
         }
@@ -206,12 +203,11 @@ namespace MarkIt
             }
         }
 
-        public async Task<string>? Download(string filename, Grid loadingscreen)
+        public async Task<string>? Download(string path, Grid loadingscreen)
         {
             loadingscreen.Visibility = Visibility.Visible;
             try
             {
-                string path = userPath + $"/{filename}";
                 byte[] content_byte = await MainWindow.supabase.Storage.From("MarkIt").Download(path, null);
                 loadingscreen.Visibility = Visibility.Hidden;
                 return Encoding.UTF8.GetString(content_byte);

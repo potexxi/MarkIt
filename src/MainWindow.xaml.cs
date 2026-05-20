@@ -27,6 +27,7 @@ namespace MarkIt
         public static ServerManager ServerManager;
         public static FileManager FileManager;
         public static GeneralSettings GeneralSettings;
+        public static ClassWorksheet CurrentWorkSheet;
         public static Grid loadingScreen { get; private set; }
         public MainWindow()
         {
@@ -42,9 +43,8 @@ namespace MarkIt
 
             FileManager = new FileManager(currentUser.Email);
             filebar.Show();
-            filebar.Update();
             // zum Testen
-            ClassWorksheet CurrentWorkSheet = new ClassWorksheet(GridWorksheet);
+            CurrentWorkSheet = new ClassWorksheet(GridWorksheet);
             CurrentWorkSheet.Init();
         }
 
@@ -56,7 +56,6 @@ namespace MarkIt
         private void MenuItemWorkspace_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             filebar.Show();
-            filebar.Update();
         }
 
         private void MenuItem_PreviewMouseDown(object sender, MouseButtonEventArgs e)
