@@ -38,7 +38,7 @@ namespace MarkIt.UserControls
                 if (value)
                 {
                     _animation = true;
-                    timer.Interval = TimeSpan.FromMilliseconds(15);
+                    timer.Interval = TimeSpan.FromMilliseconds(Convert.ToInt32(MainWindow.GeneralSettings.animationFPS));
                     timer.Tick += Timer_Tick;
                     timer.Start();
                 }
@@ -51,9 +51,9 @@ namespace MarkIt.UserControls
             }
         }
 
-        static public SolidColorBrush hovercolor = Brushes.LightGray; // autocomplition
-        static public SolidColorBrush defaultcolor = Brushes.Black;
-        static public SolidColorBrush Backgroundcolor = Brushes.Gray;
+        static public Brush hovercolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground); // chatgpt this specific line might be used very often
+        static public Brush defaultcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+        static public Brush Backgroundcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
 
         public InformationIcon()
         {
@@ -84,13 +84,13 @@ namespace MarkIt.UserControls
                 EllispeI.Margin = new Thickness(0, position, 0, 0); // new thinkness von chatgpt
                 if (up)
                 {
-                    position += 0.5;
+                    position += 0.25;
                     if (position > 3.5)
                         up = false;
                 }
                 else
                 {
-                    position -= 0.5;
+                    position -= 0.25;
                     if (position < -3.5)
                         up = true;
                 }
@@ -114,6 +114,16 @@ namespace MarkIt.UserControls
                 RectBody.Fill = defaultcolor;
                 hover = false;
             }
+        }
+        public void updateSettings()
+        {
+            hovercolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+            defaultcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+            Backgroundcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+            animation = MainWindow.GeneralSettings.iconAnimations;
+            timer.Interval = TimeSpan.FromMilliseconds(Convert.ToInt32(MainWindow.GeneralSettings.animationFPS));
+            EllispeI.Fill = defaultcolor;
+            RectBody.Fill = defaultcolor;
         }
     }
 }

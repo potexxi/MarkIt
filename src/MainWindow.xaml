@@ -32,9 +32,9 @@
                 </Menu>
             </DockPanel>
             <StackPanel x:Name="StackPanelNavigationBar" Background="Gray" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="120">
-                <uc:SettingsIcon Width="50" Height="50"/>
-                <uc:AccoundIcon Width="50" Height="50" PreviewMouseDown="AccoundIcon_PreviewMouseDown"/>
-                <uc:InformationIcon Width="50" Height="50" PreviewMouseDown="InformationIcon_PreviewMouseDown"/>
+                <uc:SettingsIcon x:Name="UC_Settings" Width="50" Height="50"/>
+                <uc:AccoundIcon x:Name="UC_AccountIcon" Width="50" Height="50"/>
+                <uc:InformationIcon x:Name="UC_Information" PreviewMouseDown="InformationIcon_PreviewMouseDown" Width="50" Height="50"/>
             </StackPanel>
             <Grid x:Name="GridWorksheet" Background="LightGray" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
         </StackPanel>

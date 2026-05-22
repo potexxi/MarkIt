@@ -14,7 +14,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-
 namespace MarkIt
 {
     /// <summary>
@@ -30,15 +29,24 @@ namespace MarkIt
         public static GeneralSettings GeneralSettings;
         public static ClassWorksheet CurrentWorkSheet;
         public static Grid loadingScreen { get; private set; }
+        private FileBar filebar;
+
+        DispatcherTimer Maintimer = new DispatcherTimer();
+
         public MainWindow()
         {
-            InitializeComponent();
             Logger.Init();
             loadingScreen = LoadingScreen;
+
+            Maintimer.Interval = TimeSpan.FromMilliseconds(1000);
+            Maintimer.Tick += Maintimer_Tick;
+            Maintimer.Start(); // für das farb theme
+
+            GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, true, false, "12"); // has to be infront of init
+            GeneralSettings = GeneralSettings.LoadFromFile("sources/options/generalSettings.json");
+            InitializeComponent();
             ServerManager = new ServerManager();
-            GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, true, false, "12");
-            GeneralSettings.SaveColorsToFile();
-            ServerManager.InitSupabaseClient();
+            updateSettings();
             WindowUserLogin window = new WindowUserLogin();
             window.ShowDialog();
 
@@ -47,6 +55,29 @@ namespace MarkIt
             // zum Testen
             CurrentWorkSheet = new ClassWorksheet(GridWorksheet);
             CurrentWorkSheet.Init();
+        }
+
+        private void Maintimer_Tick(object? sender, EventArgs e)
+        {
+            updateSettings();
+        }
+
+        public void updateSettings()
+        {
+            if (GeneralSettings.updatedColorTheme)
+            {
+                UC_AccountIcon.updateSettings();
+                UC_Settings.updateSettings();
+                UC_Information.updateSettings();
+                updateColorMain();
+                GeneralSettings.updatedColorTheme = false;
+            }
+        }
+
+
+        public void updateColorMain()
+        {
+            StackPanelNavigationBar.Background = (Brush)new BrushConverter().ConvertFromString(GeneralSettings.currentColorTheme.BackgroundColor);
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)

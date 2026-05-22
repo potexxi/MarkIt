@@ -15,14 +15,16 @@ namespace MarkIt.settings
         public string HoverColor {  get; init; }
         public string BackgroundColor {  get; init; }
         public string Foreground {  get; init; }
+        public string Textcolor { get; init; }
 
         public ColorTheme() { }
-        public ColorTheme(string name, string hovercolor, string backgroundcolor, string foreground)
+        public ColorTheme(string name, string hovercolor, string backgroundcolor, string foreground, string textcolor)
         {
             Name = name;
             HoverColor = hovercolor;
             BackgroundColor = backgroundcolor;
             Foreground = foreground;
+            Textcolor = textcolor;
         }
 
         static private string tohex(int dez)

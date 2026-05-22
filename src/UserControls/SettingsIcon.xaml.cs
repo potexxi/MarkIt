@@ -28,17 +28,18 @@ namespace MarkIt.UserControls
     {
         private double rotation { get; set; } = 0;
         private DispatcherTimer timer = new DispatcherTimer();
-        private bool _animation = false;
+        private bool animation = false;
         //chatgpt
         private RotateTransform rotation1;
         //chatgpt ende
-        static public SolidColorBrush hovercolor = Brushes.LightGray; // autocomplition
-        static public SolidColorBrush defaultcolor = Brushes.Black;
-        static public SolidColorBrush Backgroundcolor = Brushes.Gray;
+        static public Brush hovercolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground); // chatgpt this specific line might be used very often
+        static public Brush defaultcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+        static public Brush Backgroundcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+
         public SettingsIcon()
         {
             InitializeComponent();
-            timer.Interval = TimeSpan.FromMilliseconds(15);
+            timer.Interval = TimeSpan.FromMilliseconds(Convert.ToInt32(MainWindow.GeneralSettings.animationFPS));
             timer.Tick -= Timer_Tick;
             timer.Tick += Timer_Tick;
 
@@ -47,8 +48,8 @@ namespace MarkIt.UserControls
             rotation1 = new RotateTransform(0);
             HoleGrid.RenderTransform = rotation1;
             //chatgpt end
-            EllipseBack.Fill = Backgroundcolor; // might be changed later on
-            _animation = true;
+            EllipseBack.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.BackgroundColor);
+            animation = true;
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
@@ -59,7 +60,7 @@ namespace MarkIt.UserControls
 
         private void RectSettingsIcon_MouseEnter(object sender, MouseEventArgs e)
         {
-            if (_animation)
+            if (animation)
             {
                 EllipseCenter.Fill = hovercolor;
                 Rect1.Fill = hovercolor;
@@ -72,7 +73,7 @@ namespace MarkIt.UserControls
 
         private void RectSettingsIcon_MouseLeave(object sender, MouseEventArgs e)
         {
-            if (_animation)
+            if (animation)
             {
                 EllipseCenter.Fill = defaultcolor;
                 Rect1.Fill = defaultcolor;
@@ -87,6 +88,20 @@ namespace MarkIt.UserControls
         {
             WindowSettings ws = new WindowSettings();
             ws.ShowDialog();
+        }
+        public void updateSettings()
+        {
+            hovercolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+            defaultcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+            Backgroundcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+            animation = MainWindow.GeneralSettings.iconAnimations;
+            timer.Interval = TimeSpan.FromMilliseconds(Convert.ToInt32(MainWindow.GeneralSettings.animationFPS));
+            EllipseBack.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.BackgroundColor);
+            EllipseCenter.Fill = defaultcolor;
+            Rect1.Fill = defaultcolor;
+            Rect2.Fill = defaultcolor;
+            Rect3.Fill = defaultcolor;
+            Rect4.Fill = defaultcolor;
         }
     }
 }
