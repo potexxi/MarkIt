@@ -14,6 +14,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Threading;
 namespace MarkIt
 {
     /// <summary>
@@ -29,7 +31,6 @@ namespace MarkIt
         public static GeneralSettings GeneralSettings;
         public static ClassWorksheet CurrentWorkSheet;
         public static Grid loadingScreen { get; private set; }
-        private FileBar filebar;
 
         DispatcherTimer Maintimer = new DispatcherTimer();
 
@@ -37,14 +38,13 @@ namespace MarkIt
         {
             Logger.Init();
             loadingScreen = LoadingScreen;
-
+            GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, true, false, "12"); // has to be infront of init
+            GeneralSettings = GeneralSettings.LoadFromFile("sources/options/generalSettings.json");
+            InitializeComponent();
             Maintimer.Interval = TimeSpan.FromMilliseconds(1000);
             Maintimer.Tick += Maintimer_Tick;
             Maintimer.Start(); // für das farb theme
 
-            GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, true, false, "12"); // has to be infront of init
-            GeneralSettings = GeneralSettings.LoadFromFile("sources/options/generalSettings.json");
-            InitializeComponent();
             ServerManager = new ServerManager();
             updateSettings();
             WindowUserLogin window = new WindowUserLogin();
