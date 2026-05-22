@@ -35,3 +35,7 @@
 | Max | 19.05. | start Menu-Bar and Cloud-File-Tree-View |
 | Karim | 20.05. | Bug fixes from Max |
 | Max | 20.05. | filebar |
+| Karim | 21.05. | apply colors from settings |
+| Max | 21.05. | load from tree views |
+| Karim | 22.05. | settings window |
+| Max | 22.05. | load from file history |
