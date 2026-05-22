@@ -15,6 +15,7 @@ namespace MarkIt.settings
         public bool iconAnimations { get; set; }
         public bool liveRendering { get; set; }
         public string animationFPS { get; set; }
+        public bool updatedColorTheme { get; set; } = false;
         public ColorTheme? currentColorTheme {  get; set; }
         private List<ColorTheme>? colorThemes {  get; set; }
 
@@ -89,7 +90,7 @@ namespace MarkIt.settings
             catch
             {
                 Logger.logger.Warning("No file color-themes.json found!");
-                ColorTheme colortheme = new ColorTheme("default", "#FFEA00", "#345554", "#FFFFFF");
+                ColorTheme colortheme = new ColorTheme("default", "#FFEA00", "#345554", "#FFFFFF", "#000000");
                 colorThemes.Add(colortheme);
                 currentColorTheme = colortheme;
                 SaveColorsToFile();

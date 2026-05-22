@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace MarkIt
 {
@@ -32,14 +33,21 @@ namespace MarkIt
         public static GeneralSettings GeneralSettings;
         private FileBar filebar;
 
+        DispatcherTimer Maintimer = new DispatcherTimer();
+
         public MainWindow()
         {
             Logger.Init();
+
+
+            Maintimer.Interval = TimeSpan.FromMilliseconds(15);
+            Maintimer.Tick += Maintimer_Tick;
+
             GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, true, false, "12"); // has to be infront of init
             GeneralSettings = GeneralSettings.LoadFromFile("sources/options/generalSettings.json");
             InitializeComponent();
             ServerManager = new ServerManager();
-            updateColors();
+            updateSettings();
             WindowUserLogin window = new WindowUserLogin();
             window.ShowDialog();
 
@@ -53,9 +61,19 @@ namespace MarkIt
             GridMain.Children.Add(filebar);
         }
 
-        public void updateColors()
+        private void Maintimer_Tick(object? sender, EventArgs e)
         {
-            updateColorMain();
+            updateSettings();
+        }
+
+        public void updateSettings()
+        {
+            if (GeneralSettings.updatedColorTheme)
+            {
+                UC_AccountIcon.updateSettings();
+                updateColorMain();
+                GeneralSettings.updatedColorTheme = false;
+            }
         }
 
 

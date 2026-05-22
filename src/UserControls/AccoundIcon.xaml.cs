@@ -26,8 +26,8 @@ namespace MarkIt.UserControls
         public double position { get; set; } = 0;
         private DispatcherTimer timer = new DispatcherTimer();
         private bool _animation = false;
-        static public Brush hovercolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.BackgroundColor);
-        static public Brush defaultcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+        static public Brush hovercolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground); // chatgpt this specific line might be used very often
+        static public Brush defaultcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
         static public Brush Backgroundcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
         public bool animation
         {
@@ -55,7 +55,14 @@ namespace MarkIt.UserControls
         public AccoundIcon()
         {
             InitializeComponent();
-            animation = true;
+            updateSettings();
+        }
+
+        public void updateSettings()
+        {
+            animation = MainWindow.GeneralSettings.iconAnimations;
+            ElliepseBody.Fill = defaultcolor;
+            ElliepseHead.Fill = defaultcolor;
         }
 
         private void Timer_Tick(object? sender, EventArgs e)

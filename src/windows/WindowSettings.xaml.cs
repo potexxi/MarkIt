@@ -27,6 +27,7 @@ namespace MarkIt.windows
         static public string color_Background = "#FFFFFF";
         static public string color_Middle = "#FFFFFF";
         static public string color_Forground = "#FFFFFF";
+        static public string color_Text = "#FFFFFF";
 
         private void CheckIfInt(TextBox customtextbox)
         {
@@ -72,6 +73,7 @@ namespace MarkIt.windows
                 color_Background = MainWindow.GeneralSettings.currentColorTheme.BackgroundColor;
                 color_Middle = MainWindow.GeneralSettings.currentColorTheme.HoverColor;
                 color_Forground = MainWindow.GeneralSettings.currentColorTheme.Foreground;
+                color_Text = MainWindow.GeneralSettings.currentColorTheme.Textcolor;
                 updateColorDisplays();
             }
         }
@@ -92,6 +94,8 @@ namespace MarkIt.windows
                 CD_Forground.ChangeColor = (Brush)new BrushConverter().ConvertFromString(color_Forground); // ChatGPT
             if (color_Middle != "")
                 CD_Middle.ChangeColor = (Brush)new BrushConverter().ConvertFromString(color_Middle); // ChatGPT
+            if (color_Text != "")
+                CD_Textcolor.ChangeColor = (Brush)new BrushConverter().ConvertFromString(color_Text); // ChatGPT
         }
 
         private void Background_CustomButton_MouseDown(object sender, MouseButtonEventArgs e)
@@ -101,16 +105,22 @@ namespace MarkIt.windows
             updateColorDisplays();
         }
 
-        private void Middle_CustomButton_MouseDown_1(object sender, MouseButtonEventArgs e)
+        private void Middle_CustomButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             WindowColorpicker cp = new WindowColorpicker(3);
             cp.ShowDialog();
             updateColorDisplays();
         }
 
-        private void Forground_CustomButton_MouseDown_2(object sender, MouseButtonEventArgs e)
+        private void Forground_CustomButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             WindowColorpicker cp = new WindowColorpicker(2);
+            cp.ShowDialog();
+            updateColorDisplays();
+        }
+        private void Textcolor_CustomButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowColorpicker cp = new WindowColorpicker(4);
             cp.ShowDialog();
             updateColorDisplays();
         }
@@ -127,10 +137,12 @@ namespace MarkIt.windows
             MainWindow.GeneralSettings.iconAnimations = AnimationSetting.IsOn;
             MainWindow.GeneralSettings.liveRendering = LiveRender.IsOn;
 
-            MainWindow.GeneralSettings.currentColorTheme = new settings.ColorTheme("user", color_Middle, color_Background, color_Forground);
+            MainWindow.GeneralSettings.currentColorTheme = new settings.ColorTheme("user", color_Middle, color_Background, color_Forground, color_Text);
 
             MainWindow.GeneralSettings.SaveToFile("sources/options/generalSettings.json");
-            
+
+            MainWindow.GeneralSettings.updatedColorTheme = true;
+
             Logger.logger.Verbose("Settings closed with saving");
             Close();
         }

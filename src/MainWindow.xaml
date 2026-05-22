@@ -12,7 +12,7 @@
         <StackPanel x:Name="StackPanelMainWindow" Orientation="Vertical">
             <StackPanel x:Name="StackPanelNavigationBar" Background="Gray" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="120">
                 <uc:SettingsIcon Width="50" Height="50"/>
-                <uc:AccoundIcon Width="50" Height="50"/>
+                <uc:AccoundIcon x:Name="UC_AccountIcon" Width="50" Height="50"/>
                 <uc:InformationIcon Width="50" Height="50"/>
             </StackPanel>
             <Grid x:Name="GridWorksheet" Background="LightGray" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>

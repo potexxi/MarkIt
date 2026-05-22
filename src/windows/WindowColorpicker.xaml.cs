@@ -57,6 +57,8 @@ namespace MarkIt.windows
                 WindowSettings.color_Forground = ColorTheme.RGBToHEX(Convert.ToInt32(r.Value), Convert.ToInt32(g.Value), Convert.ToInt32(b.Value));
             if (layer == 3)
                 WindowSettings.color_Middle = ColorTheme.RGBToHEX(Convert.ToInt32(r.Value), Convert.ToInt32(g.Value), Convert.ToInt32(b.Value));
+            if (layer == 4)
+                WindowSettings.color_Text = ColorTheme.RGBToHEX(Convert.ToInt32(r.Value), Convert.ToInt32(g.Value), Convert.ToInt32(b.Value));
             Logger.logger.Debug("Colorpicker closed with settings save");
             Close();
         }
