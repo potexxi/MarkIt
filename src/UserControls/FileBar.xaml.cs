@@ -44,8 +44,11 @@ namespace MarkIt.UserControls
             timerBlurOut.Tick += TimerBlurOut_Tick;
 
             timerUpdate = new DispatcherTimer();
-            timerUpdate.Interval = TimeSpan.FromSeconds(6.7);
+            timerUpdate.Interval = TimeSpan.FromHours(6.7);
             timerUpdate.Tick += TimerUpdate_Tick;
+
+            selectedPath = "";
+            history = new List<string>();
         }
 
         private void TimerUpdate_Tick(object? sender, EventArgs e)
@@ -129,6 +132,8 @@ namespace MarkIt.UserControls
 
         private void Rectangle_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            timerBlurIn.Stop();
+            timerBlurOut.Stop();
             Hide();
         }
 
@@ -148,51 +153,72 @@ namespace MarkIt.UserControls
 
         private void ButtonDel_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedTreeViewItem != null)
+            try
             {
-                if (selectedTreeViewItem.Tag.ToString() == "root")
+                if (selectedTreeViewItem != null)
                 {
-                    WindowMessageBox box1 = new WindowMessageBox("Cannot remove!", "You cannot remove this folder! It is your root folder.");
-                    box1.ShowDialog();
-                    return;
-                }
-                WindowMessageBox box;
-                if (Directory.Exists(selectedTreeViewItem.Tag.ToString()))
-                    box = new WindowMessageBox("Really?", "Do you really want to delete this folder? All files will be removed in this folder.", WindowMessageBox.ButtonType.YesNo);
-                else
-                    box = new WindowMessageBox("Really?", "Do you really want to delete this file?", WindowMessageBox.ButtonType.YesNo);
-                box.ShowDialog();
-                if (box.returnType == WindowMessageBox.ReturnType.Yes)
-                {
-                    if (!RemoveItem(TreeViewLocal, selectedTreeViewItem))
+                    (string path, string type) = ((string, string))selectedTreeViewItem.Tag;
+                    if (path == "root")
                     {
-                        RemoveItem(TreeViewCloud, selectedTreeViewItem);
+                        WindowMessageBox box1 = new WindowMessageBox("Cannot remove!", "You cannot remove this folder! It is your root folder.");
+                        box1.ShowDialog();
+                        return;
                     }
-                    // TODO: Do the delete thing here
-                    try
+                    WindowMessageBox box;
+                    if (Directory.Exists(path))
+                        box = new WindowMessageBox("Really?", "Do you really want to delete this folder? All files will be removed in this folder.", WindowMessageBox.ButtonType.YesNo);
+                    else
+                        box = new WindowMessageBox("Really?", "Do you really want to delete this file?", WindowMessageBox.ButtonType.YesNo);
+                    box.ShowDialog();
+                    if (box.returnType == WindowMessageBox.ReturnType.Yes)
                     {
-                        if (Directory.Exists(selectedTreeViewItem.Tag.ToString()))
+                        if (type == "local")
                         {
-                            Directory.Delete(selectedTreeViewItem.Tag.ToString(), true);
+                            if (Directory.Exists(path))
+                            {
+                                try
+                                {
+                                    Directory.Delete(path, true);
+                                }
+                                catch (Exception ex)
+                                {
+                                    box = new WindowMessageBox("Access denied.", "This folder is read-only. MarkIt cannot delete it.");
+                                    box.ShowDialog();
+                                    Logger.logger.Warning($"Delete directory: {ex.Message}");
+                                    return;
+                                }
+                            }
+                            else if (File.Exists(path))
+                            {
+                                File.Delete(path);
+                            }
                         }
-                        else if (File.Exists(selectedTreeViewItem.Tag.ToString()))
+                        else if (type == "cloud")
                         {
-                            File.Delete(selectedTreeViewItem.Tag.ToString());
+                            MainWindow.FileManager.DeleteFromServer(path, MainWindow.loadingScreen);
                         }
+                        if (!RemoveItem(TreeViewLocal, selectedTreeViewItem))
+                        {
+                            RemoveItem(TreeViewCloud, selectedTreeViewItem);
+                        }
+                        selectedTreeViewItem = null;
                     }
-                    finally
-                    {
-                        MainWindow.FileManager.DeleteFromServer(selectedTreeViewItem.Tag.ToString(), MainWindow.loadingScreen);
-                    }
-                    selectedTreeViewItem = null;
                 }
             }
+            catch(Exception ex)
+            {
+                WindowMessageBox box = new WindowMessageBox("Unexpected Error!", "This action caused a unexpected error, please try again.");
+                box.ShowDialog();
+                Logger.logger.Error($"Delete file: {ex.Message}");
+            }
+
         }
 
         // ChatGPT-Anfang
         // Prompt: <Funktion ohne itemscontrol und 2. if in der for loop> wieso geht diese funktion nicht bei eine file tree view
         private bool RemoveItem(ItemsControl treeView, TreeViewItem item)
         {
+            selectedTreeViewItem = null;
             foreach(TreeViewItem item2 in treeView.Items)
             {
                 if(item2 == item)
@@ -214,36 +240,48 @@ namespace MarkIt.UserControls
 
         private async void ButtonOpen_Click(object sender, RoutedEventArgs e)
         {
-            string path;
-            string type;
-            if (selectedTreeViewItem != null)
+            try
             {
-                (path, type) = ((string, string))selectedTreeViewItem.Tag;
+                string path;
+                string type;
+                if (selectedTreeViewItem != null)
+                {
+                    (path, type) = ((string, string))selectedTreeViewItem.Tag;
+                }
+                else if (selectedPath != "")
+                {
+                    path = selectedPath;
+                    type = "local";
+                }
+                else { return; }
+                if (type == "local")
+                {
+                    if (!File.Exists(path))
+                    {
+                        RemoveItem(TreeViewLocal, selectedTreeViewItem);
+                        WindowMessageBox box = new WindowMessageBox("File does not exist.", "This file does not exist anymore.");
+                        box.ShowDialog();
+                        return;
+                    }
+                    MainWindow.CurrentWorkSheet.LoadFromString(MainWindow.FileManager.LoadFromFile(path));
+                }
+                else
+                {
+                    MainWindow.CurrentWorkSheet.LoadFromString(await MainWindow.FileManager.Download(path, MainWindow.loadingScreen));
+                }
+                Hide();
+                selectedTreeViewItem = null;
+                selectedPath = "";
             }
-            else if(selectedPath != "")
+            catch(Exception ex)
             {
-                path = selectedPath;
-                type = "local";
+
             }
-            else { return; }
-            if (!File.Exists(path))
-            {
-                return;
-            }
-            if (type == "local")
-            {
-                MainWindow.CurrentWorkSheet.LoadFromString(MainWindow.FileManager.LoadFromFile(path));
-            }
-            else
-            {
-                MainWindow.CurrentWorkSheet.LoadFromString(await MainWindow.FileManager.Download(path, MainWindow.loadingScreen));
-            }
-            Hide();
-            selectedPath = "";
         }
 
         public async Task UpdateFileTreeCloud()
         {
+            TreeViewCloud.IsHitTestVisible = true;
             TreeViewCloud.Items.Clear();
             if(MainWindow.currentUser.Email != "guest")
             {
@@ -263,6 +301,7 @@ namespace MarkIt.UserControls
 
         public void UpdateFileTreeLocal()
         {
+            TreeViewLocal.IsHitTestVisible = true;
             string path = MainWindow.FileManager.userPath;
             TreeViewLocal.Items.Clear();
             DirectoryInfo userInfo = new DirectoryInfo(path);
@@ -362,6 +401,7 @@ namespace MarkIt.UserControls
 
         public void Show()
         {
+            Logger.logger.Debug("Open file-workspace.");
             Update();
             timerUpdate.Start();
             Canvas.SetLeft(BorderMain, 10);

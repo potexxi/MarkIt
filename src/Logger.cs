@@ -19,6 +19,7 @@ namespace MarkIt
                 .MinimumLevel.Verbose()
                 .WriteTo.File("markit-log-.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 5);
             logger = config.CreateLogger();
+            logger.Debug("========== New Programm start ==========");
         }
     }
 }

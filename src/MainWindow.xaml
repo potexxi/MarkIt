@@ -20,7 +20,8 @@
                         <MenuItem x:Name="MenuItemWorkspace" Header="Open File-Workspace" Cursor="Hand" PreviewMouseDown="MenuItemWorkspace_PreviewMouseDown"/>
                     </MenuItem>
                     <MenuItem Header="Options" Opacity="0.6">
-                        <MenuItem Header="Open" PreviewMouseDown="MenuItem_PreviewMouseDown" Cursor="Hand"/>
+                        <MenuItem Header="Open Settings" x:Name="MenuItemGeneralSettings" PreviewMouseDown="MenuItemGeneralSettings_PreviewMouseDown" Cursor="Hand"/>
+                        <MenuItem Header="Open User Settings" x:Name="MenuItemUserSettings" Cursor="Hand" PreviewMouseDown="MenuItemUserSettings_PreviewMouseDown"></MenuItem>
                         <Separator />
                         <MenuItem Header="Exit" x:Name="MenuItemExit" PreviewMouseDown="MenuItemExit_PreviewMouseDown"/>
                     </MenuItem>
@@ -32,7 +33,7 @@
             </DockPanel>
             <StackPanel x:Name="StackPanelNavigationBar" Background="Gray" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="120">
                 <uc:SettingsIcon Width="50" Height="50"/>
-                <uc:AccoundIcon Width="50" Height="50"/>
+                <uc:AccoundIcon Width="50" Height="50" PreviewMouseDown="AccoundIcon_PreviewMouseDown"/>
                 <uc:InformationIcon Width="50" Height="50" PreviewMouseDown="InformationIcon_PreviewMouseDown"/>
             </StackPanel>
             <Grid x:Name="GridWorksheet" Background="LightGray" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>

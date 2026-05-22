@@ -7,6 +7,7 @@ using Serilog;
 using Serilog.Core;
 using Supabase.Gotrue;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -58,12 +59,6 @@ namespace MarkIt
             filebar.Show();
         }
 
-        private void MenuItem_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            WindowSettings settings = new WindowSettings();
-            settings.ShowDialog();
-        }
-
         private void MenuItemExit_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             Logger.logger.Information("Closed application.");
@@ -80,6 +75,22 @@ namespace MarkIt
         private void MenuItemCredits_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             InformationIcon_PreviewMouseDown(sender, e);
+        }
+
+        private void MenuItemGeneralSettings_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowSettings settings = new WindowSettings();
+            settings.ShowDialog();
+        }
+
+        private void MenuItemUserSettings_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void AccoundIcon_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

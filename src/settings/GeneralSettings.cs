@@ -13,8 +13,8 @@ namespace MarkIt.settings
         public bool iconAnimations { get; set; }
         public bool liveRendering { get; set; }
         public string animationFPS { get; set; }
-        public ColorTheme? currentColorTheme {  get; set; }
-        private List<ColorTheme>? colorThemes {  get; set; }
+        public ColorTheme currentColorTheme {  get; set; }
+        private List<ColorTheme> colorThemes {  get; set; }
 
         public GeneralSettings() { }
 
