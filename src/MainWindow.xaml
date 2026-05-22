@@ -7,9 +7,30 @@
         xmlns:uc="clr-namespace:MarkIt.UserControls"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" SizeChanged="Window_SizeChanged" MinWidth="600" MinHeight="400" Icon="/images/markit-logo.png">
+        Title="MarkIt" Height="450" Width="800" SizeChanged="Window_SizeChanged" MinWidth="620" MinHeight="400" Icon="/images/markit-logo.png">
     <Grid x:Name="GridMain">
         <StackPanel x:Name="StackPanelMainWindow" Orientation="Vertical">
+            <DockPanel>
+                <Menu DockPanel.Dock="Top">
+                    <MenuItem Header="File" Opacity="0.6">
+                        <MenuItem x:Name="MenuItemNewFile" Header="New" Cursor="Hand" />
+                        <MenuItem x:Name="MenuItemOpenFile" Header="Open" Cursor="Hand" />
+                        <MenuItem x:Name="MenuItemSaveFile" Header="Save" Cursor="Hand" />
+                        <Separator/>
+                        <MenuItem x:Name="MenuItemWorkspace" Header="Open File-Workspace" Cursor="Hand" PreviewMouseDown="MenuItemWorkspace_PreviewMouseDown"/>
+                    </MenuItem>
+                    <MenuItem Header="Options" Opacity="0.6">
+                        <MenuItem Header="Open Settings" x:Name="MenuItemGeneralSettings" PreviewMouseDown="MenuItemGeneralSettings_PreviewMouseDown" Cursor="Hand"/>
+                        <MenuItem Header="Open User Settings" x:Name="MenuItemUserSettings" Cursor="Hand" PreviewMouseDown="MenuItemUserSettings_PreviewMouseDown"></MenuItem>
+                        <Separator />
+                        <MenuItem Header="Exit" x:Name="MenuItemExit" PreviewMouseDown="MenuItemExit_PreviewMouseDown"/>
+                    </MenuItem>
+                    <MenuItem Header="Info" Opacity="0.6">
+                        <MenuItem Header="Credits" Cursor="Hand" x:Name="MenuItemCredits" PreviewMouseDown="MenuItemCredits_PreviewMouseDown"></MenuItem>
+                        <MenuItem Header="Help" Cursor="Hand"></MenuItem>
+                    </MenuItem>
+                </Menu>
+            </DockPanel>
             <StackPanel x:Name="StackPanelNavigationBar" Background="Gray" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="120">
                 <uc:SettingsIcon x:Name="UC_Settings" Width="50" Height="50"/>
                 <uc:AccoundIcon x:Name="UC_AccountIcon" Width="50" Height="50"/>
@@ -17,6 +38,7 @@
             </StackPanel>
             <Grid x:Name="GridWorksheet" Background="LightGray" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
         </StackPanel>
+        <uc:FileBar Opacity="1" x:Name="filebar"></uc:FileBar>
         <Grid Visibility="Hidden" x:Name="LoadingScreen">
             <Rectangle Fill="#FF1F4572" Opacity="0.6"></Rectangle>
             <Image Width="100" Visibility="Visible" Height="100" gif:ImageBehavior.AnimatedSource="/images/loading-animation.gif"></Image>

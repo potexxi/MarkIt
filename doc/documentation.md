@@ -25,3 +25,13 @@
 | Max | 08.05. | Start Cloud-Sync |
 | Karim | 12.05. | Settings Window and Colorpicker |
 | Max | 12.05. | Cloud-Sync | 
+| Karim | 13.05. | details in settings window |
+| Max | 13.05. | bug-fixes in login an registration |
+| Max | 14.05. | file-tree-views in file-bar |
+| Karim | 15.05. | settings apply in all other windows |
+| Max | 15.05. | Info-window and file-bar |
+| Karim | 16.05. | Planation, how we will continue... |
+| Max | 17.05. | Local-File-Tree-View in file bar |
+| Max | 19.05. | start Menu-Bar and Cloud-File-Tree-View |
+| Karim | 20.05. | Bug fixes from Max |
+| Max | 20.05. | filebar |

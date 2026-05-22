@@ -1,23 +1,19 @@
 ﻿using MarkIt.login_register;
 using MarkIt.settings;
 using MarkIt.UserControls;
+using MarkIt.windows;
 using MarkIt.worksheet;
 using Serilog;
 using Serilog.Core;
 using Supabase.Gotrue;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
-
 namespace MarkIt
 {
     /// <summary>
@@ -31,6 +27,8 @@ namespace MarkIt
         public static ServerManager ServerManager;
         public static FileManager FileManager;
         public static GeneralSettings GeneralSettings;
+        public static ClassWorksheet CurrentWorkSheet;
+        public static Grid loadingScreen { get; private set; }
         private FileBar filebar;
 
         DispatcherTimer Maintimer = new DispatcherTimer();
@@ -38,6 +36,7 @@ namespace MarkIt
         public MainWindow()
         {
             Logger.Init();
+            loadingScreen = LoadingScreen;
 
             Maintimer.Interval = TimeSpan.FromMilliseconds(1000);
             Maintimer.Tick += Maintimer_Tick;
@@ -52,13 +51,10 @@ namespace MarkIt
             window.ShowDialog();
 
             FileManager = new FileManager(currentUser.Email);
-
+            filebar.Show();
             // zum Testen
-            ClassWorksheet CurrentWorkSheet = new ClassWorksheet(GridWorksheet);
+            CurrentWorkSheet = new ClassWorksheet(GridWorksheet);
             CurrentWorkSheet.Init();
-
-            filebar = new FileBar(FileManager.FileHistory);
-            GridMain.Children.Add(filebar);
         }
 
         private void Maintimer_Tick(object? sender, EventArgs e)
@@ -89,10 +85,43 @@ namespace MarkIt
             filebar.SetSize(this.ActualWidth, this.ActualHeight);
         }
 
+        private void MenuItemWorkspace_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            filebar.Show();
+        }
+
+        private void MenuItemExit_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Logger.logger.Information("Closed application.");
+            Environment.Exit(0);
+        }
+
         private void InformationIcon_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            windows.WindowInfoTab infoTab = new windows.WindowInfoTab();
-            infoTab.ShowDialog();
+            Logger.logger.Debug("Open InfoTab");
+            WindowInfoTab info = new WindowInfoTab();
+            info.ShowDialog();
+        }
+
+        private void MenuItemCredits_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            InformationIcon_PreviewMouseDown(sender, e);
+        }
+
+        private void MenuItemGeneralSettings_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowSettings settings = new WindowSettings();
+            settings.ShowDialog();
+        }
+
+        private void MenuItemUserSettings_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void AccoundIcon_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

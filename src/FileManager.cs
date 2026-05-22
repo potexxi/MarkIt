@@ -1,15 +1,19 @@
-﻿using System.IO;
+﻿using Supabase;
+using Supabase.Storage;
+using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MarkIt
 {
     public class FileManager
     {
         private string userEmail;
-        private string userPath;
+        public string userPath {  get; private set; }
         public string LastContent {  get; private set; }
         public List<string> FileHistory { get; private set; }
         public string? CurrentFilePath;
@@ -37,7 +41,7 @@ namespace MarkIt
             Logger.logger.Debug($"Created {userPath}");
         }
 
-        private void setFileHistory()
+        public void setFileHistory()
         {
             try
             {
@@ -85,14 +89,14 @@ namespace MarkIt
             AddToHistory(userPath + $"/{filename}");
         }
 
-        public string? LoadFromFile(string filename)
+        public string? LoadFromFile(string path)
         {
             try
             {
-                using(StreamReader sr = new StreamReader(userPath + $"/{filename}"))
+                using(StreamReader sr = new StreamReader(path))
                 {
-                    CurrentFilePath = userPath + $"/{filename}";
-                    AddToHistory(userPath + $"/{filename}");
+                    CurrentFilePath = path;
+                    AddToHistory(path);
                     string content =  sr.ReadToEnd();
                     LastContent = content;
                     sr.Close();
@@ -101,7 +105,7 @@ namespace MarkIt
             }
             catch
             {
-                Logger.logger.Debug($"File not found: {userPath}/{filename}");
+                Logger.logger.Debug($"File not found: {path}");
                 return null;
             }
         }
@@ -141,6 +145,22 @@ namespace MarkIt
                 WriteIndented = true
             };
             File.WriteAllText(userPath + "/file-history.json", JsonSerializer.Serialize(FileHistory, options));
+        }
+
+        public async Task<bool> DeleteFromServer(string path, Grid loadingScreen)
+        {
+            try
+            {
+                // Von Supabase DOCS:  https://supabase.com/docs/reference/csharp/storage-from-download
+                await MainWindow.supabase.Storage.From("MarkIt").Remove(new List<string> { path });
+                // Ende
+                return true;
+            }
+            catch (Exception ex) 
+            {
+                Logger.logger.Error(ex.ToString());
+                return false;
+            }
         }
 
         public async Task<bool> UploadToServer(Grid loadingscreen)
@@ -183,12 +203,11 @@ namespace MarkIt
             }
         }
 
-        public async Task<string>? Download(string filename, Grid loadingscreen)
+        public async Task<string>? Download(string path, Grid loadingscreen)
         {
             loadingscreen.Visibility = Visibility.Visible;
             try
             {
-                string path = userPath + $"/{filename}";
                 byte[] content_byte = await MainWindow.supabase.Storage.From("MarkIt").Download(path, null);
                 loadingscreen.Visibility = Visibility.Hidden;
                 return Encoding.UTF8.GetString(content_byte);
@@ -201,11 +220,6 @@ namespace MarkIt
                 box.ShowDialog();
                 return null;
             }
-        }
-
-        private void GetAllCloudPath()
-        {
-           
         }
     }
 }

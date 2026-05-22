@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
 namespace MarkIt.worksheet
@@ -14,6 +15,7 @@ namespace MarkIt.worksheet
     // this class manages everything about the worksheets (may use sub-classes later on)
     // ws = worksheet
     {
+        private TextBox textBoxContent { get; set; }
         private string wsName { get; set; } = "markdown";
         private DateTime wsCreationDate { get; set; }
         private List<string> wsStringPages { get; set; } = new List<string>();
@@ -46,7 +48,7 @@ namespace MarkIt.worksheet
             ScrollViewerWorksheet.Height = 1000; // must be chanhe in windowsizechange event later on
 
             StackPanel stackpanelWorksheet = new StackPanel();
-
+            bool first = true;
             for (int pageNumber = 0; pageNumber < this.wsStringPages.Count(); pageNumber++)
             {
                 Grid GridPage = new Grid();
@@ -60,7 +62,11 @@ namespace MarkIt.worksheet
                 TextboxPage.TextChanged += TextboxPage_TextChanged; ;
 
                 TextboxPage.AcceptsReturn = true; // allows user to press enter to create a new line inside of the textbox
-
+                if (first)
+                {
+                    textBoxContent = TextboxPage;
+                    first = false;
+                }
                 GridPage.Children.Add(TextboxPage);
                 stackpanelWorksheet.Children.Add(GridPage);
             }
@@ -107,6 +113,11 @@ namespace MarkIt.worksheet
         // saves current worksheet to filepath
         {
 
+        }
+
+        public void LoadFromString(string content)
+        {
+            textBoxContent.Text = content;
         }
     }
 }
