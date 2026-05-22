@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MarkIt.settings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,9 @@ namespace MarkIt.UserControls
         public double position { get; set; } = 0;
         private DispatcherTimer timer = new DispatcherTimer();
         private bool _animation = false;
+        static public Brush hovercolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground); // chatgpt this specific line might be used very often
+        static public Brush defaultcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+        static public Brush Backgroundcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
         public bool animation
         {
             get
@@ -36,7 +40,7 @@ namespace MarkIt.UserControls
                 if (value)
                 {
                     _animation = true;
-                    timer.Interval = TimeSpan.FromMilliseconds(15);
+                    timer.Interval = TimeSpan.FromMilliseconds(Convert.ToInt32(MainWindow.GeneralSettings.animationFPS));
                     timer.Tick += Timer_Tick;
                     timer.Start();
                 }
@@ -48,14 +52,21 @@ namespace MarkIt.UserControls
                 }
             }
         }
-        static public SolidColorBrush hovercolor = Brushes.LightGray; // autocomplition
-        static public SolidColorBrush defaultcolor = Brushes.Black;
-        static public SolidColorBrush Backgroundcolor = Brushes.Gray;
-
         public AccoundIcon()
         {
             InitializeComponent();
-            animation = true;
+            updateSettings();
+        }
+
+        public void updateSettings()
+        {
+            hovercolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+            defaultcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+            Backgroundcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+            animation = MainWindow.GeneralSettings.iconAnimations;
+            timer.Interval = TimeSpan.FromMilliseconds(Convert.ToInt32(MainWindow.GeneralSettings.animationFPS));
+            ElliepseBody.Fill = defaultcolor;
+            ElliepseHead.Fill = defaultcolor;
         }
 
         private void Timer_Tick(object? sender, EventArgs e)

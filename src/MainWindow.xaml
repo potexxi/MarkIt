@@ -10,10 +10,10 @@
         Title="MainWindow" Height="450" Width="800" SizeChanged="Window_SizeChanged" MinWidth="600" MinHeight="400" Icon="/images/markit-logo.png">
     <Grid x:Name="GridMain">
         <StackPanel x:Name="StackPanelMainWindow" Orientation="Vertical">
-            <StackPanel x:Name="StackPanelNavigationBar" Background="Gray" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="120" Cursor="">
-                <uc:SettingsIcon Cursor="Hand" Width="50" Height="50"/>
-                <uc:AccoundIcon Cursor="Hand" Width="50" Height="50"/>
-                <uc:InformationIcon Cursor="Hand"  PreviewMouseDown="InformationIcon_PreviewMouseDown" Width="50" Height="50"/>
+            <StackPanel x:Name="StackPanelNavigationBar" Background="Gray" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="120">
+                <uc:SettingsIcon x:Name="UC_Settings" Width="50" Height="50"/>
+                <uc:AccoundIcon x:Name="UC_AccountIcon" Width="50" Height="50"/>
+                <uc:InformationIcon x:Name="UC_Information" PreviewMouseDown="InformationIcon_PreviewMouseDown" Width="50" Height="50"/>
             </StackPanel>
             <Grid x:Name="GridWorksheet" Background="LightGray" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
         </StackPanel>

@@ -1,8 +1,10 @@
-﻿using System.IO;
+﻿using System.Drawing;
+using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using static Microsoft.IO.RecyclableMemoryStreamManager;
 
 namespace MarkIt.settings
 {
@@ -13,6 +15,7 @@ namespace MarkIt.settings
         public bool iconAnimations { get; set; }
         public bool liveRendering { get; set; }
         public string animationFPS { get; set; }
+        public bool updatedColorTheme { get; set; }
         public ColorTheme? currentColorTheme {  get; set; }
         private List<ColorTheme>? colorThemes {  get; set; }
 
@@ -20,6 +23,7 @@ namespace MarkIt.settings
 
         public GeneralSettings(double width, double height, bool iconAnimaition, bool liveRendering, string animationFPS)
         {
+            colorThemes = new List<ColorTheme>();
             setColorsFromFile();
             this.width = width;
             this.height = height;
@@ -86,21 +90,24 @@ namespace MarkIt.settings
             catch
             {
                 Logger.logger.Warning("No file color-themes.json found!");
-                ColorTheme colortheme = new ColorTheme("default", "#FFEA00", "#FF1F4572", "#FFFFFF");
+                ColorTheme colortheme = new ColorTheme("default", "#FFEA00", "#345554", "#FFFFFF", "#000000");
                 colorThemes.Add(colortheme);
                 currentColorTheme = colortheme;
+                SaveColorsToFile();
             }
         }
 
         public void SaveColorsToFile()
         {
-            string path = Directory.GetDirectoryRoot("sources/options/color-themes.json");
-            Directory.CreateDirectory(path);
-            JsonSerializerOptions options = new JsonSerializerOptions
+            if (Directory.Exists("sources/options/color-themes.json"))
             {
-                WriteIndented = true
-            };
-            File.WriteAllText("sources/options/color-themes.json", JsonSerializer.Serialize(colorThemes, options));
+                Directory.CreateDirectory("sources/options/color-themes.json");
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                };
+                File.WriteAllText("sources/options/color-themes.json", JsonSerializer.Serialize(colorThemes, options));
+            }
         }
     }
 }
