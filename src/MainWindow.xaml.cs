@@ -39,9 +39,9 @@ namespace MarkIt
         {
             Logger.Init();
 
-
-            Maintimer.Interval = TimeSpan.FromMilliseconds(15);
+            Maintimer.Interval = TimeSpan.FromMilliseconds(1000);
             Maintimer.Tick += Maintimer_Tick;
+            Maintimer.Start(); // für das farb theme
 
             GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, true, false, "12"); // has to be infront of init
             GeneralSettings = GeneralSettings.LoadFromFile("sources/options/generalSettings.json");
@@ -71,6 +71,8 @@ namespace MarkIt
             if (GeneralSettings.updatedColorTheme)
             {
                 UC_AccountIcon.updateSettings();
+                UC_Settings.updateSettings();
+                UC_Information.updateSettings();
                 updateColorMain();
                 GeneralSettings.updatedColorTheme = false;
             }

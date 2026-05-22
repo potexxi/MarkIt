@@ -49,10 +49,6 @@ namespace MarkIt.windows
             CT_Animation_FPS.TextChanged += CT_TextChanged;
             CT_Height.TextChanged += CT_TextChanged;
             CT_Width.TextChanged += CT_TextChanged;
-
-            timer.Interval = TimeSpan.FromMicroseconds(15);
-            timer.Tick += Timer_Tick;
-            timer.Start();
         }
 
         private void CT_TextChanged(object sender, TextChangedEventArgs e)
@@ -76,10 +72,6 @@ namespace MarkIt.windows
                 color_Text = MainWindow.GeneralSettings.currentColorTheme.Textcolor;
                 updateColorDisplays();
             }
-        }
-
-        private void Timer_Tick(object? sender, EventArgs e)
-        {
         }
 
         private void SwitchSlider_MouseDown(object sender, MouseButtonEventArgs e)
@@ -139,9 +131,9 @@ namespace MarkIt.windows
 
             MainWindow.GeneralSettings.currentColorTheme = new settings.ColorTheme("user", color_Middle, color_Background, color_Forground, color_Text);
 
-            MainWindow.GeneralSettings.SaveToFile("sources/options/generalSettings.json");
-
             MainWindow.GeneralSettings.updatedColorTheme = true;
+
+            MainWindow.GeneralSettings.SaveToFile("sources/options/generalSettings.json");
 
             Logger.logger.Verbose("Settings closed with saving");
             Close();

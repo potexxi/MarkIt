@@ -40,7 +40,7 @@ namespace MarkIt.UserControls
                 if (value)
                 {
                     _animation = true;
-                    timer.Interval = TimeSpan.FromMilliseconds(15);
+                    timer.Interval = TimeSpan.FromMilliseconds(Convert.ToInt32(MainWindow.GeneralSettings.animationFPS));
                     timer.Tick += Timer_Tick;
                     timer.Start();
                 }
@@ -60,7 +60,11 @@ namespace MarkIt.UserControls
 
         public void updateSettings()
         {
+            hovercolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+            defaultcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+            Backgroundcolor = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             animation = MainWindow.GeneralSettings.iconAnimations;
+            timer.Interval = TimeSpan.FromMilliseconds(Convert.ToInt32(MainWindow.GeneralSettings.animationFPS));
             ElliepseBody.Fill = defaultcolor;
             ElliepseHead.Fill = defaultcolor;
         }
