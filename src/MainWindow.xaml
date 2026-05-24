@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MarkIt"
         xmlns:uc="clr-namespace:MarkIt.UserControls"
+        xmlns:CB_uc="clr-namespace:MarkIt.UserControls.usercontrolsTextdecoration"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
         Title="MarkIt" Height="450" Width="800" SizeChanged="Window_SizeChanged" MinWidth="620" MinHeight="400" Icon="/images/markit-logo.png">
@@ -35,6 +36,11 @@
                 <uc:SettingsIcon x:Name="UC_Settings" Width="50" Height="50"/>
                 <uc:AccoundIcon x:Name="UC_AccountIcon" Width="50" Height="50"/>
                 <uc:InformationIcon x:Name="UC_Information" PreviewMouseDown="InformationIcon_PreviewMouseDown" Width="50" Height="50"/>
+                <CB_uc:CB_Bold Width="50" Height="50"></CB_uc:CB_Bold>
+                <CB_uc:CB_Code Width="50" Height="50"></CB_uc:CB_Code>
+                <CB_uc:CB_Italic Width="50" Height="50"></CB_uc:CB_Italic>
+                <CB_uc:CB_StrikeThrough Width="50" Height="50"></CB_uc:CB_StrikeThrough>
+                <CB_uc:CB_Underlined Width="50" Height="50"></CB_uc:CB_Underlined>
             </StackPanel>
             <Grid x:Name="GridWorksheet" Background="LightGray" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
         </StackPanel>

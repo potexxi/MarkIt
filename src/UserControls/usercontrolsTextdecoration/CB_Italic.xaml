@@ -1,0 +1,14 @@
+﻿<UserControl x:Class="MarkIt.UserControls.usercontrolsTextdecoration.CB_Italic"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MarkIt.UserControls.usercontrolsTextdecoration"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="50">
+    <Grid>
+        <Rectangle x:Name="RectBackground" StrokeThickness="2" Stroke="Black" RadiusX="5" RadiusY="5" Fill="White"/>
+        <Rectangle HorizontalAlignment="Center" Height="24" Margin="0,21,0,0" Stroke="Black" VerticalAlignment="Top" Width="8" Fill="Black"/>
+        <Ellipse HorizontalAlignment="Center" Height="10" Margin="0,6,0,0" Stroke="Black" VerticalAlignment="Top" Width="10" Fill="Black"/>
+    </Grid>
+</UserControl>
