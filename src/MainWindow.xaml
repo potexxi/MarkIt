@@ -32,16 +32,20 @@
                     </MenuItem>
                 </Menu>
             </DockPanel>
-            <StackPanel x:Name="StackPanelNavigationBar" Background="Gray" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="120">
-                <uc:SettingsIcon x:Name="UC_Settings" Width="50" Height="50"/>
-                <uc:AccoundIcon x:Name="UC_AccountIcon" Width="50" Height="50"/>
-                <uc:InformationIcon x:Name="UC_Information" PreviewMouseDown="InformationIcon_PreviewMouseDown" Width="50" Height="50"/>
-                <CB_uc:CB_Bold Width="50" Height="50"></CB_uc:CB_Bold>
-                <CB_uc:CB_Code Width="50" Height="50"></CB_uc:CB_Code>
-                <CB_uc:CB_Italic Width="50" Height="50"></CB_uc:CB_Italic>
-                <CB_uc:CB_StrikeThrough Width="50" Height="50"></CB_uc:CB_StrikeThrough>
-                <CB_uc:CB_Underlined Width="50" Height="50"></CB_uc:CB_Underlined>
-            </StackPanel>
+            <Grid x:Name="StackPanelNavigationBar" Background="Gray" HorizontalAlignment="Stretch" Height="120">
+                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Orientation="Horizontal" Margin="20">
+                    <uc:SettingsIcon x:Name="UC_Settings" Width="50" Height="50"/>
+                    <uc:AccoundIcon x:Name="UC_AccountIcon" Width="50" Height="50"/>
+                    <uc:InformationIcon x:Name="UC_Information" PreviewMouseDown="InformationIcon_PreviewMouseDown" Width="50" Height="50"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Orientation="Horizontal" Margin=" 10">
+                    <CB_uc:CB_Bold Width="50" Height="50" Margin="0,0,0,0"></CB_uc:CB_Bold>
+                    <CB_uc:CB_Code Width="50" Height="50" Margin="10,0,0,0"></CB_uc:CB_Code>
+                    <CB_uc:CB_Italic Width="50" Height="50" Margin="10,0,0,0"></CB_uc:CB_Italic>
+                    <CB_uc:CB_StrikeThrough Width="50" Height="50" Margin="10,0,0,0"></CB_uc:CB_StrikeThrough>
+                    <CB_uc:CB_Underlined Width="50" Height="50" Margin="10,0,0,0"></CB_uc:CB_Underlined>
+                </StackPanel>
+            </Grid>
             <Grid x:Name="GridWorksheet" Background="LightGray" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
         </StackPanel>
         <uc:FileBar Opacity="1" x:Name="filebar"></uc:FileBar>

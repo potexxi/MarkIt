@@ -7,8 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="50">
     <Grid>
-        <Rectangle x:Name="RectBackground" StrokeThickness="2" Stroke="Black" RadiusX="5" RadiusY="5" Fill="White"/>
-        <Ellipse HorizontalAlignment="Left" Height="34" Margin="10,0,0,0" Stroke="Black" VerticalAlignment="Center" Width="40" StrokeThickness="7"/>
-        <Rectangle HorizontalAlignment="Left" Height="34" Margin="36,0,0,0" Fill="white" VerticalAlignment="Center" Width="12"/>
+        <Rectangle x:Name="RectBackground" StrokeThickness="4" Stroke="Black" RadiusX="5" RadiusY="5" Fill="White"/>
+        <Ellipse x:Name="Ellipse_c" HorizontalAlignment="Left" Height="34" Margin="10,0,0,0" Stroke="Black" VerticalAlignment="Center" Width="38" StrokeThickness="7"/>
+        <Rectangle x:Name="Rect_BGc" HorizontalAlignment="Left" Height="34" Margin="37,0,0,0" Fill="white" VerticalAlignment="Center" Width="9"/>
+        <Rectangle x:Name="CB_Hitbox" Fill="Transparent" MouseDown="CB_Hitbox_MouseDown" MouseEnter="CB_Hitbox_MouseEnter" MouseLeave="CB_Hitbox_MouseLeave"/>
+        
     </Grid>
 </UserControl>
