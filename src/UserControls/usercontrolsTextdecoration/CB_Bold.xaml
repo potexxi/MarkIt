@@ -9,9 +9,10 @@
     <Grid>
         <Rectangle x:Name="RectBackground" StrokeThickness="4" Stroke="Black" RadiusX="5" RadiusY="5" Fill="White"/>
 
-        <Rectangle HorizontalAlignment="Left" Height="36" Margin="14,0,0,0" Stroke="Black" VerticalAlignment="Center" Width="7" Fill="Black"/>
-        <Ellipse HorizontalAlignment="Left" Height="16" Margin="11,7,0,0" Stroke="Black" VerticalAlignment="Top" Width="23" StrokeThickness="5"/>
-        <Ellipse HorizontalAlignment="Left" Height="22" Margin="8,21,0,0" Stroke="Black" VerticalAlignment="Top" Width="29" StrokeThickness="5"/>
-        <Rectangle HorizontalAlignment="Left" Height="36" Margin="8,0,0,0" VerticalAlignment="Center" Width="6" Fill="White"/>
+        <Ellipse x:Name="Ellipse_Bu" HorizontalAlignment="Left" Height="16" Margin="11,7,0,0" Stroke="Black" VerticalAlignment="Top" Width="23" StrokeThickness="5"/>
+        <Ellipse x:Name="Ellipse_Bl" HorizontalAlignment="Left" Height="22" Margin="8,21,0,0" Stroke="Black" VerticalAlignment="Top" Width="29" StrokeThickness="5"/>
+        <Rectangle x:Name="Rect_B" HorizontalAlignment="Left" Height="36" Margin="14,0,0,0" VerticalAlignment="Center" Width="7" Fill="Black"/>
+        <Rectangle x:Name="Rectbackground" HorizontalAlignment="Left" Height="36" Margin="8,0,0,0" VerticalAlignment="Center" Width="6" Fill="White"/>
+        <Rectangle x:Name="CB_Hitbox" Fill="Transparent" MouseDown="CB_Hitbox_MouseDown" MouseEnter="CB_Hitbox_MouseEnter" MouseLeave="CB_Hitbox_MouseLeave"/>
     </Grid>
 </UserControl>

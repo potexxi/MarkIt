@@ -8,7 +8,8 @@
              d:DesignHeight="50" d:DesignWidth="50">
     <Grid>
         <Rectangle x:Name="RectBackground" StrokeThickness="4" Stroke="Black" RadiusX="5" RadiusY="5" Fill="White"/>
-        <Rectangle HorizontalAlignment="Center" Height="24" Margin="0,21,0,0" Stroke="Black" VerticalAlignment="Top" Width="8" Fill="Black"/>
-        <Ellipse HorizontalAlignment="Center" Height="10" Margin="0,6,0,0" Stroke="Black" VerticalAlignment="Top" Width="10" Fill="Black"/>
+        <Rectangle x:Name="Rect_I" HorizontalAlignment="Center" Height="24" Margin="0,21,0,0" VerticalAlignment="Top" Width="8" Fill="Black"/>
+        <Ellipse x:Name="Ellipse_I" HorizontalAlignment="Center" Height="10" Margin="0,6,0,0" VerticalAlignment="Top" Width="10" Fill="Black"/>
+        <Rectangle x:Name="CB_Hitbox" Fill="Transparent" MouseDown="CB_Hitbox_MouseDown" MouseEnter="CB_Hitbox_MouseEnter" MouseLeave="CB_Hitbox_MouseLeave"/>
     </Grid>
 </UserControl>
