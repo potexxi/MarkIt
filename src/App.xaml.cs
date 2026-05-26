@@ -20,6 +20,7 @@ namespace MarkIt
                 box.ShowDialog();
                 Logger.logger.Fatal($"Unexpected Error: {e.Exception}");
                 e.Handled = true;
+                Environment.Exit(0);
             };
         }
         // Ende

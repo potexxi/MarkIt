@@ -39,3 +39,6 @@
 | Max | 21.05. | load from tree views |
 | Karim | 22.05. | settings window |
 | Max | 22.05. | load from file history |
+| Max | 25.05. | load from file history |
+| Max | 26.05. | load from file history |
+| Karim | 26.05. | UI |

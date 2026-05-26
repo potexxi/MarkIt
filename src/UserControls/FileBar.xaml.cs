@@ -26,7 +26,7 @@ namespace MarkIt.UserControls
     /// </summary>
     public partial class FileBar : UserControl
     {
-        private string selectedPath;
+        private FileHistoryItem? selectedFileHistoryItem = null;
         private TreeViewItem? selectedTreeViewItem;
         public List<string> history;
         private DispatcherTimer timerBlurOut;
@@ -47,7 +47,7 @@ namespace MarkIt.UserControls
             timerUpdate.Interval = TimeSpan.FromHours(6.7);
             timerUpdate.Tick += TimerUpdate_Tick;
 
-            selectedPath = "";
+            selectedFileHistoryItem = null;
             history = new List<string>();
         }
 
@@ -58,7 +58,7 @@ namespace MarkIt.UserControls
 
         public void Update()
         {
-            MainWindow.FileManager.setFileHistory();
+            MainWindow.FileManager.InitFileHistory();
             DrawHistory(MainWindow.FileManager.FileHistory);
             UpdateFileTreeLocal();
             UpdateFileTreeCloud();
@@ -68,7 +68,7 @@ namespace MarkIt.UserControls
             LabelCloud.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
         }
 
-        public void DrawHistory(List<string> history)
+        public void DrawHistory(List<FileHistoryItem> history)
         {
             StackPanelHistory.Children.Clear();
             if (history == null || history.Count == 0)
@@ -81,22 +81,26 @@ namespace MarkIt.UserControls
                 label.FontSize = 14;
                 StackPanelHistory.Children.Add(label);
             }
-            foreach (string item in history)
+            foreach (FileHistoryItem item in history)
             {
-                Label label = new Label();
-                label.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
-                label.MouseEnter += Label_MouseEnter;
-                label.MouseLeave += Label_MouseLeave;
-                label.PreviewMouseDoubleClick += LabelHistory_PreviewMouseDoubleClick;
-                label.PreviewMouseDown += LabelHistory_PreviewMouseDown;
-                label.Margin = new Thickness(10, -5, 0, 0);
-                label.Cursor = Cursors.Hand;
-                label.FontFamily = new FontFamily("Leelawadee UI");
-                label.FontSize = 14;
-                string[] parts = item.Split(MainWindow.currentUser.Email.Split("@")[0]);
-                label.Content = parts[1];
-                selectedPath = item;
-                StackPanelHistory.Children.Add(label);
+                if (item.Type != FileManager.FileType.Root)
+                {
+                    Label label = new Label();
+                    label.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+                    label.MouseEnter += Label_MouseEnter;
+                    label.MouseLeave += Label_MouseLeave;
+                    label.PreviewMouseDoubleClick += LabelHistory_PreviewMouseDoubleClick;
+                    label.PreviewMouseDown += LabelHistory_PreviewMouseDown;
+                    label.Margin = new Thickness(10, -5, 0, 0);
+                    label.Cursor = Cursors.Hand;
+                    label.FontFamily = new FontFamily("Leelawadee UI");
+                    label.FontSize = 14;
+                    //string[] parts = item.Path.Split(MainWindow.currentUser.Email.Split("@")[0]);
+                    //label.Content = parts[1];
+                    label.Content = item.Path;
+                    label.Tag = ("", item);
+                    StackPanelHistory.Children.Add(label);
+                }
             }
         }
 
@@ -108,13 +112,14 @@ namespace MarkIt.UserControls
             }
             Label label = (Label)sender;
             label.Background = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
-            selectedPath = label.Content.ToString();
+            selectedFileHistoryItem = (FileHistoryItem)label.Tag;
             ButtonDel.IsEnabled = false;
         }
 
         private void LabelHistory_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            ButtonOpen_Click(sender, e);
+            // TODO
+            //ButtonOpen_Click(sender, e);
             Hide();
         }
 
@@ -248,9 +253,9 @@ namespace MarkIt.UserControls
                 {
                     (path, type) = ((string, string))selectedTreeViewItem.Tag;
                 }
-                else if (selectedPath != "")
+                else if (selectedFileHistoryItem != null)
                 {
-                    path = selectedPath;
+                    path = selectedFileHistoryItem.Path;
                     type = "local";
                 }
                 else { return; }
@@ -271,7 +276,7 @@ namespace MarkIt.UserControls
                 }
                 Hide();
                 selectedTreeViewItem = null;
-                selectedPath = "";
+                selectedFileHistoryItem = null;
             }
             catch(Exception ex)
             {
@@ -398,7 +403,6 @@ namespace MarkIt.UserControls
             selectedTreeViewItem = (TreeViewItem)sender;
         }
 
-
         public void Show()
         {
             Logger.logger.Debug("Open file-workspace.");
@@ -484,6 +488,19 @@ namespace MarkIt.UserControls
 
             e.Handled = true;
             // CHATGPT Ende
+        }
+
+        private void BorderMain_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            // TODO
+            //if(selectedTreeViewItem != null)
+            //    selectedTreeViewItem.Background = Brushes.Transparent;
+            //selectedFileHistoryItem = null;
+            //selectedTreeViewItem = null;
+            foreach (Label label1 in StackPanelHistory.Children)
+            {
+                label1.Background = Brushes.Transparent;
+            }
         }
     }
 }
