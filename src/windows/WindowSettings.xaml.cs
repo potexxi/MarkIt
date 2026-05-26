@@ -119,11 +119,11 @@ namespace MarkIt.windows
 
         private void Button_Save_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (CT_Height.CustomContent != null)
+            if (CT_Height.CustomContent != null && CT_Height.CustomContent != "")
                 MainWindow.GeneralSettings.height = Convert.ToDouble(CT_Height.CustomContent);
-            if (CT_Width.CustomContent != null)
+            if (CT_Width.CustomContent != null && CT_Width.CustomContent != "")
                 MainWindow.GeneralSettings.width = Convert.ToDouble(CT_Width.CustomContent);
-            if (CT_Animation_FPS.CustomContent != null)
+            if (CT_Animation_FPS.CustomContent != null && CT_Animation_FPS.CustomContent != "")
                 MainWindow.GeneralSettings.animationFPS = CT_Animation_FPS.CustomContent;
 
             MainWindow.GeneralSettings.iconAnimations = AnimationSetting.IsOn;

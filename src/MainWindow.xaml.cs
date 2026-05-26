@@ -38,9 +38,16 @@ namespace MarkIt
         {
             Logger.Init();
             loadingScreen = LoadingScreen;
-            GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, true, false, "12"); // has to be infront of init
-            GeneralSettings = GeneralSettings.LoadFromFile("sources/options/generalSettings.json");
-            InitializeComponent();
+            if(GeneralSettings.LoadFromFile("sources/options/generalSettings.json") == null)
+            {
+                GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, true, false, "12"); // has to be infront of init
+            }
+            else
+            {
+                GeneralSettings = GeneralSettings.LoadFromFile("sources/options/generalSettings.json");
+                GeneralSettings.SaveToFile("generalSettings.json");
+            }
+                InitializeComponent();
             Maintimer.Interval = TimeSpan.FromMilliseconds(1000);
             Maintimer.Tick += Maintimer_Tick;
             Maintimer.Start(); // für das farb theme
@@ -69,6 +76,13 @@ namespace MarkIt
                 UC_AccountIcon.updateSettings();
                 UC_Settings.updateSettings();
                 UC_Information.updateSettings();
+
+                CB_Bold.updateSettings();
+                CB_Code.updateSettings();
+                CB_Italic.updateSettings();
+                CB_Striketrough.updateSettings();
+                CB_Underline.updateSettings();
+
                 updateColorMain();
                 GeneralSettings.updatedColorTheme = false;
             }
