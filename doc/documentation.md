@@ -41,4 +41,6 @@
 | Max | 22.05. | load from file history |
 | Max | 25.05. | load from file history |
 | Max | 26.05. | load from file history |
-| Karim | 26.05. | UI |
+| Karim | 26.05. | UI-Buttons |
+| Max | 27.05. | load from file history |
+| Karim | 27.05. | worksheet |
