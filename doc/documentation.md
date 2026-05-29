@@ -44,3 +44,6 @@
 | Karim | 26.05. | UI-Buttons |
 | Max | 27.05. | load from file history |
 | Karim | 27.05. | worksheet |
+| Max | 28.05. | supabase-api-bug-fix |
+| Max | 29.05. | all file management |
+| Karim | 29.05. | worksheet |
