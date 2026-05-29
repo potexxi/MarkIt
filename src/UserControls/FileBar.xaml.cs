@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -66,6 +67,8 @@ namespace MarkIt.UserControls
             LabelRecent.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
             LabelLocal.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
             LabelCloud.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+            TreeViewLocal.Resources[SystemColors.HighlightBrushKey] = (SolidColorBrush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+            TreeViewCloud.Resources[SystemColors.HighlightBrushKey] = (SolidColorBrush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
         }
 
         public void DrawHistory(List<FileHistoryItem> history)
@@ -73,9 +76,10 @@ namespace MarkIt.UserControls
             StackPanelHistory.Children.Clear();
             if (history == null || history.Count == 0)
             {
-                Label label = new Label();
+                System.Windows.Controls.Label label = new System.Windows.Controls.Label();
                 label.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
                 label.Content = "No recent files...";
+                ScrollViewerHistory.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 label.Margin = new Thickness(10, -5, 0, 0);
                 label.FontFamily = new FontFamily("Leelawadee UI");
                 label.FontSize = 14;
@@ -85,7 +89,7 @@ namespace MarkIt.UserControls
             {
                 if (item.Type != FileManager.FileType.Root)
                 {
-                    Label label = new Label();
+                    System.Windows.Controls.Label label = new System.Windows.Controls.Label();
                     label.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
                     label.MouseEnter += Label_MouseEnter;
                     label.MouseLeave += Label_MouseLeave;
@@ -97,8 +101,15 @@ namespace MarkIt.UserControls
                     label.FontSize = 14;
                     //string[] parts = item.Path.Split(MainWindow.currentUser.Email.Split("@")[0]);
                     //label.Content = parts[1];
-                    label.Content = item.Path;
-                    label.Tag = ("", item);
+                    if (item.Type == FileManager.FileType.Local)
+                    {
+                        label.Content = $"📄 {item.Path}";
+                    }
+                    else if (item.Type == FileManager.FileType.Cloud)
+                    {
+                        label.Content = $"☁ {item.Path}";
+                    }
+                    label.Tag = item;
                     StackPanelHistory.Children.Add(label);
                 }
             }
@@ -106,33 +117,34 @@ namespace MarkIt.UserControls
 
         private void LabelHistory_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            foreach(Label label1 in  StackPanelHistory.Children)
+            e.Handled = true;
+            foreach (System.Windows.Controls.Label label1 in StackPanelHistory.Children)
             {
-                label1.Background = Brushes.Transparent;
+                label1.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
             }
-            Label label = (Label)sender;
-            label.Background = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+            System.Windows.Controls.Label label = (System.Windows.Controls.Label)sender;
+            label.Background = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             selectedFileHistoryItem = (FileHistoryItem)label.Tag;
             ButtonDel.IsEnabled = false;
         }
 
         private void LabelHistory_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            // TODO
-            //ButtonOpen_Click(sender, e);
+            ButtonOpen_Click(sender, e);
             Hide();
         }
 
         private void Label_MouseLeave(object sender, MouseEventArgs e)
         {
-            Label label = (Label)sender;
+            System.Windows.Controls.Label label = (System.Windows.Controls.Label)sender;
             label.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
         }
 
         private void Label_MouseEnter(object sender, MouseEventArgs e)
         {
-            Label label = (Label)sender;
-            label.Foreground = (Brush) new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+            System.Windows.Controls.Label label = (System.Windows.Controls.Label)sender;
+            if (selectedFileHistoryItem != (FileHistoryItem)label.Tag)
+                label.Foreground = (Brush) new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
         }
 
         private void Rectangle_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -154,10 +166,14 @@ namespace MarkIt.UserControls
             ScrollViewerMain.Width = 0.3 * width;
             if(RectBackground.IsHitTestVisible == false)
                 Canvas.SetLeft(BorderMain, -BorderMain.Width - 20);
+            ButtonDel.Width = BorderMain.Width * 0.9;
+            ButtonOpen.Width = BorderMain.Width * 0.9;
+            ButtonCreate.Width = BorderMain.Width * 0.9;
         }
 
         private void ButtonDel_Click(object sender, RoutedEventArgs e)
         {
+            e.Handled = true;
             try
             {
                 if (selectedTreeViewItem != null)
@@ -184,6 +200,7 @@ namespace MarkIt.UserControls
                                 try
                                 {
                                     Directory.Delete(path, true);
+                                    RemoveItem(TreeViewLocal, selectedTreeViewItem);
                                 }
                                 catch (Exception ex)
                                 {
@@ -196,14 +213,12 @@ namespace MarkIt.UserControls
                             else if (File.Exists(path))
                             {
                                 File.Delete(path);
+                                RemoveItem(TreeViewLocal, selectedTreeViewItem);
                             }
                         }
                         else if (type == "cloud")
                         {
                             MainWindow.FileManager.DeleteFromServer(path, MainWindow.loadingScreen);
-                        }
-                        if (!RemoveItem(TreeViewLocal, selectedTreeViewItem))
-                        {
                             RemoveItem(TreeViewCloud, selectedTreeViewItem);
                         }
                         selectedTreeViewItem = null;
@@ -245,34 +260,43 @@ namespace MarkIt.UserControls
 
         private async void ButtonOpen_Click(object sender, RoutedEventArgs e)
         {
+            e.Handled = true;
             try
             {
                 string path;
-                string type;
+                FileManager.FileType type;
                 if (selectedTreeViewItem != null)
                 {
-                    (path, type) = ((string, string))selectedTreeViewItem.Tag;
+                    (path, type) = ((string, FileManager.FileType))selectedTreeViewItem.Tag;
                 }
                 else if (selectedFileHistoryItem != null)
                 {
                     path = selectedFileHistoryItem.Path;
-                    type = "local";
+                    type = selectedFileHistoryItem.Type;
                 }
                 else { return; }
-                if (type == "local")
+                if (type == FileManager.FileType.Local)
                 {
                     if (!File.Exists(path))
                     {
+                        if (Directory.Exists(path))
+                        {
+                            WindowMessageBox box1 = new WindowMessageBox("This is a folder.", "You cannot open a folder!");
+                            box1.ShowDialog();
+                            return;
+                        }
                         RemoveItem(TreeViewLocal, selectedTreeViewItem);
                         WindowMessageBox box = new WindowMessageBox("File does not exist.", "This file does not exist anymore.");
                         box.ShowDialog();
                         return;
                     }
                     MainWindow.CurrentWorkSheet.LoadFromString(MainWindow.FileManager.LoadFromFile(path));
+                    MainWindow.FileManager.fileType = FileManager.FileType.Local;
                 }
-                else
+                else if(type == FileManager.FileType.Cloud)
                 {
                     MainWindow.CurrentWorkSheet.LoadFromString(await MainWindow.FileManager.Download(path, MainWindow.loadingScreen));
+                    MainWindow.FileManager.fileType = FileManager.FileType.Cloud;
                 }
                 Hide();
                 selectedTreeViewItem = null;
@@ -312,7 +336,7 @@ namespace MarkIt.UserControls
             DirectoryInfo userInfo = new DirectoryInfo(path);
             if (userInfo.GetFiles().Length <= 1)
             {
-                Label item = new Label();
+                System.Windows.Controls.Label item = new System.Windows.Controls.Label();
                 item.Content = "No local files.";
                 item.FontSize = 14;
                 item.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
@@ -326,17 +350,23 @@ namespace MarkIt.UserControls
 
         private TreeViewItem GetAllLocalPath(DirectoryInfo info)
         {
-            TreeViewItem item = new TreeViewItem { Header = $"📁{info.Name}" };
+            TreeViewItem item = new TreeViewItem { Header = $"📁 {info.Name}" };
             item.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
             item.FontSize = 14;
-            item.Tag = (info.Name, "local");
+            item.Tag = (info.FullName, FileManager.FileType.Local);
             item.PreviewMouseDown += Fileitem_PreviewMouseDown;
+            item.MouseEnter += TreeViewItem_MouseEnter;
+            item.MouseLeave += TreeViewItem_MouseLeave;
+            item.Cursor = Cursors.Hand;
 
             foreach (DirectoryInfo underfolder in info.GetDirectories())
             {
                 TreeViewItem folderitem = GetAllLocalPath(underfolder);
                 folderitem.PreviewMouseDown += Fileitem_PreviewMouseDown;
-                folderitem.Tag = (underfolder.FullName, "local");
+                folderitem.MouseEnter += TreeViewItem_MouseEnter;
+                folderitem.MouseLeave += TreeViewItem_MouseLeave;
+                folderitem.Tag = (underfolder.FullName, FileManager.FileType.Local);
+                folderitem.Cursor = Cursors.Hand;
                 item.Items.Add(folderitem);
             }
             foreach(FileInfo file in info.GetFiles())
@@ -346,22 +376,41 @@ namespace MarkIt.UserControls
                     TreeViewItem fileitem = new TreeViewItem { Header = file.Name };
                     fileitem.MouseDoubleClick += Fileitem_MouseDoubleClick;
                     fileitem.PreviewMouseDown += Fileitem_PreviewMouseDown;
+                    fileitem.MouseEnter += TreeViewItem_MouseEnter;
+                    fileitem.MouseLeave += TreeViewItem_MouseLeave;
                     fileitem.Cursor = Cursors.Hand;
                     fileitem.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
                     fileitem.FontSize = 14;
-                    fileitem.Tag = (file.FullName, "local");
+                    fileitem.Tag = (file.FullName, FileManager.FileType.Local);
                     item.Items.Add(fileitem);
                 }
             }
             return item;
         }
 
+        private void TreeViewItem_MouseLeave(object sender, MouseEventArgs e)
+        {
+            TreeViewItem item = (TreeViewItem)sender;
+            item.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+        }
+
+        private void TreeViewItem_MouseEnter(object sender, MouseEventArgs e)
+        {
+            TreeViewItem item = (TreeViewItem)sender;
+            if(item != selectedTreeViewItem)
+                item.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+        }
+
         public async Task<TreeViewItem> GetAllCloudPath(string userpath)
         {
             TreeViewItem big = new TreeViewItem();
-            big.Tag = userpath;
+            big.Tag = (userpath, FileManager.FileType.Cloud);
             big.FontSize = 14;
             big.Header = $"📁 {userpath.Split('/')[^1]}";
+            big.PreviewMouseDown += Fileitem_PreviewMouseDown;
+            big.Cursor = Cursors.Hand;
+            big.MouseEnter += TreeViewItem_MouseEnter;
+            big.MouseLeave += TreeViewItem_MouseLeave;
             big.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
 
             List<FileObject>? storageitems = await MainWindow.supabase.Storage.From("MarkIt").List(userpath);
@@ -378,19 +427,24 @@ namespace MarkIt.UserControls
                 {
                     TreeViewItem underfolder = await GetAllCloudPath($"{userpath}/{item.Name}");
                     underfolder.FontSize = 14;
-                    underfolder.Tag = (underfolder.Name, "cloud");
+                    underfolder.Tag = (underfolder.Name, FileManager.FileType.Cloud);
+                    underfolder.PreviewMouseDown += Fileitem_PreviewMouseDown;
+                    underfolder.MouseEnter += TreeViewItem_MouseEnter;
+                    underfolder.MouseLeave += TreeViewItem_MouseLeave;
                     underfolder.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
                     big.Items.Add(underfolder);
                 }
                 else
                 {
                     TreeViewItem small = new TreeViewItem();
-                    small.Tag = ($"{userpath}/{item.Name}", "cloud");
+                    small.Tag = ($"{userpath}/{item.Name}", FileManager.FileType.Cloud);
                     small.Header = item.Name;
                     small.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
                     small.Cursor = Cursors.Hand;
                     small.PreviewMouseDown += Fileitem_PreviewMouseDown;
                     small.PreviewMouseDoubleClick += Fileitem_MouseDoubleClick;
+                    small.MouseEnter += TreeViewItem_MouseEnter;
+                    small.MouseLeave += TreeViewItem_MouseLeave;
                     small.FontSize = 14;
                     big.Items.Add(small);
                 }
@@ -398,13 +452,33 @@ namespace MarkIt.UserControls
             return big;
         }
 
-        private void Fileitem_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private async void Fileitem_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            //e.Handled = true;
+            ButtonDel.IsEnabled = true;
+            ButtonCreate.IsEnabled = true;
+            foreach(System.Windows.Controls.Label label in StackPanelHistory.Children)
+            {
+                label.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+            }
             selectedTreeViewItem = (TreeViewItem)sender;
+            (string path, FileManager.FileType type) = ((string, FileManager.FileType))selectedTreeViewItem.Tag;
+            if(!Directory.Exists(path) && type == FileManager.FileType.Local)
+                ButtonCreate.IsEnabled = false;
+            else if(FileManager.FileType.Cloud == type)
+            {
+                List<FileObject>? result = await MainWindow.supabase.Storage.From("MarkIt").List(path);
+                if (!result.Any())
+                {
+                    ButtonCreate.IsEnabled = false;
+                }
+            }
+            selectedTreeViewItem.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
         }
 
         public void Show()
         {
+            ButtonDel.IsEnabled = true;
             Logger.logger.Debug("Open file-workspace.");
             Update();
             timerUpdate.Start();
@@ -472,6 +546,7 @@ namespace MarkIt.UserControls
 
         private void Fileitem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            e.Handled = true;
             ButtonOpen_Click(sender, e);
             Hide();
         }
@@ -493,13 +568,49 @@ namespace MarkIt.UserControls
         private void BorderMain_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             // TODO
-            //if(selectedTreeViewItem != null)
-            //    selectedTreeViewItem.Background = Brushes.Transparent;
             //selectedFileHistoryItem = null;
             //selectedTreeViewItem = null;
-            foreach (Label label1 in StackPanelHistory.Children)
+            //foreach (System.Windows.Controls.Label label1 in StackPanelHistory.Children)
+            //{
+            //    label1.Background = Brushes.Transparent;
+            //}
+            //ButtonDel.IsEnabled = true;
+        }
+
+        private void ButtonCreate_Click(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+            if (selectedTreeViewItem == null)
+                return;
+            WindowMessageBox box;
+            (string path, FileManager.FileType type) = ((string, FileManager.FileType))selectedTreeViewItem.Tag;
+            if(type == FileManager.FileType.Local)
             {
-                label1.Background = Brushes.Transparent;
+                if (File.Exists(path))
+                {
+                    box = new WindowMessageBox("This is a file.", "You cannot create a file in a file.");
+                    box.ShowDialog();
+                    return;
+                }
+                else if(Directory.Exists(path))
+                {
+                    string newPath = $"{path}/NewMarkItFile";
+                    while (File.Exists($"{newPath}.md"))
+                        newPath += "-Copy";
+                    File.WriteAllText($"{newPath}.md", "");
+                    UpdateFileTreeLocal();
+                    return;
+                }
+                else
+                {
+                    box = new WindowMessageBox("This is not a folder.", "You have to select a folder to create a item.");
+                    box.ShowDialog();
+                    return;
+                }
+            }
+            else if(type == FileManager.FileType.Cloud)
+            {
+
             }
         }
     }

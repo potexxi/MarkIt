@@ -21,6 +21,7 @@
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
     <PackageReference Include="Supabase" Version="1.1.1" />
     <PackageReference Include="Supabase.Storage" Version="2.4.1" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
   </ItemGroup>
 

@@ -18,7 +18,7 @@ namespace MarkIt
         public string LastContent {  get; private set; }
         public List<FileHistoryItem> FileHistory { get; private set; }
         public string? CurrentFilePath;
-        public List<string> CloudFiles {  get; private set; }
+        public FileType fileType { get; set; }
         public enum FileType
         {
             Root,
@@ -141,8 +141,16 @@ namespace MarkIt
                 Logger.logger.Debug("Tried to save empty FilePath.");
                 return;
             }
-            if (FileHistory.Contains(item))
-                FileHistory.Remove(item);
+            foreach(FileHistoryItem item2 in FileHistory)
+            {
+                if(item.Path == item2.Path)
+                {
+                    FileHistory.Remove(item2);
+                    break;
+                }
+            }
+            //if (FileHistory.Contains(item))
+            //    FileHistory.Remove(item);
             FileHistory.Insert(0, item);
             if(FileHistory.Count > 5)
             {
@@ -182,30 +190,18 @@ namespace MarkIt
             }
         }
 
-        public async Task<bool> UploadToServer(Grid loadingscreen)
+        public async Task<bool> Upload(string path, string content, Grid loadingscreen)
         {
             loadingscreen.Visibility = Visibility.Visible;
-            if(CurrentFilePath == null || CurrentFilePath == "")
+            if (CurrentFilePath == null || CurrentFilePath == "")
             {
                 loadingscreen.Visibility = Visibility.Hidden;
                 return false;
             }
-            string filepath = CurrentFilePath;
-            return await Upload(filepath, loadingscreen);
-        }
 
-        public async Task<bool> UploadToServer(string filename, Grid loadingscreen)
-        {
-            loadingscreen.Visibility = Visibility.Visible;
-            string filepath = userPath + $"/{filename}";
-            return await Upload(filepath, loadingscreen);
-        }
-
-        private async Task<bool> Upload(string path, Grid loadingscreen)
-        {
             try
             {
-                byte[] bytes = await File.ReadAllBytesAsync(path);
+                byte[] bytes = Encoding.UTF8.GetBytes(content);
                 await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, path);
                 Supabase.Storage.FileOptions options = new Supabase.Storage.FileOptions { Upsert = true };
                 await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, path, options);

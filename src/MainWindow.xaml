@@ -7,7 +7,7 @@
         xmlns:uc="clr-namespace:MarkIt.UserControls"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d" KeyDown="Window_KeyDown"
-        Title="MarkIt" Height="450" Width="800" SizeChanged="Window_SizeChanged" MinWidth="620" MinHeight="400" Icon="/images/markit-logo.png">
+        Title="MarkIt" Height="550" Width="800" SizeChanged="Window_SizeChanged" MinWidth="650" MinHeight="550" Icon="/images/markit-logo.png">
     <Grid x:Name="GridMain">
         <StackPanel x:Name="StackPanelMainWindow" Orientation="Vertical">
             <DockPanel>

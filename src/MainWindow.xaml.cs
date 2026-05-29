@@ -3,6 +3,7 @@ using MarkIt.settings;
 using MarkIt.UserControls;
 using MarkIt.windows;
 using MarkIt.worksheet;
+using Microsoft.IdentityModel.Abstractions;
 using Microsoft.Win32;
 using Serilog;
 using Serilog.Core;
@@ -38,10 +39,10 @@ namespace MarkIt
         public MainWindow()
         {
             Logger.Init();
-            loadingScreen = LoadingScreen;
             GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, true, false, "12"); // has to be infront of init
             GeneralSettings = GeneralSettings.LoadFromFile("sources/options/generalSettings.json");
             InitializeComponent();
+            loadingScreen = LoadingScreen;
             Maintimer.Interval = TimeSpan.FromMilliseconds(1000);
             Maintimer.Tick += Maintimer_Tick;
             Maintimer.Start(); // für das farb theme
@@ -146,14 +147,17 @@ namespace MarkIt
 
         private void MenuItemSaveFile_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            FileManager.SaveToFile(FileManager.CurrentFilePath, CurrentWorkSheet.GetContent());
+            if (FileManager.fileType == FileManager.FileType.Local)
+                FileManager.SaveToFile(FileManager.CurrentFilePath, CurrentWorkSheet.GetContent());
+            else if (FileManager.fileType == FileManager.FileType.Cloud)
+                FileManager.Upload(FileManager.CurrentFilePath, CurrentWorkSheet.GetContent(), LoadingScreen);
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.S && Keyboard.Modifiers == ModifierKeys.Control)
             {
-                FileManager.SaveToFile(FileManager.CurrentFilePath, CurrentWorkSheet.GetContent());
+                MenuItemSaveFile_PreviewMouseDown(null, null);
             }
         }
     }

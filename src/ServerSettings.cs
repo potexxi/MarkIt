@@ -1,14 +1,16 @@
-﻿namespace MarkIt
+﻿using System.Net.Http;
+namespace MarkIt
 {
     public static class ServerSettings
     {
-        public static int Port {  get; private set; }
-        public static string? PublicIp {  get; private set; }
+        public static string? URL {  get; private set; }
 
-        public static void Init(int port, string publicip)
+        public async static Task Init()
         {
-            Port = port;
-            PublicIp = publicip;
+            //HttpClient client = new HttpClient();
+            //URL = await client.GetStringAsync("https://gist.githubusercontent.com/potexxi/2a982358d449e60b466923f0fc5127b9/raw/api-url.txt");
+            //Logger.logger.Debug($"API-URL: {URL}");
+            URL = "http://potexxi.ddns.net:10223";
         }
     }
 }
