@@ -178,8 +178,8 @@ namespace MarkIt.UserControls
             {
                 if (selectedTreeViewItem != null)
                 {
-                    (string path, string type) = ((string, string))selectedTreeViewItem.Tag;
-                    if (path == "root")
+                    (string path, FileManager.FileType type) = ((string, FileManager.FileType))selectedTreeViewItem.Tag;
+                    if (type == FileManager.FileType.Root)
                     {
                         WindowMessageBox box1 = new WindowMessageBox("Cannot remove!", "You cannot remove this folder! It is your root folder.");
                         box1.ShowDialog();
@@ -193,7 +193,7 @@ namespace MarkIt.UserControls
                     box.ShowDialog();
                     if (box.returnType == WindowMessageBox.ReturnType.Yes)
                     {
-                        if (type == "local")
+                        if (type == FileManager.FileType.Local)
                         {
                             if (Directory.Exists(path))
                             {
@@ -216,7 +216,7 @@ namespace MarkIt.UserControls
                                 RemoveItem(TreeViewLocal, selectedTreeViewItem);
                             }
                         }
-                        else if (type == "cloud")
+                        else if (type == FileManager.FileType.Cloud)
                         {
                             MainWindow.FileManager.DeleteFromServer(path, MainWindow.loadingScreen);
                             RemoveItem(TreeViewCloud, selectedTreeViewItem);
@@ -314,6 +314,7 @@ namespace MarkIt.UserControls
             TreeViewCloud.Items.Clear();
             if(MainWindow.currentUser.Email != "guest")
             {
+                TreeViewCloudRootCount = 0;
                 TreeViewItem item = await GetAllCloudPath(MainWindow.FileManager.userPath);
                 TreeViewCloud.Items.Add(item);
             }
@@ -334,7 +335,7 @@ namespace MarkIt.UserControls
             string path = MainWindow.FileManager.userPath;
             TreeViewLocal.Items.Clear();
             DirectoryInfo userInfo = new DirectoryInfo(path);
-            if (userInfo.GetFiles().Length <= 1)
+            if (userInfo.GetFiles().Length <= 1 && userInfo.GetDirectories().Length < 0)
             {
                 System.Windows.Controls.Label item = new System.Windows.Controls.Label();
                 item.Content = "No local files.";
@@ -344,16 +345,36 @@ namespace MarkIt.UserControls
                 TreeViewLocal.IsHitTestVisible = false;
                 return;
             }
+            TreeViewLocalRootCount = 0;
             TreeViewLocal.Items.Add(GetAllLocalPath(userInfo));
-
         }
 
+        private int TreeViewLocalRootCount = 0;
         private TreeViewItem GetAllLocalPath(DirectoryInfo info)
         {
             TreeViewItem item = new TreeViewItem { Header = $"📁 {info.Name}" };
             item.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
             item.FontSize = 14;
-            item.Tag = (info.FullName, FileManager.FileType.Local);
+
+            item.ContextMenu = new ContextMenu();
+            item.ContextMenu.Opened += ContextMenu_Opened;
+            item.ContextMenu.Closed += ContextMenu_Closed;
+            MenuItem menuItem1 = new MenuItem { Header = "Create File", Cursor = Cursors.Hand };
+            MenuItem menuItem2 = new MenuItem { Header = "Delete", Cursor = Cursors.Hand };
+            MenuItem menuItem3 = new MenuItem { Header = "Rename", Cursor = Cursors.Hand };
+            item.ContextMenu.Items.Add(menuItem1);
+            item.ContextMenu.Items.Add(menuItem2);
+            item.ContextMenu.Items.Add(menuItem3);
+
+            if (TreeViewLocalRootCount == 0)
+            {
+                item.Tag = (info.FullName, FileManager.FileType.Root);
+                TreeViewLocalRootCount = 1;
+            }
+            else
+            {
+                item.Tag = (info.FullName, FileManager.FileType.Local);
+            }
             item.PreviewMouseDown += Fileitem_PreviewMouseDown;
             item.MouseEnter += TreeViewItem_MouseEnter;
             item.MouseLeave += TreeViewItem_MouseLeave;
@@ -367,6 +388,19 @@ namespace MarkIt.UserControls
                 folderitem.MouseLeave += TreeViewItem_MouseLeave;
                 folderitem.Tag = (underfolder.FullName, FileManager.FileType.Local);
                 folderitem.Cursor = Cursors.Hand;
+
+                ContextMenu contextMenu = new ContextMenu();
+                contextMenu.Opened += ContextMenu_Opened;
+                contextMenu.Closed += ContextMenu_Closed;
+
+                MenuItem menuItem21 = new MenuItem { Header = "Open", Cursor = Cursors.Hand };
+                MenuItem menuItem22 = new MenuItem { Header = "Delete", Cursor = Cursors.Hand };
+                MenuItem menuItem23 = new MenuItem { Header = "Rename", Cursor = Cursors.Hand };
+                contextMenu.Items.Add(menuItem21);
+                contextMenu.Items.Add(menuItem22);
+                contextMenu.Items.Add(menuItem23);
+                folderitem.ContextMenu = contextMenu;
+
                 item.Items.Add(folderitem);
             }
             foreach(FileInfo file in info.GetFiles())
@@ -388,6 +422,36 @@ namespace MarkIt.UserControls
             return item;
         }
 
+        private void ContextMenu_Closed(object sender, RoutedEventArgs e)
+        {
+            //if (selectedTreeViewItem != null)
+            //    selectedTreeViewItem.Background = Brushes.Transparent;
+            selectedTreeViewItem = null;
+            foreach(TreeViewItem item in TreeViewLocal.Items)
+            {
+                ClearTreeViewItemsBackground(item);
+            }
+            foreach (TreeViewItem item in TreeViewCloud.Items)
+            {
+                ClearTreeViewItemsBackground(item);
+            }
+        }
+
+        private void ClearTreeViewItemsBackground(TreeViewItem item)
+        {
+            foreach(TreeViewItem item1 in item.Items)
+            {
+                ClearTreeViewItemsBackground(item1);
+            }
+            item.Background = Brushes.Transparent;
+        }
+
+        private void ContextMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            if (selectedTreeViewItem != null)
+                selectedTreeViewItem.Background = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+        }
+
         private void TreeViewItem_MouseLeave(object sender, MouseEventArgs e)
         {
             TreeViewItem item = (TreeViewItem)sender;
@@ -401,10 +465,20 @@ namespace MarkIt.UserControls
                 item.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
         }
 
+        private int TreeViewCloudRootCount = 0;
         public async Task<TreeViewItem> GetAllCloudPath(string userpath)
         {
+            List<FileObject>? storageitems = await MainWindow.supabase.Storage.From("MarkIt").List(userpath);
             TreeViewItem big = new TreeViewItem();
-            big.Tag = (userpath, FileManager.FileType.Cloud);
+            if (TreeViewCloudRootCount == 0)
+            {
+                big.Tag = (userpath, FileManager.FileType.Root);
+                TreeViewCloudRootCount = 1;
+            }
+            else
+            {
+                big.Tag = (userpath, FileManager.FileType.Cloud);
+            }
             big.FontSize = 14;
             big.Header = $"📁 {userpath.Split('/')[^1]}";
             big.PreviewMouseDown += Fileitem_PreviewMouseDown;
@@ -413,7 +487,16 @@ namespace MarkIt.UserControls
             big.MouseLeave += TreeViewItem_MouseLeave;
             big.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
 
-            List<FileObject>? storageitems = await MainWindow.supabase.Storage.From("MarkIt").List(userpath);
+            big.ContextMenu = new ContextMenu();
+            big.ContextMenu.Opened += ContextMenu_Opened;
+            big.ContextMenu.Closed += ContextMenu_Closed;
+            MenuItem menuItem1 = new MenuItem { Header = "Create File", Cursor = Cursors.Hand };
+            MenuItem menuItem2 = new MenuItem { Header = "Delete", Cursor = Cursors.Hand };
+            MenuItem menuItem3 = new MenuItem { Header = "Rename", Cursor = Cursors.Hand };
+            big.ContextMenu.Items.Add(menuItem1);
+            big.ContextMenu.Items.Add(menuItem2);
+            big.ContextMenu.Items.Add(menuItem3);
+
             if (storageitems == null || storageitems.Count == 0)
             {
                 big.Header = "No cloud files.";
@@ -427,12 +510,24 @@ namespace MarkIt.UserControls
                 {
                     TreeViewItem underfolder = await GetAllCloudPath($"{userpath}/{item.Name}");
                     underfolder.FontSize = 14;
-                    underfolder.Tag = (underfolder.Name, FileManager.FileType.Cloud);
+                    underfolder.Tag = ($"{userpath}/{item.Name}", FileManager.FileType.Cloud);
                     underfolder.PreviewMouseDown += Fileitem_PreviewMouseDown;
                     underfolder.MouseEnter += TreeViewItem_MouseEnter;
                     underfolder.MouseLeave += TreeViewItem_MouseLeave;
                     underfolder.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
                     big.Items.Add(underfolder);
+
+                    ContextMenu contextMenu = new ContextMenu();
+                    contextMenu.Opened += ContextMenu_Opened;
+                    contextMenu.Closed += ContextMenu_Closed;
+
+                    MenuItem menuItem21 = new MenuItem { Header = "Create File", Cursor = Cursors.Hand };
+                    MenuItem menuItem22 = new MenuItem { Header = "Delete", Cursor = Cursors.Hand };
+                    MenuItem menuItem23 = new MenuItem { Header = "Rename", Cursor = Cursors.Hand };
+                    contextMenu.Items.Add(menuItem21);
+                    contextMenu.Items.Add(menuItem22);
+                    contextMenu.Items.Add(menuItem23);
+                    underfolder.ContextMenu = contextMenu;
                 }
                 else
                 {
@@ -446,6 +541,19 @@ namespace MarkIt.UserControls
                     small.MouseEnter += TreeViewItem_MouseEnter;
                     small.MouseLeave += TreeViewItem_MouseLeave;
                     small.FontSize = 14;
+
+                    ContextMenu contextMenu = new ContextMenu();
+                    contextMenu.Opened += ContextMenu_Opened;
+                    contextMenu.Closed += ContextMenu_Closed;
+
+                    MenuItem menuItem21 = new MenuItem { Header = "Open", Cursor = Cursors.Hand };
+                    MenuItem menuItem22 = new MenuItem { Header = "Delete", Cursor = Cursors.Hand };
+                    MenuItem menuItem23 = new MenuItem { Header = "Rename", Cursor = Cursors.Hand };
+                    contextMenu.Items.Add(menuItem21);
+                    contextMenu.Items.Add(menuItem22);
+                    contextMenu.Items.Add(menuItem23);
+                    small.ContextMenu = contextMenu;
+
                     big.Items.Add(small);
                 }
             }
@@ -547,6 +655,7 @@ namespace MarkIt.UserControls
         private void Fileitem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
+            selectedTreeViewItem = (TreeViewItem)sender;
             ButtonOpen_Click(sender, e);
             Hide();
         }
@@ -577,7 +686,7 @@ namespace MarkIt.UserControls
             //ButtonDel.IsEnabled = true;
         }
 
-        private void ButtonCreate_Click(object sender, RoutedEventArgs e)
+        private async void ButtonCreate_Click(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
             if (selectedTreeViewItem == null)
@@ -610,7 +719,22 @@ namespace MarkIt.UserControls
             }
             else if(type == FileManager.FileType.Cloud)
             {
-
+                string newPath = $"{path}/NewMarkItFile";
+                while (true)
+                {
+                    try
+                    {
+                        await MainWindow.supabase.Storage.From("MarkIt").Download($"{newPath}.md", null);
+                        newPath += "-Copy";
+                        continue;
+                    }
+                    catch
+                    {
+                        break;
+                    }
+                }
+                MainWindow.FileManager.Upload($"{newPath}.md", "", MainWindow.loadingScreen);
+                UpdateFileTreeCloud();
             }
         }
     }

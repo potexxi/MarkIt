@@ -179,7 +179,24 @@ namespace MarkIt
             try
             {
                 // Von Supabase DOCS:  https://supabase.com/docs/reference/csharp/storage-from-download
-                await MainWindow.supabase.Storage.From("MarkIt").Remove(new List<string> { path });
+                // Danach CHAtGPT
+                // Prompt: await MainWindow.supabase.Storage.From("MarkIt").Remove(new List<string> { path });
+                // wieso loescht das nicht die folder, weil die folder sind in supabase ja nur relative files
+                // Anfang
+                var files = await MainWindow.supabase.Storage
+                    .From("MarkIt")
+                    .List(path);
+
+                var paths = files.Select(f => $"{path}/{f.Name}").ToList();
+                if(paths.Count > 0)
+                {
+                    await MainWindow.supabase.Storage
+                        .From("MarkIt")
+                        .Remove(paths);
+                }
+                await MainWindow.supabase.Storage
+                    .From("MarkIt")
+                    .Remove(path);
                 // Ende
                 return true;
             }
@@ -193,12 +210,6 @@ namespace MarkIt
         public async Task<bool> Upload(string path, string content, Grid loadingscreen)
         {
             loadingscreen.Visibility = Visibility.Visible;
-            if (CurrentFilePath == null || CurrentFilePath == "")
-            {
-                loadingscreen.Visibility = Visibility.Hidden;
-                return false;
-            }
-
             try
             {
                 byte[] bytes = Encoding.UTF8.GetBytes(content);
@@ -224,6 +235,7 @@ namespace MarkIt
             try
             {
                 byte[] content_byte = await MainWindow.supabase.Storage.From("MarkIt").Download(path, null);
+                AddToHistory(new FileHistoryItem(path, FileType.Cloud));
                 loadingscreen.Visibility = Visibility.Hidden;
                 return Encoding.UTF8.GetString(content_byte);
             }

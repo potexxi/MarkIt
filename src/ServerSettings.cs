@@ -7,10 +7,9 @@ namespace MarkIt
 
         public async static Task Init()
         {
-            //HttpClient client = new HttpClient();
-            //URL = await client.GetStringAsync("https://gist.githubusercontent.com/potexxi/2a982358d449e60b466923f0fc5127b9/raw/api-url.txt");
-            //Logger.logger.Debug($"API-URL: {URL}");
-            URL = "http://potexxi.ddns.net:10223";
+            HttpClient client = new HttpClient();
+            URL = await client.GetStringAsync("https://gist.githubusercontent.com/potexxi/2a982358d449e60b466923f0fc5127b9/raw/api-url.txt");
+            Logger.logger.Debug($"API-URL: {URL}");
         }
     }
 }
