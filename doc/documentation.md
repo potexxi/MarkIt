@@ -47,4 +47,4 @@
 | Max | 28.05. | supabase-api-bug-fix |
 | Max | 29.05. | all file management |
 | Karim | 29.05. | worksheet |
-| Max | 30.05. | finish file-management |
+| Max | 30.05. | context menu's in file-bar |
