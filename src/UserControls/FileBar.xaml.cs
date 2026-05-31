@@ -1,4 +1,5 @@
 ﻿using MarkIt.settings;
+using MarkIt.windows;
 using Supabase.Storage;
 using System;
 using System.Collections.Generic;
@@ -676,21 +677,30 @@ namespace MarkIt.UserControls
 
         private void BorderMain_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            // TODO
-            //selectedFileHistoryItem = null;
-            //selectedTreeViewItem = null;
-            //foreach (System.Windows.Controls.Label label1 in StackPanelHistory.Children)
-            //{
-            //    label1.Background = Brushes.Transparent;
-            //}
-            //ButtonDel.IsEnabled = true;
+            DependencyObject source = (DependencyObject)e.OriginalSource;
+
+            if (source == BorderMain || source == TreeViewLocal || source == TreeViewCloud)
+            {
+                selectedFileHistoryItem = null;
+                selectedTreeViewItem = null;
+                foreach (System.Windows.Controls.Label label1 in StackPanelHistory.Children)
+                {
+                    label1.Background = Brushes.Transparent;
+                }
+                ButtonDel.IsEnabled = true;
+                ButtonCreate.IsEnabled = true;
+                MessageBox.Show("Click");
+            }
         }
 
         private async void ButtonCreate_Click(object sender, RoutedEventArgs e)
         {
             e.Handled = true;
             if (selectedTreeViewItem == null)
+            {
+                CreateFromNothingSelected();
                 return;
+            }
             WindowMessageBox box;
             (string path, FileManager.FileType type) = ((string, FileManager.FileType))selectedTreeViewItem.Tag;
             if(type == FileManager.FileType.Local)
@@ -736,6 +746,14 @@ namespace MarkIt.UserControls
                 MainWindow.FileManager.Upload($"{newPath}.md", "", MainWindow.loadingScreen);
                 UpdateFileTreeCloud();
             }
+        }
+
+        private async void CreateFromNothingSelected()
+        {
+            WindowCreateAssistent window = new WindowCreateAssistent();
+            window.ShowDialog();
+            await UpdateFileTreeCloud();
+            UpdateFileTreeLocal();
         }
     }
 }
