@@ -48,3 +48,4 @@
 | Max | 29.05. | all file management |
 | Karim | 29.05. | worksheet |
 | Max | 30.05. | add context menu's in file-bar |
+| Max | 31.05. | finish file-bar (hopefully) |
