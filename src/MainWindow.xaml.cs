@@ -137,5 +137,30 @@ namespace MarkIt
         {
             throw new NotImplementedException();
         }
+
+        private void CB_Bold_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CurrentWorkSheet.addToPostion("**");
+        }
+
+        private void CB_Code_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CurrentWorkSheet.addToPostion("`");
+        }
+
+        private void CB_Italic_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CurrentWorkSheet.addToPostion("*");
+        }
+
+        private void CB_Striketrough_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CurrentWorkSheet.addToPostion("~~");
+        }
+
+        private void CB_Underline_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CurrentWorkSheet.addToPostion("<u>", "</u>");
+        }
     }
 }

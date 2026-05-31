@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MarkIt.UserControls;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -8,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace MarkIt.worksheet
 {
@@ -24,6 +27,7 @@ namespace MarkIt.worksheet
 
         private Grid gridWorkSheet;
         private List<Canvas> canvisWsPages;
+        private StackPanel stackpanelWorksheet;
 
         // might be moved to a different setting / config file
         private double Zoom = 0.8;
@@ -33,6 +37,7 @@ namespace MarkIt.worksheet
         public ClassWorksheet(Grid _gridWorkSheet)
         {
             this.gridWorkSheet = _gridWorkSheet;
+            stackpanelWorksheet = new StackPanel();
         }
 
         public void Init()
@@ -41,37 +46,112 @@ namespace MarkIt.worksheet
             wsStringPages.Add("testpage");
             wsStringPages.Add("testpage");
             wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
+            wsStringPages.Add("testpage");
 
             ScrollViewer ScrollViewerWorksheet = new ScrollViewer();
             ScrollViewerWorksheet.HorizontalAlignment = HorizontalAlignment.Stretch;
             ScrollViewerWorksheet.VerticalAlignment = VerticalAlignment.Stretch;
             ScrollViewerWorksheet.Height = 1000; // must be chanhe in windowsizechange event later on
-
-            StackPanel stackpanelWorksheet = new StackPanel();
+            stackpanelWorksheet.Margin = new System.Windows.Thickness(MainWindow.GeneralSettings.width);
             bool first = true;
             for (int pageNumber = 0; pageNumber < this.wsStringPages.Count(); pageNumber++)
             {
-                Grid GridPage = new Grid();
-                GridPage.Height = this.wsHeight * this.Zoom;
-                GridPage.Width = this.wsWidth * this.Zoom;
-                GridPage.Margin = new Thickness(0, pageMargin, 0, 0);
-
-                GridPage.Background = Brushes.Red;
-
-                TextBox TextboxPage = new TextBox();
-                TextboxPage.TextChanged += TextboxPage_TextChanged; ;
-
-                TextboxPage.AcceptsReturn = true; // allows user to press enter to create a new line inside of the textbox
-                if (first)
-                {
-                    textBoxContent = TextboxPage;
-                    first = false;
-                }
-                GridPage.Children.Add(TextboxPage);
-                stackpanelWorksheet.Children.Add(GridPage);
+                CustomLine customLine = new CustomLine();
+                customLine.Height = (int)MainWindow.GeneralSettings.height;
+                customLine.fontsize = (int)MainWindow.GeneralSettings.height - 2;
+                stackpanelWorksheet.Children.Add(customLine);
             }
             ScrollViewerWorksheet.Content = stackpanelWorksheet;
             this.gridWorkSheet.Children.Add(ScrollViewerWorksheet);
+        }
+
+        public void addToPostion(string symbols)
+        {
+            int line = checkCurrentLine();
+            if (line != -1)
+            {
+                int cursorpos = getCursorPosition(line);
+                CustomLine l = (CustomLine)stackpanelWorksheet.Children[line];
+                string content = l.CT_TextBox.Text;
+                string bevor = "";
+                string after = "";
+                int currentpos = 0;
+                foreach (char c in content)
+                {
+                    if (currentpos >= cursorpos)
+                        after += c;
+                    else
+                        bevor += c;
+                    currentpos++;
+                }
+                l.CT_TextBox.Text = bevor + symbols + symbols + after;
+                l.CT_TextBox.CaretIndex = cursorpos + symbols.Length;
+            }
+        }
+        public void addToPostion(string symbols,string symbolsEND)
+        {
+            int line = checkCurrentLine();
+            if (line != -1)
+            {
+                int cursorpos = getCursorPosition(line);
+                CustomLine l = (CustomLine)stackpanelWorksheet.Children[line];
+                string content = l.CT_TextBox.Text;
+                string bevor = "";
+                string after = "";
+                int currentpos = 0;
+                foreach (char c in content)
+                {
+                    if (currentpos >= cursorpos)
+                        after += c;
+                    else
+                        bevor += c;
+                    currentpos++;
+                }
+                l.CT_TextBox.Text = bevor + symbols + symbolsEND + after;
+                l.CT_TextBox.CaretIndex = cursorpos + symbols.Length;
+            }
+        }
+        private int checkCurrentLine()
+        {
+            for(int i = 0; i < stackpanelWorksheet.Children.Count; i ++)
+            {
+                if (stackpanelWorksheet.Children[i].IsKeyboardFocusWithin)
+                {
+                    return i;
+                }
+            }
+            return -1; // default return
+        }
+        private int getCursorPosition(int line)
+        {
+            CustomLine l = (CustomLine)stackpanelWorksheet.Children[line]; // converts the child into the line
+            return l.CT_TextBox.CaretIndex;  // CaretIndex is form ChatGPT what it does is that it shows the current cursor position
         }
 
         private void TextboxPage_TextChanged(object sender, TextChangedEventArgs e)
@@ -83,6 +163,7 @@ namespace MarkIt.worksheet
             //MessageBox.Show(Convert.ToString(sender));
             CheckIfNextPage(0);
         }
+
 
         private void CheckIfNextPage(int pagenumber)
         // this methode sees if the user should be creating a new page if he presses the enter-key
