@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MarkIt"
         xmlns:uc="clr-namespace:MarkIt.UserControls"
+        xmlns:CB_uc="clr-namespace:MarkIt.UserControls.usercontrolsTextdecoration"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d" KeyDown="Window_KeyDown"
         Title="MarkIt" Height="550" Width="800" SizeChanged="Window_SizeChanged" MinWidth="650" MinHeight="550" Icon="/images/markit-logo.png">
@@ -36,11 +37,20 @@
                     </MenuItem>
                 </Menu>
             </DockPanel>
-            <StackPanel x:Name="StackPanelNavigationBar" Background="Gray" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="120">
-                <uc:SettingsIcon x:Name="UC_Settings" Width="50" Height="50"/>
-                <uc:AccoundIcon x:Name="UC_AccountIcon" Width="50" Height="50"/>
-                <uc:InformationIcon x:Name="UC_Information" PreviewMouseDown="InformationIcon_PreviewMouseDown" Width="50" Height="50"/>
-            </StackPanel>
+            <Grid x:Name="StackPanelNavigationBar" Background="Gray" HorizontalAlignment="Stretch" Height="120">
+                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Orientation="Horizontal" Margin="20">
+                    <uc:SettingsIcon x:Name="UC_Settings" Width="50" Height="50"/>
+                    <uc:AccoundIcon x:Name="UC_AccountIcon" Width="50" Height="50"/>
+                    <uc:InformationIcon x:Name="UC_Information" PreviewMouseDown="InformationIcon_PreviewMouseDown" Width="50" Height="50"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Orientation="Horizontal" Margin=" 10">
+                    <CB_uc:CB_Bold x:Name="CB_Bold" Width="50" Height="50" Margin="0,0,0,0"></CB_uc:CB_Bold>
+                    <CB_uc:CB_Code x:Name="CB_Code" Width="50" Height="50" Margin="10,0,0,0"></CB_uc:CB_Code>
+                    <CB_uc:CB_Italic x:Name="CB_Italic" Width="50" Height="50" Margin="10,0,0,0"></CB_uc:CB_Italic>
+                    <CB_uc:CB_StrikeThrough x:Name="CB_Striketrough" Width="50" Height="50" Margin="10,0,0,0"></CB_uc:CB_StrikeThrough>
+                    <CB_uc:CB_Underlined x:Name="CB_Underline" Width="50" Height="50" Margin="10,0,0,0"></CB_uc:CB_Underlined>
+                </StackPanel>
+            </Grid>
             <Grid x:Name="GridWorksheet" Background="LightGray" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
         </StackPanel>
         <uc:FileBar Opacity="1" x:Name="filebar"></uc:FileBar>

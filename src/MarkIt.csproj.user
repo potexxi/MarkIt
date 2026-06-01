@@ -55,6 +55,19 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="windows\WindowCreateAssistent.xaml.cs">
+    <Compile Update="UserControls\usercontrolsTextdecoration\CB_Bold.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\usercontrolsTextdecoration\CB_Code.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\usercontrolsTextdecoration\CB_Italic.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\usercontrolsTextdecoration\CB_StrikeThrough.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\usercontrolsTextdecoration\CB_Underlined.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="windows\WindowInfoTab.xaml.cs">
