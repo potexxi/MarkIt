@@ -76,7 +76,7 @@ namespace MarkIt.windows
             else if(RB_Cloud.IsChecked == true)
             {
                 if(RB_Folder.IsChecked==true)
-                    await MainWindow.FileManager.Upload(MainWindow.FileManager.userPath + "/" + name + ".placeholder", "", LoadingScreen);
+                    await MainWindow.FileManager.Upload(MainWindow.FileManager.userPath + "/" + name + "/" + ".placeholder", "", LoadingScreen);
                 else if(RB_File.IsChecked==true)
                     await MainWindow.FileManager.Upload(MainWindow.FileManager.userPath + "/" + name, "", LoadingScreen);
                 this.Close();

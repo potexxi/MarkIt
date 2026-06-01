@@ -174,7 +174,8 @@ namespace MarkIt.UserControls
 
         private void ButtonDel_Click(object sender, RoutedEventArgs e)
         {
-            e.Handled = true;
+            if(e.Handled != null)
+                e.Handled = true;
             try
             {
                 if (selectedTreeViewItem != null)
@@ -300,8 +301,6 @@ namespace MarkIt.UserControls
                     MainWindow.FileManager.fileType = FileManager.FileType.Cloud;
                 }
                 Hide();
-                selectedTreeViewItem = null;
-                selectedFileHistoryItem = null;
             }
             catch(Exception ex)
             {
@@ -361,8 +360,11 @@ namespace MarkIt.UserControls
             item.ContextMenu.Opened += ContextMenu_Opened;
             item.ContextMenu.Closed += ContextMenu_Closed;
             MenuItem menuItem1 = new MenuItem { Header = "Create File", Cursor = Cursors.Hand };
+            menuItem1.Click += MenuItemCreate_Click;
             MenuItem menuItem2 = new MenuItem { Header = "Delete", Cursor = Cursors.Hand };
+            menuItem2.Click += MenuItemDelete_Click;
             MenuItem menuItem3 = new MenuItem { Header = "Rename", Cursor = Cursors.Hand };
+            menuItem3.Click += MenuItemRename_Click;
             item.ContextMenu.Items.Add(menuItem1);
             item.ContextMenu.Items.Add(menuItem2);
             item.ContextMenu.Items.Add(menuItem3);
@@ -394,9 +396,12 @@ namespace MarkIt.UserControls
                 contextMenu.Opened += ContextMenu_Opened;
                 contextMenu.Closed += ContextMenu_Closed;
 
-                MenuItem menuItem21 = new MenuItem { Header = "Open", Cursor = Cursors.Hand };
+                MenuItem menuItem21 = new MenuItem { Header = "Create", Cursor = Cursors.Hand };
+                menuItem21.Click += MenuItemCreate_Click;
                 MenuItem menuItem22 = new MenuItem { Header = "Delete", Cursor = Cursors.Hand };
+                menuItem22.Click += MenuItemDelete_Click;
                 MenuItem menuItem23 = new MenuItem { Header = "Rename", Cursor = Cursors.Hand };
+                menuItem23.Click += MenuItemRename_Click;
                 contextMenu.Items.Add(menuItem21);
                 contextMenu.Items.Add(menuItem22);
                 contextMenu.Items.Add(menuItem23);
@@ -417,10 +422,55 @@ namespace MarkIt.UserControls
                     fileitem.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
                     fileitem.FontSize = 14;
                     fileitem.Tag = (file.FullName, FileManager.FileType.Local);
+
+                    ContextMenu contextMenu = new ContextMenu();
+                    contextMenu.Opened += ContextMenu_Opened;
+                    contextMenu.Closed += ContextMenu_Closed;
+
+                    MenuItem menuItem21 = new MenuItem { Header = "Open", Cursor = Cursors.Hand };
+                    menuItem21.Click += MenuItemOpen_Click;
+                    MenuItem menuItem22 = new MenuItem { Header = "Delete", Cursor = Cursors.Hand };
+                    menuItem22.Click += MenuItemDelete_Click;
+                    MenuItem menuItem23 = new MenuItem { Header = "Rename", Cursor = Cursors.Hand };
+                    menuItem23.Click += MenuItemRename_Click;
+                    contextMenu.Items.Add(menuItem21);
+                    contextMenu.Items.Add(menuItem22);
+                    contextMenu.Items.Add(menuItem23);
+                    fileitem.ContextMenu = contextMenu;
+
                     item.Items.Add(fileitem);
                 }
             }
             return item;
+        }
+
+        private void MenuItemOpen_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonOpen_Click(sender, e);
+        }
+
+        private void MenuItemRename_Click(object sender, RoutedEventArgs e)
+        {
+            if(selectedTreeViewItem != null)
+            {
+                (string path, FileManager.FileType type) = ((string, FileManager.FileType))selectedTreeViewItem.Tag;
+                WindowRename window = new WindowRename(path, type);
+                window.ShowDialog();
+                UpdateFileTreeCloud();
+                UpdateFileTreeLocal();
+            }
+        }
+
+        private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonDel_Click(sender, e);
+            UpdateFileTreeLocal();
+            UpdateFileTreeCloud();
+        }
+
+        private void MenuItemCreate_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonCreate_Click(sender, e);
         }
 
         private void ContextMenu_Closed(object sender, RoutedEventArgs e)
@@ -492,8 +542,11 @@ namespace MarkIt.UserControls
             big.ContextMenu.Opened += ContextMenu_Opened;
             big.ContextMenu.Closed += ContextMenu_Closed;
             MenuItem menuItem1 = new MenuItem { Header = "Create File", Cursor = Cursors.Hand };
+            menuItem1.PreviewMouseDown += MenuItemCreate_Click;
             MenuItem menuItem2 = new MenuItem { Header = "Delete", Cursor = Cursors.Hand };
+            menuItem2.PreviewMouseDown += MenuItemDelete_Click;
             MenuItem menuItem3 = new MenuItem { Header = "Rename", Cursor = Cursors.Hand };
+            menuItem3.PreviewMouseDown += MenuItemRename_Click;
             big.ContextMenu.Items.Add(menuItem1);
             big.ContextMenu.Items.Add(menuItem2);
             big.ContextMenu.Items.Add(menuItem3);
@@ -523,8 +576,11 @@ namespace MarkIt.UserControls
                     contextMenu.Closed += ContextMenu_Closed;
 
                     MenuItem menuItem21 = new MenuItem { Header = "Create File", Cursor = Cursors.Hand };
+                    menuItem21.PreviewMouseDown += MenuItemCreate_Click;
                     MenuItem menuItem22 = new MenuItem { Header = "Delete", Cursor = Cursors.Hand };
+                    menuItem22.PreviewMouseDown += MenuItemDelete_Click;
                     MenuItem menuItem23 = new MenuItem { Header = "Rename", Cursor = Cursors.Hand };
+                    menuItem23.PreviewMouseDown += MenuItemRename_Click;
                     contextMenu.Items.Add(menuItem21);
                     contextMenu.Items.Add(menuItem22);
                     contextMenu.Items.Add(menuItem23);
@@ -548,8 +604,11 @@ namespace MarkIt.UserControls
                     contextMenu.Closed += ContextMenu_Closed;
 
                     MenuItem menuItem21 = new MenuItem { Header = "Open", Cursor = Cursors.Hand };
+                    menuItem21.PreviewMouseDown += MenuItemOpen_Click;
                     MenuItem menuItem22 = new MenuItem { Header = "Delete", Cursor = Cursors.Hand };
+                    menuItem22.PreviewMouseDown += MenuItemDelete_Click;
                     MenuItem menuItem23 = new MenuItem { Header = "Rename", Cursor = Cursors.Hand };
+                    menuItem23.PreviewMouseDown += MenuItemRename_Click;
                     contextMenu.Items.Add(menuItem21);
                     contextMenu.Items.Add(menuItem22);
                     contextMenu.Items.Add(menuItem23);
@@ -582,7 +641,8 @@ namespace MarkIt.UserControls
                     ButtonCreate.IsEnabled = false;
                 }
             }
-            selectedTreeViewItem.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+            if(selectedTreeViewItem != null)
+                selectedTreeViewItem.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
         }
 
         public void Show()
@@ -614,6 +674,9 @@ namespace MarkIt.UserControls
 
         public void Hide()
         {
+            selectedFileHistoryItem = null;
+            selectedTreeViewItem = null;
+            ButtonCreate.IsEnabled = true;
             timerUpdate.Stop();
             if (MainWindow.GeneralSettings.iconAnimations)
                 timerBlurOut.Start();
@@ -703,7 +766,7 @@ namespace MarkIt.UserControls
             }
             WindowMessageBox box;
             (string path, FileManager.FileType type) = ((string, FileManager.FileType))selectedTreeViewItem.Tag;
-            if(type == FileManager.FileType.Local)
+            if(type == FileManager.FileType.Local || (type == FileManager.FileType.Root && System.IO.Path.IsPathRooted(path)))
             {
                 if (File.Exists(path))
                 {
@@ -727,7 +790,7 @@ namespace MarkIt.UserControls
                     return;
                 }
             }
-            else if(type == FileManager.FileType.Cloud)
+            else if(type == FileManager.FileType.Cloud ||(type == FileManager.FileType.Root && !System.IO.Path.IsPathRooted(path)))
             {
                 string newPath = $"{path}/NewMarkItFile";
                 while (true)
@@ -743,7 +806,7 @@ namespace MarkIt.UserControls
                         break;
                     }
                 }
-                MainWindow.FileManager.Upload($"{newPath}.md", "", MainWindow.loadingScreen);
+                await MainWindow.FileManager.Upload($"{newPath}.md", "", MainWindow.loadingScreen);
                 UpdateFileTreeCloud();
             }
         }
