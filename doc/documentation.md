@@ -49,3 +49,6 @@
 | Karim | 29.05. | worksheet |
 | Max | 30.05. | add context menu's in file-bar |
 | Max | 31.05. | finish file-bar (hopefully) |
+| Karim | 31.05. | work on worksheet |
+| Max | 01.06. | finish file-bar, was not finished yesterday |
+| Karim | 01.06. | work on worksheet |
