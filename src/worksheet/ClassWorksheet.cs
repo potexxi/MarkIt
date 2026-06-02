@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -84,7 +85,7 @@ namespace MarkIt.worksheet
             {
                 CustomLine customLine = new CustomLine();
                 customLine.Height = (int)MainWindow.GeneralSettings.height;
-                customLine.fontsize = (int)MainWindow.GeneralSettings.height - 2;
+                customLine.fontsize = (int)MainWindow.GeneralSettings.height - 20;
                 stackpanelWorksheet.Children.Add(customLine);
             }
             ScrollViewerWorksheet.Content = stackpanelWorksheet;
@@ -135,6 +136,18 @@ namespace MarkIt.worksheet
                 }
                 l.CT_TextBox.Text = bevor + symbols + symbolsEND + after;
                 l.CT_TextBox.CaretIndex = cursorpos + symbols.Length;
+            }
+        }
+        public void addToLineBeginning(string symbol)
+        {
+            int line = checkCurrentLine();
+            if (line != -1)
+            {
+                int cursorpos = getCursorPosition(line);
+                CustomLine l = (CustomLine)stackpanelWorksheet.Children[line];
+                string content = l.CT_TextBox.Text;
+                l.CT_TextBox.Text = symbol + content;
+                l.CT_TextBox.CaretIndex = cursorpos + symbol.Length;
             }
         }
         private int checkCurrentLine()

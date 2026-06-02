@@ -6,6 +6,7 @@ using MarkIt.worksheet;
 using Serilog;
 using Serilog.Core;
 using Supabase.Gotrue;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.Xml;
 using System.Text;
@@ -60,6 +61,8 @@ namespace MarkIt
             FileManager = new FileManager(currentUser.Email);
             filebar.Show();
             // zum Testen
+
+            MS_Headers.setSelection(["Header 1", "Header 2", "Header 3", "Header 4", "Header 5"]);
             CurrentWorkSheet = new ClassWorksheet(GridWorksheet);
             CurrentWorkSheet.Init();
         }
@@ -82,6 +85,8 @@ namespace MarkIt
                 CB_Italic.updateSettings();
                 CB_Striketrough.updateSettings();
                 CB_Underline.updateSettings();
+
+                MS_Headers.updateSettings();
 
                 updateColorMain();
                 GeneralSettings.updatedColorTheme = false;
@@ -161,6 +166,15 @@ namespace MarkIt
         private void CB_Underline_MouseDown(object sender, MouseButtonEventArgs e)
         {
             CurrentWorkSheet.addToPostion("<u>", "</u>");
+        }
+
+        private void MS_Headers_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            string hashSTR = "#";
+            for (int i = 0; i < MS_Headers.selectionIndex; i++)
+                hashSTR += "#";
+            hashSTR += " ";
+            CurrentWorkSheet.addToLineBeginning(hashSTR);
         }
     }
 }

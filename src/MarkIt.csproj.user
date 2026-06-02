@@ -72,6 +72,12 @@
     <Compile Update="UserControls\usercontrolsTextdecoration\CB_Underlined.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\usercontrolsTextdecoration\MultiSelection.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\usercontrolsTextdecoration\MultiSelectItem.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="windows\WindowInfoTab.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

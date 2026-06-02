@@ -38,12 +38,17 @@
                     <uc:AccoundIcon x:Name="UC_AccountIcon" Width="50" Height="50"/>
                     <uc:InformationIcon x:Name="UC_Information" PreviewMouseDown="InformationIcon_PreviewMouseDown" Width="50" Height="50"/>
                 </StackPanel>
-                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Orientation="Horizontal" Margin=" 10">
-                    <CB_uc:CB_Bold x:Name="CB_Bold" Width="50" Height="50" Margin="0,0,0,0" MouseDown="CB_Bold_MouseDown"></CB_uc:CB_Bold>
-                    <CB_uc:CB_Code x:Name="CB_Code" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Code_MouseDown"></CB_uc:CB_Code>
-                    <CB_uc:CB_Italic x:Name="CB_Italic" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Italic_MouseDown"></CB_uc:CB_Italic>
-                    <CB_uc:CB_StrikeThrough x:Name="CB_Striketrough" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Striketrough_MouseDown"></CB_uc:CB_StrikeThrough>
-                    <CB_uc:CB_Underlined x:Name="CB_Underline" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Underline_MouseDown"></CB_uc:CB_Underlined>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Orientation="Horizontal" Margin=" 10">
+                        <CB_uc:CB_Bold x:Name="CB_Bold" Width="50" Height="50" Margin="0,0,0,0" MouseDown="CB_Bold_MouseDown"></CB_uc:CB_Bold>
+                        <CB_uc:CB_Code x:Name="CB_Code" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Code_MouseDown"></CB_uc:CB_Code>
+                        <CB_uc:CB_Italic x:Name="CB_Italic" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Italic_MouseDown"></CB_uc:CB_Italic>
+                        <CB_uc:CB_StrikeThrough x:Name="CB_Striketrough" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Striketrough_MouseDown"></CB_uc:CB_StrikeThrough>
+                        <CB_uc:CB_Underlined x:Name="CB_Underline" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Underline_MouseDown"></CB_uc:CB_Underlined>
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
+                        <CB_uc:MultiSelection x:Name="MS_Headers" Width="300" Height="50" MouseDown="MS_Headers_MouseDown"></CB_uc:MultiSelection>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
             <Grid x:Name="GridWorksheet" Background="LightGray" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>

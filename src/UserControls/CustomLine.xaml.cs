@@ -21,7 +21,7 @@ namespace MarkIt.UserControls
     /// </summary>
     public partial class CustomLine : UserControl
     {
-        private int _fontsize = 40;
+        private int _fontsize = 30;
         public int fontsize
         {
             get
