@@ -49,7 +49,7 @@ namespace MarkIt
                 GeneralSettings = GeneralSettings.LoadFromFile("sources/options/generalSettings.json");
                 GeneralSettings.SaveToFile("generalSettings.json");
             }
-                InitializeComponent();
+            InitializeComponent();
             Maintimer.Interval = TimeSpan.FromMilliseconds(1000);
             Maintimer.Tick += Maintimer_Tick;
             Maintimer.Start(); // für das farb theme
@@ -132,12 +132,14 @@ namespace MarkIt
 
         private void MenuItemUserSettings_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            WindowUserSettings settings = new WindowUserSettings();
+            settings.ShowDialog();
         }
 
         private void AccoundIcon_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            WindowUserSettings settings = new WindowUserSettings();
+            settings.ShowDialog();
         }
 
         private void MenuItemNewFile_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -173,6 +175,12 @@ namespace MarkIt
             {
                 MenuItemSaveFile_PreviewMouseDown(null, null);
             }
+        }
+
+        private void MenuItemOpen_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowUserSettings settings = new WindowUserSettings();
+            settings.ShowDialog();
         }
     }
 }

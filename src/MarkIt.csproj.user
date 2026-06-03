@@ -55,8 +55,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="windows\WindowCreateAssistent.xaml.cs">
-		<SubType>Code</SubType>
-	</Compile>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\usercontrolsTextdecoration\CB_Bold.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -76,6 +76,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="windows\WindowRename.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="windows\WindowUserSettings.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

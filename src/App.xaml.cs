@@ -28,6 +28,7 @@ namespace MarkIt
                     box = new WindowMessageBox("Server connection closed.", "Please try again.");
                     box.ShowDialog();
                     Timer_Tick(null, null);
+                    e.Handled = true;
                     return;
                 }
                 box = new WindowMessageBox("Unexpected Error!", "A unexpected error forced the applicatio to stop, please restart \"MarkIt\".");

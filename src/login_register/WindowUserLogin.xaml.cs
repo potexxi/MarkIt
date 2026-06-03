@@ -15,6 +15,7 @@ namespace MarkIt
         public static bool Guest = false;
         public static WindowUserLogin? window;
         public static UserManager UserManager = new UserManager();
+        public static bool Login = true;
         public WindowUserLogin()
         {
             InitializeComponent();
