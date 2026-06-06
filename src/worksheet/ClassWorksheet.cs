@@ -22,7 +22,7 @@ namespace MarkIt.worksheet
         private TextBox textBoxContent { get; set; }
         private string wsName { get; set; } = "markdown";
         private DateTime wsCreationDate { get; set; }
-        private List<string> wsStringPages { get; set; } = new List<string>();
+        private List<string> wsStringPages { get; set; } = [""];
         private double wsWidth { get; set; } = 1050;
         public double wsHeight { get; set; } = 1440;
 
@@ -34,47 +34,20 @@ namespace MarkIt.worksheet
         private double Zoom = 0.8;
         private double pageMargin = 50;
 
-        public ClassWorksheet() {}
-        public ClassWorksheet(Grid _gridWorkSheet)
+        public ClassWorksheet()
+        {
+        }
+        public ClassWorksheet(Grid _gridWorkSheet):this()
         {
             this.gridWorkSheet = _gridWorkSheet;
             stackpanelWorksheet = new StackPanel();
         }
 
-        public void Init()
+        public void RenderLines()
         // may also be move to a render-class (otherwise just use it once, while it gets created)
         {
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-            wsStringPages.Add("testpage");
-
+            this.gridWorkSheet.Children.Clear();
+            this.stackpanelWorksheet.Children.Clear();
             ScrollViewer ScrollViewerWorksheet = new ScrollViewer();
             ScrollViewerWorksheet.HorizontalAlignment = HorizontalAlignment.Stretch;
             ScrollViewerWorksheet.VerticalAlignment = VerticalAlignment.Stretch;
@@ -84,12 +57,46 @@ namespace MarkIt.worksheet
             for (int pageNumber = 0; pageNumber < this.wsStringPages.Count(); pageNumber++)
             {
                 CustomLine customLine = new CustomLine();
+                customLine.CT_TextBox.Text = wsStringPages[pageNumber]; // reupdate the text
                 customLine.Height = (int)MainWindow.GeneralSettings.height;
                 customLine.fontsize = (int)MainWindow.GeneralSettings.height - 20;
+                customLine.CT_TextBox.TextChanged += CT_TextBox_TextChanged;
+                customLine.CT_TextBox.PreviewKeyDown += CT_TextBox_PreviewKeyDown;
                 stackpanelWorksheet.Children.Add(customLine);
             }
             ScrollViewerWorksheet.Content = stackpanelWorksheet;
             this.gridWorkSheet.Children.Add(ScrollViewerWorksheet);
+        }
+
+        private void CT_TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true; // ChatGPT to stop the refocus on the old line
+                addLine();
+            }
+            if (e.Key == Key.Up)
+            {
+                e.Handled = true; //tells the programm that e has been handelt
+                moveLineUp();
+            }
+            if (e.Key == Key.Down)
+            {
+                e.Handled = true;
+                moveLineDown();
+            }
+            if (e.Key == Key.Back)
+            {
+                deletLine();
+            }
+        }
+
+        private void CT_TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox changedTextBox = (TextBox)sender;
+            int l = checkCurrentLine();
+            if (l != -1 && l < wsStringPages.Count)
+                wsStringPages[l] = changedTextBox.Text;
         }
 
         public void addToPostion(string symbols)
@@ -151,7 +158,7 @@ namespace MarkIt.worksheet
             }
         }
         private int checkCurrentLine()
-        {
+        { // returns the current line
             for(int i = 0; i < stackpanelWorksheet.Children.Count; i ++)
             {
                 if (stackpanelWorksheet.Children[i].IsKeyboardFocusWithin)
@@ -163,31 +170,148 @@ namespace MarkIt.worksheet
         }
         private int getCursorPosition(int line)
         {
+            if (line == -1)
+                return -1;
             CustomLine l = (CustomLine)stackpanelWorksheet.Children[line]; // converts the child into the line
             return l.CT_TextBox.CaretIndex;  // CaretIndex is form ChatGPT what it does is that it shows the current cursor position
         }
 
-        private void TextboxPage_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            ClassPages page = new ClassPages(gridWorkSheet);
-            TextBox textbox = (TextBox)sender;
-            page.content = textbox.Text;
-            page.Render();
-            //MessageBox.Show(Convert.ToString(sender));
-            CheckIfNextPage(0);
-        }
 
-
-        private void CheckIfNextPage(int pagenumber)
-        // this methode sees if the user should be creating a new page if he presses the enter-key
+        private void moveLineUp()
         {
-            //MessageBox.Show(wsStringPages[pagenumber]);
-            if (wsStringPages[pagenumber].Split("\n").Count() >= 10)
+            int line = -1;
+            int linepos = -1;
+            if (stackpanelWorksheet.Children != null)
             {
-                MessageBox.Show("10 Zeilen");
+                line = checkCurrentLine();
+                if (line == -1)
+                    return;
+                else
+                {
+                    linepos = getCursorPosition(line);
+                }
+            }
+
+            if (line <= 0)
+                return;
+            if (stackpanelWorksheet.Children[line - 1] == null)
+                return;
+            CustomLine customLine = (CustomLine)stackpanelWorksheet.Children[line  - 1];
+            //chatGPT beginning (comments from me tryint to explain the code to make it more sencefull)
+            //promt: please help me fix this
+            customLine.Dispatcher.BeginInvoke(new Action(() => // makes a new Dispatcher timer for the new line bc WPF is wierd like that and needs this...
+            {
+                customLine.CT_TextBox.Focus();// focuses the line
+                Keyboard.Focus(customLine.CT_TextBox); // sets the keyboard focus to the line
+                FocusManager.SetFocusedElement( // tells WPF more directly what element to focus on
+                    FocusManager.GetFocusScope(customLine.CT_TextBox), // sets the focus to the right line
+                    customLine.CT_TextBox // the textbox to focus
+                );
+
+                customLine.CT_TextBox.CaretIndex = linepos; // change the carter index to the beginning of the line
+            }), System.Windows.Threading.DispatcherPriority.Input); // runs the focusing code later if WPF is still processing previews inputs
+            //chatGPT end
+        }
+        private void moveLineDown()
+        {
+            int line = -1;
+            int linepos = -1;
+            if (stackpanelWorksheet.Children != null)
+            {
+                line = checkCurrentLine();
+                if (line == -1)
+                    return;
+                else
+                {
+                    linepos = getCursorPosition(line);
+                }
+            }
+
+            if (line >= stackpanelWorksheet.Children.Count - 1)
+                return;
+            CustomLine customLine = (CustomLine)stackpanelWorksheet.Children[line + 1];
+            //chatGPT beginning (comments from me tryint to explain the code to make it more sencefull)
+            //promt: please help me fix this
+            customLine.Dispatcher.BeginInvoke(new Action(() => // makes a new Dispatcher timer for the new line bc WPF is wierd like that and needs this...
+            {
+                customLine.CT_TextBox.Focus();// focuses the line
+                Keyboard.Focus(customLine.CT_TextBox); // sets the keyboard focus to the line
+                FocusManager.SetFocusedElement( // tells WPF more directly what element to focus on
+                    FocusManager.GetFocusScope(customLine.CT_TextBox), // sets the focus to the right line
+                    customLine.CT_TextBox // the textbox to focus
+                );
+
+                customLine.CT_TextBox.CaretIndex = linepos; // change the carter index to the beginning of the line
+            }), System.Windows.Threading.DispatcherPriority.Input); // runs the focusing code later if WPF is still processing previews inputs
+            //chatGPT end
+        }
+        private void addLine()
+        {
+            int line = -1;
+            if (stackpanelWorksheet.Children != null)
+            {
+                line = checkCurrentLine();
+                if (line == -1)
+                    return;
+                wsStringPages.Insert(line+1, "");   
+            }
+            CustomLine customLine = new CustomLine();
+            customLine.Height = (int)MainWindow.GeneralSettings.height;
+            customLine.fontsize = (int)MainWindow.GeneralSettings.height - 20;
+            int indx = wsStringPages.Count - 1;
+            customLine.CT_TextBox.TextChanged += CT_TextBox_TextChanged;
+            customLine.CT_TextBox.PreviewKeyDown += CT_TextBox_PreviewKeyDown;
+            stackpanelWorksheet.Children.Insert(line+1, customLine);
+
+            //chatGPT beginning (comments from me tryint to explain the code to make it more sencefull)
+            //promt: please help me fix this
+            customLine.Dispatcher.BeginInvoke(new Action(() => // makes a new Dispatcher timer for the new line bc WPF is wierd like that and needs this...
+            {
+                customLine.CT_TextBox.Focus();// focuses the line
+                Keyboard.Focus(customLine.CT_TextBox); // sets the keyboard focus to the line
+                FocusManager.SetFocusedElement( // tells WPF more directly what element to focus on
+                    FocusManager.GetFocusScope(customLine.CT_TextBox), // sets the focus to the right line
+                    customLine.CT_TextBox // the textbox to focus
+                ); 
+
+                customLine.CT_TextBox.CaretIndex = 0; // change the carter index to the beginning of the line
+            }), System.Windows.Threading.DispatcherPriority.Input); // runs the focusing code later if WPF is still processing previews inputs
+            //chatGPT end
+        }
+        private void deletLine()
+        { // deletes a line (if the current lines content is 0)
+            int line = -1;
+            if (stackpanelWorksheet.Children != null)
+            {
+                line = checkCurrentLine();
+                if (line == -1)
+                    return;
+                wsStringPages.Insert(line + 1, "");
+            }
+            if(wsStringPages[line] == "")
+            {
+                wsStringPages.RemoveAt(line);
+                stackpanelWorksheet.Children.RemoveAt(line);
+                if(line < 0)
+                {
+                    return; // to make sure you dont remove line 1
+                }
+                CustomLine customLine = (CustomLine)stackpanelWorksheet.Children[line - 1];
+                //chatGPT beginning (comments from me tryint to explain the code to make it more sencefull)
+                //promt: please help me fix this
+                customLine.Dispatcher.BeginInvoke(new Action(() => // makes a new Dispatcher timer for the new line bc WPF is wierd like that and needs this...
+                {
+                    customLine.CT_TextBox.Focus();// focuses the line
+                    Keyboard.Focus(customLine.CT_TextBox); // sets the keyboard focus to the line
+                    FocusManager.SetFocusedElement( // tells WPF more directly what element to focus on
+                        FocusManager.GetFocusScope(customLine.CT_TextBox), // sets the focus to the right line
+                        customLine.CT_TextBox // the textbox to focus
+                    );
+                    customLine.CT_TextBox.CaretIndex = 0; // change the carter index to the beginning of the line
+                }), System.Windows.Threading.DispatcherPriority.Input); // runs the focusing code later if WPF is still processing previews inputs
+                                                                        //chatGPT end
             }
         }
-
         public void Render()
         // renders the pages that are in view (*italic*, **Bold**)
         {

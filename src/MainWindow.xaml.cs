@@ -62,9 +62,10 @@ namespace MarkIt
             filebar.Show();
             // zum Testen
 
-            MS_Headers.setSelection(["Header 1", "Header 2", "Header 3", "Header 4", "Header 5"]);
+            MS_Headers.setSelection(["# Header 1", "## Header 2", "### Header 3", "#### Header 4", "##### Header 5"]);
+            MS_List.setSelection(["- Unorderd", " 1. Orderd", "- [ ] Checkliste"]);
             CurrentWorkSheet = new ClassWorksheet(GridWorksheet);
-            CurrentWorkSheet.Init();
+            CurrentWorkSheet.RenderLines();
         }
 
         private void Maintimer_Tick(object? sender, EventArgs e)
@@ -87,12 +88,12 @@ namespace MarkIt
                 CB_Underline.updateSettings();
 
                 MS_Headers.updateSettings();
+                MS_List.updateSettings();
 
                 updateColorMain();
                 GeneralSettings.updatedColorTheme = false;
             }
         }
-
 
         public void updateColorMain()
         {
@@ -175,6 +176,20 @@ namespace MarkIt
                 hashSTR += "#";
             hashSTR += " ";
             CurrentWorkSheet.addToLineBeginning(hashSTR);
+        }
+
+        private void MS_List_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            string ListType = "- ";
+            if(MS_List.selectionIndex == 1)
+            {
+                ListType = "1. ";
+            }
+            else if (MS_List.selectionIndex == 2)
+            {
+                ListType = "- [ ] ";
+            }
+            CurrentWorkSheet.addToLineBeginning(ListType);
         }
     }
 }
