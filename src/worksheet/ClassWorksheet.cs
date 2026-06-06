@@ -12,6 +12,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Xml;
 
 namespace MarkIt.worksheet
 {
@@ -33,6 +34,7 @@ namespace MarkIt.worksheet
         // might be moved to a different setting / config file
         private double Zoom = 0.8;
         private double pageMargin = 50;
+        private bool AddingInProzess = false;
 
         public ClassWorksheet()
         {
@@ -73,6 +75,8 @@ namespace MarkIt.worksheet
             if (e.Key == Key.Enter)
             {
                 e.Handled = true; // ChatGPT to stop the refocus on the old line
+                if(AddingInProzess)
+                    return;
                 addLine();
             }
             if (e.Key == Key.Up)
@@ -87,7 +91,10 @@ namespace MarkIt.worksheet
             }
             if (e.Key == Key.Back)
             {
-                deletLine();
+                TextBox cl = (TextBox)sender;
+
+                if (cl.CaretIndex == 0)
+                    deletLine();
             }
         }
 
@@ -247,15 +254,33 @@ namespace MarkIt.worksheet
         }
         private void addLine()
         {
+            AddingInProzess = true;
             int line = -1;
+            string oldline = ""; // I searched this up I could use substring instead of a for loop but I am still going to use a for bc it looks like chatgpt if I use a substring
+            string newline = "";
             if (stackpanelWorksheet.Children != null)
             {
                 line = checkCurrentLine();
                 if (line == -1)
+                {
+                    AddingInProzess = false;
                     return;
-                wsStringPages.Insert(line+1, "");   
+                }
+                int cursorPOS = getCursorPosition(line);
+                for(int i = 0; i < wsStringPages[line].Length; i++)
+                {
+                    if (i < cursorPOS)
+                        oldline += wsStringPages[line][i];
+                    else
+                        newline += wsStringPages[line][i];
+                }
+                wsStringPages[line] = oldline; // makes it so if you press enter in the middle of the line splits the line and puts it into the next
+                wsStringPages.Insert(line + 1, newline);
+                CustomLine CL_oldline = (CustomLine)stackpanelWorksheet.Children[line];
+                CL_oldline.CT_TextBox.Text = oldline;
             }
             CustomLine customLine = new CustomLine();
+            customLine.CT_TextBox.Text = newline;
             customLine.Height = (int)MainWindow.GeneralSettings.height;
             customLine.fontsize = (int)MainWindow.GeneralSettings.height - 20;
             int indx = wsStringPages.Count - 1;
@@ -275,28 +300,31 @@ namespace MarkIt.worksheet
                 ); 
 
                 customLine.CT_TextBox.CaretIndex = 0; // change the carter index to the beginning of the line
+                AddingInProzess = false;
             }), System.Windows.Threading.DispatcherPriority.Input); // runs the focusing code later if WPF is still processing previews inputs
             //chatGPT end
         }
         private void deletLine()
         { // deletes a line (if the current lines content is 0)
             int line = -1;
+            int cursorPOS = -1;
             if (stackpanelWorksheet.Children != null)
             {
                 line = checkCurrentLine();
                 if (line == -1)
                     return;
-                wsStringPages.Insert(line + 1, "");
+                cursorPOS = getCursorPosition(line);
             }
-            if(wsStringPages[line] == "")
+            if(wsStringPages[line] == "" || cursorPOS == 0)
             {
+                if(line <= 0)
+                    return; // to make sure you dont remove line 1
+                CustomLine oldline = (CustomLine)stackpanelWorksheet.Children[line];
+                string oldstrcontent = oldline.CT_TextBox.Text;
                 wsStringPages.RemoveAt(line);
                 stackpanelWorksheet.Children.RemoveAt(line);
-                if(line < 0)
-                {
-                    return; // to make sure you dont remove line 1
-                }
                 CustomLine customLine = (CustomLine)stackpanelWorksheet.Children[line - 1];
+                customLine.CT_TextBox.Text += oldstrcontent;
                 //chatGPT beginning (comments from me tryint to explain the code to make it more sencefull)
                 //promt: please help me fix this
                 customLine.Dispatcher.BeginInvoke(new Action(() => // makes a new Dispatcher timer for the new line bc WPF is wierd like that and needs this...
@@ -307,9 +335,9 @@ namespace MarkIt.worksheet
                         FocusManager.GetFocusScope(customLine.CT_TextBox), // sets the focus to the right line
                         customLine.CT_TextBox // the textbox to focus
                     );
-                    customLine.CT_TextBox.CaretIndex = 0; // change the carter index to the beginning of the line
+                    customLine.CT_TextBox.CaretIndex = customLine.CT_TextBox.Text.Length; // change the carter index to the beginning of the line
                 }), System.Windows.Threading.DispatcherPriority.Input); // runs the focusing code later if WPF is still processing previews inputs
-                                                                        //chatGPT end
+            //chatGPT end
             }
         }
         public void Render()
