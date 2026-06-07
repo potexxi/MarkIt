@@ -258,6 +258,7 @@ namespace MarkIt.worksheet
             int line = -1;
             string oldline = ""; // I searched this up I could use substring instead of a for loop but I am still going to use a for bc it looks like chatgpt if I use a substring
             string newline = "";
+            string addon = ""; // (in the case of a list it gets continued)
             if (stackpanelWorksheet.Children != null)
             {
                 line = checkCurrentLine();
@@ -267,20 +268,60 @@ namespace MarkIt.worksheet
                     return;
                 }
                 int cursorPOS = getCursorPosition(line);
-                for(int i = 0; i < wsStringPages[line].Length; i++)
+                for (int i = 0; i < wsStringPages[line].Length; i++)
                 {
                     if (i < cursorPOS)
                         oldline += wsStringPages[line][i];
                     else
                         newline += wsStringPages[line][i];
                 }
+
+                if (oldline.Length >= 2)
+                {
+                    if (oldline[0] == '-' && oldline[1] == ' ')
+                        addon = "- ";
+                }
+                if (oldline.Length >= 3)
+                {
+                    int i = 0;
+                    try
+                    {
+                        i = Convert.ToInt32(oldline[0].ToString()); // laut chatgpt nimmt es sonst die asci Zahl was 50 ergibt bei 1 ...
+                        if (oldline[1] == '.' && oldline[2] == ' ')
+                            addon = (i + 1) + ". ";
+                    }
+                    catch
+                    {
+                        Logger.logger.Verbose("Not able to continue List, due to ERROR while trying to make a new orderd list");
+                    }
+                }
+                if (oldline.Length >= 4)
+                {
+                    try
+                    {
+                        string ZahlenBisHundert = oldline[0].ToString() + oldline[1].ToString();
+                        int i = Convert.ToInt32(ZahlenBisHundert); // laut chatgpt nimmt es sonst die asci Zahl was 50 ergibt bei 1 ...
+                        if (oldline[2] == '.' && oldline[3] == ' ')
+                            addon = (i + 1) + ". ";
+                    }
+                    catch
+                    {
+                        Logger.logger.Verbose("Not able to continue List, due to ERROR while trying to make a new orderd list");
+                    }
+                }
+                if (oldline.Length >= 5)
+                {
+                    if (oldline[0] == '-' && oldline[1] == ' ' && oldline[2] == '[' && oldline[3] == ' ' && oldline[4] == ']')
+                        addon = "- [ ] ";
+                }
+
                 wsStringPages[line] = oldline; // makes it so if you press enter in the middle of the line splits the line and puts it into the next
-                wsStringPages.Insert(line + 1, newline);
+                wsStringPages.Insert(line + 1, addon + newline);
                 CustomLine CL_oldline = (CustomLine)stackpanelWorksheet.Children[line];
                 CL_oldline.CT_TextBox.Text = oldline;
             }
             CustomLine customLine = new CustomLine();
-            customLine.CT_TextBox.Text = newline;
+            customLine.CT_TextBox.Text = addon + newline;
             customLine.Height = (int)MainWindow.GeneralSettings.height;
             customLine.fontsize = (int)MainWindow.GeneralSettings.height - 20;
             int indx = wsStringPages.Count - 1;
@@ -299,7 +340,7 @@ namespace MarkIt.worksheet
                     customLine.CT_TextBox // the textbox to focus
                 ); 
 
-                customLine.CT_TextBox.CaretIndex = 0; // change the carter index to the beginning of the line
+                customLine.CT_TextBox.CaretIndex = addon.Length; // change the carter index to the beginning of the line
                 AddingInProzess = false;
             }), System.Windows.Threading.DispatcherPriority.Input); // runs the focusing code later if WPF is still processing previews inputs
             //chatGPT end
@@ -324,6 +365,7 @@ namespace MarkIt.worksheet
                 wsStringPages.RemoveAt(line);
                 stackpanelWorksheet.Children.RemoveAt(line);
                 CustomLine customLine = (CustomLine)stackpanelWorksheet.Children[line - 1];
+                int OLDcarterINDX = customLine.CT_TextBox.Text.Length;
                 customLine.CT_TextBox.Text += oldstrcontent;
                 //chatGPT beginning (comments from me tryint to explain the code to make it more sencefull)
                 //promt: please help me fix this
@@ -335,7 +377,7 @@ namespace MarkIt.worksheet
                         FocusManager.GetFocusScope(customLine.CT_TextBox), // sets the focus to the right line
                         customLine.CT_TextBox // the textbox to focus
                     );
-                    customLine.CT_TextBox.CaretIndex = customLine.CT_TextBox.Text.Length; // change the carter index to the beginning of the line
+                    customLine.CT_TextBox.CaretIndex = OLDcarterINDX; // change the carter index to the beginning of the line
                 }), System.Windows.Threading.DispatcherPriority.Input); // runs the focusing code later if WPF is still processing previews inputs
             //chatGPT end
             }
