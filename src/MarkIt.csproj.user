@@ -63,10 +63,25 @@
     <Compile Update="UserControls\usercontrolsTextdecoration\CB_Code.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\usercontrolsTextdecoration\CB_Image.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\usercontrolsTextdecoration\CB_Italic.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\usercontrolsTextdecoration\CB_Link.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\usercontrolsTextdecoration\CB_Quote.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\usercontrolsTextdecoration\CB_StrikeThrough.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\usercontrolsTextdecoration\CB_Subscript.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\usercontrolsTextdecoration\CB_Superscript.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="UserControls\usercontrolsTextdecoration\CB_Underlined.xaml.cs">

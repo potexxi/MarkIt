@@ -87,6 +87,12 @@ namespace MarkIt
                 CB_Striketrough.updateSettings();
                 CB_Underline.updateSettings();
 
+                CB_Image.updateSettings();
+                CB_Link.updateSettings();
+                CB_Quote.updateSettings();
+                CB_Subscript.updateSettings();
+                CB_Superscript.updateSettings();
+
                 MS_Headers.updateSettings();
                 MS_List.updateSettings();
 
@@ -144,30 +150,26 @@ namespace MarkIt
             throw new NotImplementedException();
         }
 
-        private void CB_Bold_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            CurrentWorkSheet.addToPostion("**");
-        }
+        // all the Custom Button features that you can press on the navigation bar
+        private void CB_Bold_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("**"); }
 
-        private void CB_Code_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            CurrentWorkSheet.addToPostion("`");
-        }
+        private void CB_Code_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("`");}
 
-        private void CB_Italic_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            CurrentWorkSheet.addToPostion("*");
-        }
+        private void CB_Italic_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("*");}
 
-        private void CB_Striketrough_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            CurrentWorkSheet.addToPostion("~~");
-        }
+        private void CB_Striketrough_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("~~");}
 
-        private void CB_Underline_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            CurrentWorkSheet.addToPostion("<u>", "</u>");
-        }
+        private void CB_Underline_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("<u>", "</u>");}
+
+        private void CB_Subscript_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("<sub>", "</sub>");}
+
+        private void CB_Superscript_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("<sup>", "</sup>");}
+
+        private void CB_Quote_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToLineBeginning("> ");}
+
+        private void CB_Link_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("[text](https://example.com)", "");}
+
+        private void CB_Image_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("![text](image.png)", "");}
 
         private void MS_Headers_MouseDown(object sender, MouseButtonEventArgs e)
         {
