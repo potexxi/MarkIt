@@ -93,6 +93,8 @@ namespace MarkIt
                 CB_Subscript.updateSettings();
                 CB_Superscript.updateSettings();
 
+                MS_tabels.updateSettings();
+
                 MS_Headers.updateSettings();
                 MS_List.updateSettings();
 

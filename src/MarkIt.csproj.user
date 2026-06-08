@@ -29,6 +29,9 @@
     <Compile Update="UserControls\CustomLine.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\usercontrolsTextdecoration\MultiSelectionTabelle.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\usercontrolsColor\ColorDisplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
