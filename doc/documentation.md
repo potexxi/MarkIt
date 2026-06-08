@@ -52,3 +52,9 @@
 | Karim | 31.05. | work on worksheet |
 | Max | 01.06. | finish file-bar, was not finished yesterday |
 | Karim | 01.06. | work on worksheet |
+| Karim | 05.06. | work on worksheet |
+| Karim | 06.06. | work on worksheet |
+| Max | 06.06 | user-settings-window |
+| Karim | 07.06. | work on worksheet |
+| Max | 08.06. | documentation |
+| Karim | 08.06. | work on worksheet |
