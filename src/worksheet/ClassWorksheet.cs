@@ -252,6 +252,67 @@ namespace MarkIt.worksheet
             }), System.Windows.Threading.DispatcherPriority.Input); // runs the focusing code later if WPF is still processing previews inputs
             //chatGPT end
         }
+        public void addTabel(int height, int width)
+        {
+            List<string> lines = [];
+
+            string header = "";
+            for (int x = 0; x < width; x++)
+            {
+                header += "|    ";
+            }
+            header += "|";
+            lines.Add(header);
+
+            string Spliter = "";
+            for (int x = 0; x < width; x++)
+            {
+                Spliter += "|---";
+            }
+            Spliter += "|";
+            lines.Add(Spliter);
+
+            for (int y = 0; y < height; y++)
+            {
+                string lineContent = "";
+                for (int x = 0; x < width; x++)
+                {
+                    lineContent += "|    ";
+                }
+                lineContent += "|";
+                lines.Add(lineContent);
+            }
+            for (int i = lines.Count - 1; i >= 0; i--) // otherwise backwarts
+            {
+                makeLineNoCarterIDX(lines[i]);
+            }
+        }
+        
+        private void makeLineNoCarterIDX(string lineContent)
+        {
+            int line = -1;
+            string oldline = "";
+            string newline = "";
+
+            line = checkCurrentLine();
+            if (line == -1)
+            {
+                AddingInProzess = false;
+                return;
+            }
+            int cursorPOS = getCursorPosition(line);
+
+            CustomLine customLine = new CustomLine();
+            customLine.CT_TextBox.Text = lineContent;
+            customLine.Height = (int)MainWindow.GeneralSettings.height;
+            customLine.fontsize = (int)MainWindow.GeneralSettings.height - 20;
+            int indx = wsStringPages.Count - 1;
+            customLine.CT_TextBox.TextChanged += CT_TextBox_TextChanged;
+            customLine.CT_TextBox.PreviewKeyDown += CT_TextBox_PreviewKeyDown;
+            stackpanelWorksheet.Children.Insert(line + 1, customLine);
+            wsStringPages.Insert(line + 1, lineContent);
+        }
+
         private void addLine()
         {
             AddingInProzess = true;

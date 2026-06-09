@@ -5,8 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MarkIt.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="70" d:DesignWidth="700">
-    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+             d:DesignHeight="70" d:DesignWidth="700"
+             IsKeyboardFocusWithinChanged="UserControl_IsKeyboardFocusWithinChanged">
+    <Grid x:Name="Grid_line" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
         <TextBox x:Name="TextboxLineText" Background="White" BorderThickness="0" Focusable="True"/><!-- <- ChatGPT to remove the borderlines on the textbox-->
     </Grid>
 </UserControl>

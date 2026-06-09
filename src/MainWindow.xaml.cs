@@ -195,5 +195,10 @@ namespace MarkIt
             }
             CurrentWorkSheet.addToLineBeginning(ListType);
         }
+
+        private void MS_tabels_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CurrentWorkSheet.addTabel(MS_tabels.height, MS_tabels.width);
+        }
     }
 }

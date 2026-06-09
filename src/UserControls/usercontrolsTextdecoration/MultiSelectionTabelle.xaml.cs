@@ -21,8 +21,13 @@ namespace MarkIt.UserControls
     /// </summary>
     public partial class MultiSelectionTabelle : UserControl
     {
-        private int height = 7;
-        private int width = 7;
+        public int height = 7;
+        public int width = 7;
+
+        private int MAXheight = 7; // if you wannt bigger tabels you can change the size here
+        private int MAXwidth = 7;
+
+
         public MultiSelectionTabelle()
         {
             InitializeComponent();
@@ -78,11 +83,11 @@ namespace MarkIt.UserControls
             SP_TableGrid.Children.Clear();
             PopupContent.Background = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
 
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < MAXwidth; x++)
             {
                 StackPanel SP_x = new StackPanel();
                 SP_x.Orientation = Orientation.Horizontal;
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < MAXheight; y++)
                 {
                     Rectangle sel = new();
                     sel.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.BackgroundColor);
@@ -106,6 +111,8 @@ namespace MarkIt.UserControls
             string pos = (string)sel.Tag;
             string[] posList = pos.Split(",");
             Logger.logger.Debug($"New Tabel created with the size: Width={posList[1]} Height={posList[1]}");
+            width = Convert.ToInt32(posList[1]);
+            height = Convert.ToInt32(posList[0]);
             TablePopup.IsOpen = false;
         }
 
