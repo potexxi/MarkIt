@@ -58,3 +58,5 @@
 | Karim | 07.06. | work on worksheet |
 | Max | 08.06. | documentation |
 | Karim | 08.06. | work on worksheet |
+| Karim | 09.06. | work on live rendering |
+| Max | 09.06. | documentation and testing |
