@@ -29,7 +29,7 @@
                     <MenuItem Header="Account" Opacity="0.6">
                         <MenuItem x:Name="MenuItemOpen" Cursor="Hand" Header="Open User Settings" PreviewMouseDown="MenuItemOpen_PreviewMouseDown"></MenuItem>
                         <Separator/>
-                        <MenuItem x:Name="MenuItemLogout" Cursor="Hand" Header="Logout"/>
+                        <MenuItem x:Name="MenuItemLogout" Cursor="Hand" Header="Logout" PreviewMouseDown="MenuItemLogout_PreviewMouseDown"/>
                     </MenuItem>
                     <MenuItem Header="Info" Opacity="0.6">
                         <MenuItem Header="Credits" Cursor="Hand" x:Name="MenuItemCredits" PreviewMouseDown="MenuItemCredits_PreviewMouseDown"></MenuItem>

@@ -129,9 +129,9 @@ namespace MarkIt
             }
         }
 
-        public string GetAbsolutPath(string filename)
+        public string GetAbsolutPath(string path)
         {
-            return (userPath + $"/{filename}");
+            return Directory.GetParent(path).FullName;
         }
 
         public void AddToHistory(FileHistoryItem item)
@@ -257,6 +257,7 @@ namespace MarkIt
                 FileName = "NewMarkItFile.md",
                 // Filter von CHATGPT
                 Filter = "Markdown (*.md)|*.md|Textdateien (*.txt)|*.txt|Alle Dateien (*.*)|*.*",
+                InitialDirectory = GetAbsolutPath(userPath)
             };
             bool? result = sfd.ShowDialog();
             if (result == false || result == null)
