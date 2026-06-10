@@ -8,6 +8,7 @@ using Microsoft.Win32;
 using Serilog;
 using Serilog.Core;
 using Supabase.Gotrue;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.Xml;
 using System.Text;
@@ -62,8 +63,11 @@ namespace MarkIt
             FileManager = new FileManager(currentUser.Email);
             filebar.Show();
             // zum Testen
+
+            MS_Headers.setSelection(["# Header 1", "## Header 2", "### Header 3", "#### Header 4", "##### Header 5"]);
+            MS_List.setSelection(["- Unorderd", " 1. Orderd", "- [ ] Checkliste"]);
             CurrentWorkSheet = new ClassWorksheet(GridWorksheet);
-            CurrentWorkSheet.Init();
+            CurrentWorkSheet.RenderLines();
         }
 
         private void Maintimer_Tick(object? sender, EventArgs e)
@@ -85,11 +89,21 @@ namespace MarkIt
                 CB_Striketrough.updateSettings();
                 CB_Underline.updateSettings();
 
+                CB_Image.updateSettings();
+                CB_Link.updateSettings();
+                CB_Quote.updateSettings();
+                CB_Subscript.updateSettings();
+                CB_Superscript.updateSettings();
+
+                MS_tabels.updateSettings();
+
+                MS_Headers.updateSettings();
+                MS_List.updateSettings();
+
                 updateColorMain();
                 GeneralSettings.updatedColorTheme = false;
             }
         }
-
 
         public void updateColorMain()
         {
@@ -173,6 +187,55 @@ namespace MarkIt
             {
                 MenuItemSaveFile_PreviewMouseDown(null, null);
             }
+        }
+
+        // all the Custom Button features that you can press on the navigation bar
+        private void CB_Bold_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("**"); }
+
+        private void CB_Code_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("`");}
+
+        private void CB_Italic_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("*");}
+
+        private void CB_Striketrough_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("~~");}
+
+        private void CB_Underline_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("<u>", "</u>");}
+
+        private void CB_Subscript_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("<sub>", "</sub>");}
+
+        private void CB_Superscript_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("<sup>", "</sup>");}
+
+        private void CB_Quote_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToLineBeginning("> ");}
+
+        private void CB_Link_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("[text](https://example.com)", "");}
+
+        private void CB_Image_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("![text](image.png)", "");}
+
+        private void MS_Headers_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            string hashSTR = "#";
+            for (int i = 0; i < MS_Headers.selectionIndex; i++)
+                hashSTR += "#";
+            hashSTR += " ";
+            CurrentWorkSheet.addToLineBeginning(hashSTR);
+        }
+
+        private void MS_List_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            string ListType = "- ";
+            if(MS_List.selectionIndex == 1)
+            {
+                ListType = "1. ";
+            }
+            else if (MS_List.selectionIndex == 2)
+            {
+                ListType = "- [ ] ";
+            }
+            CurrentWorkSheet.addToLineBeginning(ListType);
+        }
+
+        private void MS_tabels_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CurrentWorkSheet.addTabel(MS_tabels.height, MS_tabels.width);
         }
     }
 }

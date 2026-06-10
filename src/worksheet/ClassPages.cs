@@ -40,11 +40,6 @@ namespace MarkIt.worksheet
             MessageBox.Show("test");
         }
 
-        private void AddOnClossing()
-        {
-            
-        }
-
         public List<List<int>> locateFormat()
         // sees if the Program can find formatations
         {
