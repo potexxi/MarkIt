@@ -3,6 +3,8 @@ using MarkIt.settings;
 using MarkIt.UserControls;
 using MarkIt.windows;
 using MarkIt.worksheet;
+using Microsoft.IdentityModel.Abstractions;
+using Microsoft.Win32;
 using Serilog;
 using Serilog.Core;
 using Supabase.Gotrue;
@@ -144,12 +146,47 @@ namespace MarkIt
 
         private void MenuItemUserSettings_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            throw new NotImplementedException();
+
         }
 
         private void AccoundIcon_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            throw new NotImplementedException();
+
+        }
+
+        private void MenuItemNewFile_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            FileManager.CreateNewFile();
+        }
+
+        private void MenuItemOpenFile_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Open file";
+            // Filter von CHATGPT
+            openFileDialog.Filter = "Markdown (*.md)|*.md|Textdateien (*.txt)|*.txt|Alle Dateien (*.*)|*.*";
+            bool? result = openFileDialog.ShowDialog();
+            if(result == true)
+            {
+                FileManager.CurrentFilePath = openFileDialog.FileName;
+                CurrentWorkSheet.LoadFromString(FileManager.LoadFromFile(openFileDialog.FileName));
+            }
+        }
+
+        private void MenuItemSaveFile_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (FileManager.fileType == FileManager.FileType.Local)
+                FileManager.SaveToFile(FileManager.CurrentFilePath, CurrentWorkSheet.GetContent());
+            else if (FileManager.fileType == FileManager.FileType.Cloud)
+                FileManager.Upload(FileManager.CurrentFilePath, CurrentWorkSheet.GetContent(), LoadingScreen);
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.S && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                MenuItemSaveFile_PreviewMouseDown(null, null);
+            }
         }
 
         // all the Custom Button features that you can press on the navigation bar

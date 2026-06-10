@@ -1,4 +1,5 @@
-﻿using Supabase;
+﻿using Microsoft.Win32;
+using Supabase;
 using Supabase.Storage;
 using System.IO;
 using System.Text;
@@ -15,9 +16,16 @@ namespace MarkIt
         private string userEmail;
         public string userPath {  get; private set; }
         public string LastContent {  get; private set; }
-        public List<string> FileHistory { get; private set; }
+        public List<FileHistoryItem> FileHistory { get; private set; }
         public string? CurrentFilePath;
-        public List<string> CloudFiles {  get; private set; }
+        public FileType fileType { get; set; }
+        public enum FileType
+        {
+            Root,
+            Local,
+            Cloud
+        }
+
         public FileManager(string userEmail) 
         { 
             if(userEmail == "guest")
@@ -25,7 +33,7 @@ namespace MarkIt
             else
                 this.userEmail = userEmail;
             createUserFolder();
-            setFileHistory();
+            InitFileHistory();
             Logger.logger.Debug("Initialized FileManager");
         }
 
@@ -41,29 +49,40 @@ namespace MarkIt
             Logger.logger.Debug($"Created {userPath}");
         }
 
-        public void setFileHistory()
+        public async void InitFileHistory()
         {
             try
             {
                 if (!File.Exists(userPath + "/file-history.json"))
                 {
                     using (File.Create(userPath + "/file-history.json")) { }
-                    FileHistory = new List<string>();
+                    FileHistory = new List<FileHistoryItem>();
                 }
                 else
                 {
                     string json = File.ReadAllText(userPath + "/file-history.json");
                     if (json == "")
                     {
-                        FileHistory = new List<string>();
+                        FileHistory = new List<FileHistoryItem>();
                         return;
                     }
-                    FileHistory = JsonSerializer.Deserialize<List<string>>(json);
-                    foreach (string path in FileHistory)
+                    FileHistory = JsonSerializer.Deserialize<List<FileHistoryItem>>(json);
+                    foreach (FileHistoryItem item in FileHistory)
                     {
-                        if (!File.Exists(path))
+                        if (!File.Exists(item.Path) && item.Type == FileType.Local)
                         {
-                            FileHistory.Remove(path);
+                            FileHistory.Remove(item);
+                        }
+                        else if(item.Type == FileType.Cloud)
+                        {
+                            try
+                            {
+                                await MainWindow.supabase.Storage.From("MarkIt").Download(item.Path, (Supabase.Storage.TransformOptions?)null);
+                            }
+                            catch
+                            {
+                                FileHistory.Remove(item);
+                            }
                         }
                     }
                     return;
@@ -73,20 +92,20 @@ namespace MarkIt
             {
                 File.Delete(userPath + "/file-history.json");
                 using (File.Create(userPath + "/file-history.json")) { }
-                FileHistory = new List<string>();
+                FileHistory = new List<FileHistoryItem>();
             }
         }
 
-        public void SaveToFile(string filename, string content)
+        public void SaveToFile(string path, string content)
         {
-            string folder = Path.GetDirectoryName(userPath + $"/{filename}");
+            string folder = Path.GetDirectoryName(path);
             Directory.CreateDirectory(folder);
-            using (StreamWriter rd = new StreamWriter(userPath + $"/{filename}"))
+            using (StreamWriter rd = new StreamWriter(path))
             {
                 rd.Write(content);
             }
-            CurrentFilePath = userPath + $"/{filename}";
-            AddToHistory(userPath + $"/{filename}");
+            CurrentFilePath = path;
+            AddToHistory(new FileHistoryItem(path, FileType.Local));
         }
 
         public string? LoadFromFile(string path)
@@ -96,7 +115,7 @@ namespace MarkIt
                 using(StreamReader sr = new StreamReader(path))
                 {
                     CurrentFilePath = path;
-                    AddToHistory(path);
+                    AddToHistory(new FileHistoryItem(path, FileType.Local));
                     string content =  sr.ReadToEnd();
                     LastContent = content;
                     sr.Close();
@@ -115,16 +134,24 @@ namespace MarkIt
             return (userPath + $"/{filename}");
         }
 
-        public void AddToHistory(string filepath)
+        public void AddToHistory(FileHistoryItem item)
         {
-            if(filepath == "" || filepath == null)
+            if (item.Path == "" || item.Path == null)
             {
                 Logger.logger.Debug("Tried to save empty FilePath.");
                 return;
             }
-            if (FileHistory.Contains(filepath))
-                FileHistory.Remove(filepath);
-            FileHistory.Insert(0, filepath);
+            foreach(FileHistoryItem item2 in FileHistory)
+            {
+                if(item.Path == item2.Path)
+                {
+                    FileHistory.Remove(item2);
+                    break;
+                }
+            }
+            //if (FileHistory.Contains(item))
+            //    FileHistory.Remove(item);
+            FileHistory.Insert(0, item);
             if(FileHistory.Count > 5)
             {
                 FileHistory.RemoveAt(5);
@@ -132,10 +159,10 @@ namespace MarkIt
             saveHistory();
         }
 
-        public void RemoveFromHistory(string filepath)
+        public void RemoveFromHistory(FileHistoryItem item)
         {
-            if (FileHistory.Contains(filepath))
-                FileHistory.Remove(filepath);
+            if (FileHistory.Contains(item))
+                FileHistory.Remove(item);
         }
 
         private void saveHistory()
@@ -152,7 +179,24 @@ namespace MarkIt
             try
             {
                 // Von Supabase DOCS:  https://supabase.com/docs/reference/csharp/storage-from-download
-                await MainWindow.supabase.Storage.From("MarkIt").Remove(new List<string> { path });
+                // Danach CHAtGPT
+                // Prompt: await MainWindow.supabase.Storage.From("MarkIt").Remove(new List<string> { path });
+                // wieso loescht das nicht die folder, weil die folder sind in supabase ja nur relative files
+                // Anfang
+                var files = await MainWindow.supabase.Storage
+                    .From("MarkIt")
+                    .List(path);
+
+                var paths = files.Select(f => $"{path}/{f.Name}").ToList();
+                if(paths.Count > 0)
+                {
+                    await MainWindow.supabase.Storage
+                        .From("MarkIt")
+                        .Remove(paths);
+                }
+                await MainWindow.supabase.Storage
+                    .From("MarkIt")
+                    .Remove(path);
                 // Ende
                 return true;
             }
@@ -163,30 +207,12 @@ namespace MarkIt
             }
         }
 
-        public async Task<bool> UploadToServer(Grid loadingscreen)
+        public async Task<bool> Upload(string path, string content, Grid loadingscreen)
         {
             loadingscreen.Visibility = Visibility.Visible;
-            if(CurrentFilePath == null || CurrentFilePath == "")
-            {
-                loadingscreen.Visibility = Visibility.Hidden;
-                return false;
-            }
-            string filepath = CurrentFilePath;
-            return await Upload(filepath, loadingscreen);
-        }
-
-        public async Task<bool> UploadToServer(string filename, Grid loadingscreen)
-        {
-            loadingscreen.Visibility = Visibility.Visible;
-            string filepath = userPath + $"/{filename}";
-            return await Upload(filepath, loadingscreen);
-        }
-
-        private async Task<bool> Upload(string path, Grid loadingscreen)
-        {
             try
             {
-                byte[] bytes = await File.ReadAllBytesAsync(path);
+                byte[] bytes = Encoding.UTF8.GetBytes(content);
                 await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, path);
                 Supabase.Storage.FileOptions options = new Supabase.Storage.FileOptions { Upsert = true };
                 await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, path, options);
@@ -209,6 +235,7 @@ namespace MarkIt
             try
             {
                 byte[] content_byte = await MainWindow.supabase.Storage.From("MarkIt").Download(path, null);
+                AddToHistory(new FileHistoryItem(path, FileType.Cloud));
                 loadingscreen.Visibility = Visibility.Hidden;
                 return Encoding.UTF8.GetString(content_byte);
             }
@@ -220,6 +247,26 @@ namespace MarkIt
                 box.ShowDialog();
                 return null;
             }
+        }
+
+        public bool CreateNewFile()
+        {
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Title = "Create new File",
+                FileName = "NewMarkItFile.md",
+                // Filter von CHATGPT
+                Filter = "Markdown (*.md)|*.md|Textdateien (*.txt)|*.txt|Alle Dateien (*.*)|*.*",
+            };
+            bool? result = sfd.ShowDialog();
+            if (result == false || result == null)
+            {
+                return false;
+            }
+            CurrentFilePath = sfd.FileName;
+            SaveToFile(sfd.FileName, "");
+            MainWindow.CurrentWorkSheet.LoadFromString("");
+            return true;
         }
     }
 }

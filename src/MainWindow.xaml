@@ -7,16 +7,16 @@
         xmlns:uc="clr-namespace:MarkIt.UserControls"
         xmlns:CB_uc="clr-namespace:MarkIt.UserControls.usercontrolsTextdecoration"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
-        mc:Ignorable="d"
-        Title="MarkIt" Height="850" Width="1200" SizeChanged="Window_SizeChanged" MinWidth="620" MinHeight="400" Icon="/images/markit-logo.png">
+        mc:Ignorable="d" KeyDown="Window_KeyDown"
+        Title="MarkIt" Height="550" Width="800" SizeChanged="Window_SizeChanged" MinWidth="650" MinHeight="550" Icon="/images/markit-logo.png">
     <Grid x:Name="GridMain">
         <StackPanel x:Name="StackPanelMainWindow" Orientation="Vertical">
             <DockPanel>
                 <Menu DockPanel.Dock="Top">
                     <MenuItem Header="File" Opacity="0.6">
-                        <MenuItem x:Name="MenuItemNewFile" Header="New" Cursor="Hand" />
-                        <MenuItem x:Name="MenuItemOpenFile" Header="Open" Cursor="Hand" />
-                        <MenuItem x:Name="MenuItemSaveFile" Header="Save" Cursor="Hand" />
+                        <MenuItem x:Name="MenuItemNewFile" PreviewMouseDown="MenuItemNewFile_PreviewMouseDown" Header="New" Cursor="Hand" />
+                        <MenuItem x:Name="MenuItemOpenFile" PreviewMouseDown="MenuItemOpenFile_PreviewMouseDown" Header="Open" Cursor="Hand" />
+                        <MenuItem x:Name="MenuItemSaveFile" PreviewMouseDown="MenuItemSaveFile_PreviewMouseDown" Header="Save" Cursor="Hand" />
                         <Separator/>
                         <MenuItem x:Name="MenuItemWorkspace" Header="Open File-Workspace" Cursor="Hand" PreviewMouseDown="MenuItemWorkspace_PreviewMouseDown"/>
                     </MenuItem>
@@ -25,6 +25,11 @@
                         <MenuItem Header="Open User Settings" x:Name="MenuItemUserSettings" Cursor="Hand" PreviewMouseDown="MenuItemUserSettings_PreviewMouseDown"></MenuItem>
                         <Separator />
                         <MenuItem Header="Exit" x:Name="MenuItemExit" PreviewMouseDown="MenuItemExit_PreviewMouseDown"/>
+                    </MenuItem>
+                    <MenuItem Header="Account" Opacity="0.6">
+                        <MenuItem x:Name="MenuItemOpen" Cursor="Hand" Header="Open Account Settings"></MenuItem>
+                        <Separator/>
+                        <MenuItem x:Name="MenuItemLogout" Cursor="Hand" Header="Logout"/>
                     </MenuItem>
                     <MenuItem Header="Info" Opacity="0.6">
                         <MenuItem Header="Credits" Cursor="Hand" x:Name="MenuItemCredits" PreviewMouseDown="MenuItemCredits_PreviewMouseDown"></MenuItem>

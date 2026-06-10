@@ -39,3 +39,16 @@
 | Max | 21.05. | load from tree views |
 | Karim | 22.05. | settings window |
 | Max | 22.05. | load from file history |
+| Max | 25.05. | load from file history |
+| Max | 26.05. | load from file history |
+| Karim | 26.05. | UI-Buttons |
+| Max | 27.05. | load from file history |
+| Karim | 27.05. | worksheet |
+| Max | 28.05. | supabase-api-bug-fix |
+| Max | 29.05. | all file management |
+| Karim | 29.05. | worksheet |
+| Max | 30.05. | add context menu's in file-bar |
+| Max | 31.05. | finish file-bar (hopefully) |
+| Karim | 31.05. | work on worksheet |
+| Max | 01.06. | finish file-bar, was not finished yesterday |
+| Karim | 01.06. | work on worksheet |

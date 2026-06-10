@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -452,21 +454,13 @@ namespace MarkIt.worksheet
             }
         }
 
-
-        public void Load(string filepath)
-        // loads a worksheet from filepath
-        {
-
-        }
-        public void Save(string filepath)
-        // saves current worksheet to filepath
-        {
-
-        }
-
         public void LoadFromString(string content)
         {
             textBoxContent.Text = content;
+        }
+        public string GetContent()
+        {
+            return textBoxContent.Text;
         }
     }
 }
