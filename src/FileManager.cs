@@ -116,9 +116,10 @@ namespace MarkIt
                 {
                     CurrentFilePath = path;
                     AddToHistory(new FileHistoryItem(path, FileType.Local));
-                    string content =  sr.ReadToEnd();
+                    string content = sr.ReadToEnd();
                     LastContent = content;
                     sr.Close();
+                    fileType = FileType.Local;
                     return content;
                 }
             }
@@ -237,6 +238,7 @@ namespace MarkIt
                 byte[] content_byte = await MainWindow.supabase.Storage.From("MarkIt").Download(path, null);
                 AddToHistory(new FileHistoryItem(path, FileType.Cloud));
                 loadingscreen.Visibility = Visibility.Hidden;
+                fileType = FileType.Cloud;
                 return Encoding.UTF8.GetString(content_byte);
             }
             catch (Exception ex)
