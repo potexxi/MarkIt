@@ -61,14 +61,20 @@ namespace MarkIt.login_register
                 box = new WindowMessageBox("Password reset", "Your password has been succesfully changed. Please login again!");
                 box.ShowDialog();
                 Logger.logger.Debug($"User changed password: {MainWindow.currentUser.Email}");
-                WindowUserLogin.Navigate("PagePassword3", "PageLogin");
+                if (WindowUserLogin.Login)
+                    WindowUserLogin.Navigate("PagePassword3", "PageLogin");
+                else
+                    WindowUserLogin.window.Close();
                 return;
             }
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            WindowUserLogin.Navigate("PagePassword3", "PageLogin");
+            if (WindowUserLogin.Login)
+                WindowUserLogin.Navigate("PagePassword3", "PageLogin");
+            else
+                WindowUserLogin.window.Close();
         }
 
         private void Password_PasswordChanged(object sender, RoutedEventArgs e)

@@ -27,9 +27,9 @@
                         <MenuItem Header="Exit" x:Name="MenuItemExit" PreviewMouseDown="MenuItemExit_PreviewMouseDown"/>
                     </MenuItem>
                     <MenuItem Header="Account" Opacity="0.6">
-                        <MenuItem x:Name="MenuItemOpen" Cursor="Hand" Header="Open Account Settings"></MenuItem>
+                        <MenuItem x:Name="MenuItemOpen" Cursor="Hand" Header="Open User Settings" PreviewMouseDown="MenuItemOpen_PreviewMouseDown"></MenuItem>
                         <Separator/>
-                        <MenuItem x:Name="MenuItemLogout" Cursor="Hand" Header="Logout"/>
+                        <MenuItem x:Name="MenuItemLogout" Cursor="Hand" Header="Logout" PreviewMouseDown="MenuItemLogout_PreviewMouseDown"/>
                     </MenuItem>
                     <MenuItem Header="Info" Opacity="0.6">
                         <MenuItem Header="Credits" Cursor="Hand" x:Name="MenuItemCredits" PreviewMouseDown="MenuItemCredits_PreviewMouseDown"></MenuItem>
@@ -40,7 +40,7 @@
             <Grid x:Name="StackPanelNavigationBar" Background="Gray" HorizontalAlignment="Stretch" Height="120">
                 <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Orientation="Horizontal" Margin="20">
                     <uc:SettingsIcon x:Name="UC_Settings" Width="50" Height="50"/>
-                    <uc:AccoundIcon x:Name="UC_AccountIcon" Width="50" Height="50"/>
+                    <uc:AccoundIcon x:Name="UC_AccountIcon" PreviewMouseDown="AccoundIcon_PreviewMouseDown" Width="50" Height="50"/>
                     <uc:InformationIcon x:Name="UC_Information" PreviewMouseDown="InformationIcon_PreviewMouseDown" Width="50" Height="50"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">

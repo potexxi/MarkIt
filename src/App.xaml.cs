@@ -28,13 +28,13 @@ namespace MarkIt
                     box = new WindowMessageBox("Server connection closed.", "Please try again.");
                     box.ShowDialog();
                     Timer_Tick(null, null);
+                    e.Handled = true;
                     return;
                 }
-                box = new WindowMessageBox("Unexpected Error!", "A unexpected error forced the applicatio to stop, please restart \"MarkIt\".");
+                box = new WindowMessageBox("Unexpected Error!", "A unexpected error appeared. Please try again, or restart \"MarkIt\".");
                 box.ShowDialog();
                 Logger.logger.Fatal($"Unexpected Error: {e.Exception}");
                 e.Handled = true;
-                Environment.Exit(0);
             };
         }
         // Ende

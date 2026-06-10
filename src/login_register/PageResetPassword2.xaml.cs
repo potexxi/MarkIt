@@ -30,28 +30,50 @@ namespace MarkIt.login_register
         // Claude Anfang
         // Prompt: wie kann ich von meiner password reset site an meine wpf app ein request senden also dass das password
         // veraendert wurde
+        private static HttpListener _listener;
+
         public static async void StartPasswordListener()
         {
-            HttpListener listener = new HttpListener();
-            listener.Prefixes.Add("http://localhost:9876/password-changed/");
-            listener.Start();
+            // alten Listener stoppen
+            if (_listener != null)
+            {
+                try
+                {
+                    _listener.Stop();
+                    _listener.Close();
+                }
+                catch { }
+                _listener = null;
+            }
+
+            _listener = new HttpListener();
+            _listener.Prefixes.Add("http://localhost:9876/password-changed/");
+            _listener.Start();
 
             await Task.Run(async () =>
             {
-                var ctx = await listener.GetContextAsync();
+                var ctx = await _listener.GetContextAsync();
 
-                // CORS Header damit Browser nicht blockiert
                 ctx.Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 ctx.Response.Close();
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    var box = new WindowMessageBox("Password reset", "Your password has been succesfully changed. Please login again!");
-                    box.ShowDialog();
+                    new WindowMessageBox(
+                        "Password reset",
+                        "Your password has been successfully changed. Please login again!"
+                    ).ShowDialog();
+
                     Logger.logger.Debug($"User changed password via Link: {MainWindow.currentUser.Email}");
-                    WindowUserLogin.Navigate("PagePassword3", "PageLogin");
-                    listener.Stop();
-                    listener.Close();
+
+                    _listener.Stop();
+                    _listener.Close();
+                    _listener = null;
+
+                    if (WindowUserLogin.Login)
+                        WindowUserLogin.Navigate("PagePassword3", "PageLogin");
+                    else
+                        WindowUserLogin.window.Close();
                 });
             });
         }
@@ -84,7 +106,10 @@ namespace MarkIt.login_register
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            WindowUserLogin.Navigate("PagePassword2", "PagePassword1");
+            if (WindowUserLogin.Login)
+                WindowUserLogin.Navigate("PagePassword2", "PagePassword1");
+            else
+                WindowUserLogin.window.Close();
         }
 
         private void TextBoxCode_TextChanged(object sender, TextChangedEventArgs e)
