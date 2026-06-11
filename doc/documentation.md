@@ -60,3 +60,5 @@
 | Karim | 08.06. | work on worksheet |
 | Karim | 09.06. | work on live rendering |
 | Max | 09.06. | documentation and testing |
+| Karim | 10.06. | export and load worksheet |
+| Max | 10.06. | export to pdf
