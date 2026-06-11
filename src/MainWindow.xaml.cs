@@ -8,6 +8,7 @@ using Microsoft.Win32;
 using Serilog;
 using Serilog.Core;
 using Supabase.Gotrue;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.Xml;
@@ -147,12 +148,14 @@ namespace MarkIt
 
         private void MenuItemUserSettings_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            WindowUserSettings settings = new WindowUserSettings();
+            settings.ShowDialog();
         }
 
         private void AccoundIcon_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            WindowUserSettings settings = new WindowUserSettings();
+            settings.ShowDialog();
         }
 
         private void MenuItemNewFile_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -166,6 +169,8 @@ namespace MarkIt
             openFileDialog.Title = "Open file";
             // Filter von CHATGPT
             openFileDialog.Filter = "Markdown (*.md)|*.md|Textdateien (*.txt)|*.txt|Alle Dateien (*.*)|*.*";
+            openFileDialog.InitialDirectory = FileManager.GetAbsolutPath(FileManager.userPath);
+            openFileDialog.Multiselect = false;
             bool? result = openFileDialog.ShowDialog();
             if(result == true)
             {
@@ -190,6 +195,21 @@ namespace MarkIt
             }
         }
 
+        private void MenuItemOpen_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowUserSettings settings = new WindowUserSettings();
+            settings.ShowDialog();
+        }
+
+        private void MenuItemLogout_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            // ChatGPT-Anfang
+            // prompt: wie kann ich eine application neustarten in c# code
+            Process.Start(Environment.ProcessPath!);
+            Application.Current.Shutdown();
+             // ChatGPT-Ende
+         }
+  
         // all the Custom Button features that you can press on the navigation bar
         private void CB_Bold_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("**"); }
 

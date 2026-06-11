@@ -118,9 +118,10 @@ namespace MarkIt
                 {
                     CurrentFilePath = path;
                     AddToHistory(new FileHistoryItem(path, FileType.Local));
-                    string content =  sr.ReadToEnd();
+                    string content = sr.ReadToEnd();
                     LastContent = content;
                     sr.Close();
+                    fileType = FileType.Local;
                     return content;
                 }
             }
@@ -131,9 +132,9 @@ namespace MarkIt
             }
         }
 
-        public string GetAbsolutPath(string filename)
+        public string GetAbsolutPath(string path)
         {
-            return (userPath + $"/{filename}");
+            return Directory.GetParent(path).FullName;
         }
 
         public void AddToHistory(FileHistoryItem item)
@@ -239,6 +240,7 @@ namespace MarkIt
                 byte[] content_byte = await MainWindow.supabase.Storage.From("MarkIt").Download(path, null);
                 AddToHistory(new FileHistoryItem(path, FileType.Cloud));
                 loadingscreen.Visibility = Visibility.Hidden;
+                fileType = FileType.Cloud;
                 return Encoding.UTF8.GetString(content_byte);
             }
             catch (Exception ex)
@@ -259,6 +261,7 @@ namespace MarkIt
                 FileName = "NewMarkItFile.md",
                 // Filter von CHATGPT
                 Filter = "Markdown (*.md)|*.md|Textdateien (*.txt)|*.txt|Alle Dateien (*.*)|*.*",
+                InitialDirectory = GetAbsolutPath(userPath)
             };
             bool? result = sfd.ShowDialog();
             if (result == false || result == null)

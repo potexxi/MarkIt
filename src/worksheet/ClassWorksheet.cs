@@ -22,7 +22,6 @@ namespace MarkIt.worksheet
     // this class manages everything about the worksheets (may use sub-classes later on)
     // ws = worksheet
     {
-        private TextBox textBoxContent { get; set; }
         private string wsName { get; set; } = "markdown";
         private DateTime wsCreationDate { get; set; }
         private List<string> wsStringPages { get; set; } = [""];
@@ -455,12 +454,28 @@ namespace MarkIt.worksheet
         }
 
         public void LoadFromString(string content)
-        {
-            textBoxContent.Text = content;
+        { // loads the
+            wsStringPages.Clear();
+            string[] splitted = content.Split("\n");
+            for (int i = 0; i < splitted.Length; i++)
+            {
+                wsStringPages.Add(splitted[i]);
+            }
+            if (wsStringPages.Count == 0)
+                wsStringPages.Add("");
+            RenderLines();
+            Logger.logger.Debug("Loaded content succsesfully");
         }
         public string GetContent()
-        {
-            return textBoxContent.Text;
+        { // gives back pages as a string
+            string content = "";
+            for (int i = 0; i < wsStringPages.Count; i++)
+            {
+                content += wsStringPages[i];
+                if (i != wsStringPages.Count - 1)
+                    content += "\n";
+            }
+            return content;
         }
     }
 }
