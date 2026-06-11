@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using Markdig;
+using Microsoft.Win32;
+using PuppeteerSharp;
 using Supabase;
 using Supabase.Storage;
 using System.IO;
@@ -270,6 +272,60 @@ namespace MarkIt
             SaveToFile(sfd.FileName, "");
             MainWindow.CurrentWorkSheet.LoadFromString("");
             return true;
+        }
+
+        public async Task MarkdownToPdf(string markdown)
+        {
+            // ChatGPT-Anfang
+            // prompt: bevor ich geprompted habe, habe ich markdowntopdf nuget package benutzt, das war nicht gut.
+            // chatgpt hat mir dann diese version empfohlen.
+            string filename = CurrentFilePath.Split("/")[^1].Split(".")[0];
+            var sfd = new SaveFileDialog
+            {
+                Title = "Export PDF",
+                FileName = $"{filename}.pdf",
+                Filter = "PDF (*.pdf)|*.pdf"
+            };
+
+            if (sfd.ShowDialog() != true)
+                return;
+
+            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+
+            string html = Markdown.ToHtml(markdown, pipeline);
+
+            string fullHtml = $@"
+                    <html>
+                    <head>
+                    <meta charset='utf-8'>
+                    <style>
+                    body {{ font-family: Arial; padding: 20px; }}
+                    </style>
+                    </head>
+                    <body>
+                    {html}
+                    </body>
+                    </html>";
+
+            await new BrowserFetcher().DownloadAsync();
+
+            await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+            {
+                Headless = true
+            });
+
+            await using var page = await browser.NewPageAsync();
+
+            await page.SetContentAsync(fullHtml);
+
+            var pdf = await page.PdfDataAsync(new PdfOptions
+            {
+                Format = PuppeteerSharp.Media.PaperFormat.A4,
+                PrintBackground = true
+            });
+
+            await File.WriteAllBytesAsync(sfd.FileName, pdf);
+            // ChatGPT-Ende
         }
     }
 }

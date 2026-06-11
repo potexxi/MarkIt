@@ -41,23 +41,24 @@ namespace MarkIt
         public MainWindow()
         {
             Logger.Init();
-            loadingScreen = LoadingScreen;
             if(GeneralSettings.LoadFromFile("sources/options/generalSettings.json") == null)
             {
-                GeneralSettings = new GeneralSettings(this.ActualWidth, this.ActualHeight, true, false, "12"); // has to be infront of init
+                GeneralSettings = new GeneralSettings(40, 30, true, false, "12"); // has to be infront of init
+                GeneralSettings.SaveToFile("sources/options/generalSettings.json");
             }
             else
             {
                 GeneralSettings = GeneralSettings.LoadFromFile("sources/options/generalSettings.json");
-                GeneralSettings.SaveToFile("generalSettings.json");
             }
             InitializeComponent();
+            GeneralSettings.updatedColorTheme = true;
+            updateSettings();
+            loadingScreen = LoadingScreen;
             Maintimer.Interval = TimeSpan.FromMilliseconds(1000);
             Maintimer.Tick += Maintimer_Tick;
             Maintimer.Start(); // für das farb theme
 
             ServerManager = new ServerManager();
-            updateSettings();
             WindowUserLogin window = new WindowUserLogin();
             window.ShowDialog();
 
@@ -256,6 +257,13 @@ namespace MarkIt
         private void MS_tabels_MouseDown(object sender, MouseButtonEventArgs e)
         {
             CurrentWorkSheet.addTabel(MS_tabels.height, MS_tabels.width);
+        }
+
+        private async void MenuItemExport_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            loadingScreen.Visibility = Visibility.Visible;
+            await FileManager.MarkdownToPdf(CurrentWorkSheet.GetContent());
+            loadingScreen.Visibility = Visibility.Hidden;
         }
     }
 }

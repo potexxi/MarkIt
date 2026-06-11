@@ -19,6 +19,8 @@
                         <MenuItem x:Name="MenuItemSaveFile" PreviewMouseDown="MenuItemSaveFile_PreviewMouseDown" Header="Save" Cursor="Hand" />
                         <Separator/>
                         <MenuItem x:Name="MenuItemWorkspace" Header="Open File-Workspace" Cursor="Hand" PreviewMouseDown="MenuItemWorkspace_PreviewMouseDown"/>
+                        <Separator/>
+                        <MenuItem x:Name="MenuItemExport" PreviewMouseDown="MenuItemExport_PreviewMouseDown" Header="Export current file to PDF" Cursor="Hand"/>
                     </MenuItem>
                     <MenuItem Header="Options" Opacity="0.6">
                         <MenuItem Header="Open Settings" x:Name="MenuItemGeneralSettings" PreviewMouseDown="MenuItemGeneralSettings_PreviewMouseDown" Cursor="Hand"/>
