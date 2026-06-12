@@ -122,7 +122,13 @@ namespace MarkIt.windows
             if (CT_Height.CustomContent != null && CT_Height.CustomContent != "")
                 MainWindow.GeneralSettings.height = Convert.ToDouble(CT_Height.CustomContent);
             if (CT_Width.CustomContent != null && CT_Width.CustomContent != "")
-                MainWindow.GeneralSettings.width = Convert.ToDouble(CT_Width.CustomContent);
+            {
+                double width = Convert.ToDouble(CT_Width.CustomContent);
+                if (width <= 40)
+                    MainWindow.GeneralSettings.width = 40;
+                else
+                    MainWindow.GeneralSettings.width = width;
+            }
             if (CT_Animation_FPS.CustomContent != null && CT_Animation_FPS.CustomContent != "")
                 MainWindow.GeneralSettings.animationFPS = CT_Animation_FPS.CustomContent;
 
@@ -143,6 +149,11 @@ namespace MarkIt.windows
         {
             Logger.logger.Verbose("Settings closed without saving");
             Close();
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
         }
     }
 }
