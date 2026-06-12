@@ -53,6 +53,7 @@ namespace MarkIt.windows
         private async void ButtonPassword_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             WindowUserLogin window = new WindowUserLogin();
+            PageRecetPassword2.ChangeEmail = false;
             LoadingScreen.Visibility = Visibility.Visible;
             try
             {

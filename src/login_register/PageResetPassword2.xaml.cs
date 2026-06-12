@@ -22,9 +22,13 @@ namespace MarkIt.login_register
     /// </summary>
     public partial class PageRecetPassword2 : Page
     {
+        public static bool ChangeEmail = true;
         public PageRecetPassword2()
         {
             InitializeComponent();
+            if(!ChangeEmail)
+                ButtonChangeEmail.IsEnabled = false;
+            ChangeEmail = true;
         }
 
         // Claude Anfang

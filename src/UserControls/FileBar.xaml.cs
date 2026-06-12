@@ -133,6 +133,7 @@ namespace MarkIt.UserControls
         {
             ButtonOpen_Click(sender, e);
             Hide();
+            MainWindow.UpdateMenuItemBottom();
         }
 
         private void Label_MouseLeave(object sender, MouseEventArgs e)
@@ -153,6 +154,7 @@ namespace MarkIt.UserControls
             timerBlurIn.Stop();
             timerBlurOut.Stop();
             Hide();
+            MainWindow.UpdateMenuItemBottom();
         }
 
         public void SetSize(double width, double height)
@@ -301,6 +303,7 @@ namespace MarkIt.UserControls
                     MainWindow.FileManager.fileType = FileManager.FileType.Cloud;
                 }
                 Hide();
+                MainWindow.UpdateMenuItemBottom();
             }
             catch(Exception ex)
             {
@@ -722,6 +725,7 @@ namespace MarkIt.UserControls
             selectedTreeViewItem = (TreeViewItem)sender;
             ButtonOpen_Click(sender, e);
             Hide();
+            MainWindow.UpdateMenuItemBottom();
         }
 
         private void ScrollViewerMain_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

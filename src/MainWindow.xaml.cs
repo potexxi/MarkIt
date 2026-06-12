@@ -20,6 +20,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.IO;
 namespace MarkIt
 {
     /// <summary>
@@ -34,6 +35,8 @@ namespace MarkIt
         public static FileManager FileManager;
         public static GeneralSettings GeneralSettings;
         public static ClassWorksheet CurrentWorkSheet;
+        public static MenuItem MenuItemFilePath;
+
         public static Grid loadingScreen { get; private set; }
 
         DispatcherTimer Maintimer = new DispatcherTimer();
@@ -51,6 +54,7 @@ namespace MarkIt
                 GeneralSettings = GeneralSettings.LoadFromFile("sources/options/generalSettings.json");
             }
             InitializeComponent();
+            MenuItemFilePath = MenuItemCurrentFilePath;
             GeneralSettings.updatedColorTheme = true;
             updateSettings();
             loadingScreen = LoadingScreen;
@@ -115,6 +119,7 @@ namespace MarkIt
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             filebar.SetSize(this.ActualWidth, this.ActualHeight);
+            GridWorksheet.Height = this.ActualHeight - 200;
         }
 
         private void MenuItemWorkspace_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -264,6 +269,36 @@ namespace MarkIt
             loadingScreen.Visibility = Visibility.Visible;
             await FileManager.MarkdownToPdf(CurrentWorkSheet.GetContent());
             loadingScreen.Visibility = Visibility.Hidden;
+        }
+
+        public static void UpdateMenuItemBottom()
+        {
+            if(string.IsNullOrEmpty(FileManager.CurrentFilePath))
+            {
+                MainWindow.MenuItemFilePath.Header = "No File opened";
+                MainWindow.MenuItemFilePath.IsEnabled = false;
+            }
+            else
+            {
+                MainWindow.MenuItemFilePath.Header = FileManager.CurrentFilePath;
+                MainWindow.MenuItemFilePath.IsEnabled = true;
+            }
+        }
+
+        private void MenuItemOpenFolder_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (string.IsNullOrEmpty(FileManager.CurrentFilePath))
+            {
+                return;
+            }
+            // ChatGPT
+            // Prompt: wie kann ich process start fuer folder
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = Directory.GetParent(FileManager.CurrentFilePath).ToString(),
+                UseShellExecute = true
+            });
+            // Ende
         }
     }
 }
