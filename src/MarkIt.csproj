@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <StartupObject></StartupObject>
+    <ApplicationIcon>markit-logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +15,10 @@
     <None Remove="images\loading-animation.gif" />
     <None Remove="images\lock-user-login.jpg" />
     <None Remove="images\profil-user-login.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="markit-logo.ico" />
   </ItemGroup>
 
   <ItemGroup>
