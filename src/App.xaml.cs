@@ -34,6 +34,9 @@ namespace MarkIt
                 box = new WindowMessageBox("Unexpected Error!", "A unexpected error appeared. Please try again, or restart \"MarkIt\".");
                 box.ShowDialog();
                 Logger.logger.Fatal($"Unexpected Error: {e.Exception}");
+                if (Current.MainWindow?.IsLoaded == false) {
+                    Environment.Exit(1); // clean ending
+                }
                 e.Handled = true;
             };
         }
