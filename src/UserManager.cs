@@ -40,7 +40,7 @@ namespace MarkIt
                 loadingScreen.Visibility = Visibility.Hidden;
                 if (ex.InnerException is HttpRequestException)
                 {
-                    box = new WindowMessageBox("Server offline", "Currently our server is offline, please try again later or continue as guest.");
+                    box = new WindowMessageBox("Server offline", "Currently our server is offline, please try again later or continue as guest. Remind: In some LAN's you need VPN, to reach the server.");
                     box.ShowDialog();
                     Logger.logger.Error($"Server unreachable. {ex.Message}");
                     return ErrorType.ServerUnreachable;

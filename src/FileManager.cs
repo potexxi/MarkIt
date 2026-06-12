@@ -152,8 +152,6 @@ namespace MarkIt
                     break;
                 }
             }
-            //if (FileHistory.Contains(item))
-            //    FileHistory.Remove(item);
             FileHistory.Insert(0, item);
             if(FileHistory.Count > 5)
             {
@@ -279,7 +277,17 @@ namespace MarkIt
             // ChatGPT-Anfang
             // prompt: bevor ich geprompted habe, habe ich markdowntopdf nuget package benutzt, das war nicht gut.
             // chatgpt hat mir dann diese version empfohlen.
-            string filename = CurrentFilePath.Split("/")[^1].Split(".")[0];
+            string filename;
+            if (string.IsNullOrEmpty(CurrentFilePath))
+                return;
+            if (File.Exists(CurrentFilePath))
+            {
+                filename = CurrentFilePath.Split("\\")[^1].Split(".")[0];
+            }
+            else
+            {
+                filename = CurrentFilePath.Split("/")[^1].Split(".")[0];
+            }
             var sfd = new SaveFileDialog
             {
                 Title = "Export PDF",

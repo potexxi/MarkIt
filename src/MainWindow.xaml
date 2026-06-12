@@ -21,6 +21,7 @@
                         <MenuItem x:Name="MenuItemWorkspace" Header="Open File-Workspace" Cursor="Hand" PreviewMouseDown="MenuItemWorkspace_PreviewMouseDown"/>
                         <Separator/>
                         <MenuItem x:Name="MenuItemExport" PreviewMouseDown="MenuItemExport_PreviewMouseDown" Header="Export current file to PDF" Cursor="Hand"/>
+                        <MenuItem x:Name="MenuItemOpenFolder1" PreviewMouseDown="MenuItemOpenFolder_PreviewMouseDown" Header="Open current file in Folder" Cursor="Hand"/>
                     </MenuItem>
                     <MenuItem Header="Options" Opacity="0.6">
                         <MenuItem Header="Open Settings" x:Name="MenuItemGeneralSettings" PreviewMouseDown="MenuItemGeneralSettings_PreviewMouseDown" Cursor="Hand"/>
@@ -72,7 +73,12 @@
                     </StackPanel>
                 </StackPanel>
             </Grid>
-            <Grid x:Name="GridWorksheet" Background="LightGray" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+            <Grid x:Name="GridWorksheet" Background="LightGray" Height="350" VerticalAlignment="Center"/>
+            <Menu Foreground="Black" x:Name="MenuBottom" Background="LightGray" Height="50">
+                <MenuItem Cursor="Hand" FontSize="14" Foreground="Black" x:Name="MenuItemCurrentFilePath" Header="No File opened">
+                    <MenuItem x:Name="MenuItemOpenFolder" Header="Open in Folder" Cursor="Hand" PreviewMouseDown="MenuItemOpenFolder_PreviewMouseDown"></MenuItem>
+                </MenuItem>
+            </Menu>
         </StackPanel>
         <uc:FileBar Opacity="1" x:Name="filebar"></uc:FileBar>
         <Grid Visibility="Hidden" x:Name="LoadingScreen">
