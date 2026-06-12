@@ -61,4 +61,6 @@
 | Karim | 09.06. | work on live rendering |
 | Max | 09.06. | documentation and testing |
 | Karim | 10.06. | export and load worksheet |
-| Max | 10.06. | export to pdf
+| Max | 10.06. | export to pdf |
+| Max | 12.06. | bug fixes and details for demo |
+| Karim | 12.06. | bug fixes in work sheet |
