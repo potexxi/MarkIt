@@ -7,19 +7,20 @@
         xmlns:uc="clr-namespace:MarkIt.UserControls"
         xmlns:ucColors="clr-namespace:MarkIt.UserControls.usercontrolsColor"
         mc:Ignorable="d"
-        Title="Settings" Height="400" Width="700">
+        Title="Settings" Height="400" Width="700"
+        SizeChanged="Window_SizeChanged">
     <Grid>
         <TabControl>
             <TabItem Header="Document" Width="220">
                 <Grid Background="#FFE5E5E5">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="Width" FontSize="20" FontWeight="Bold"/>
+                            <Label Content="Margin" FontSize="20" FontWeight="Bold"/>
                             <uc:CustomTextBox x:Name="CT_Width" Width="120" Height="33" Margin="477,0,0,0" MaxCharLength="5"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="Height" FontSize="20" FontWeight="Bold"/>
-                            <uc:CustomTextBox x:Name="CT_Height" Width="120" Height="33" Margin="470,0,0,0" MaxCharLength="5"/>
+                            <Label Content="Line Height" FontSize="20" FontWeight="Bold"/>
+                            <uc:CustomTextBox x:Name="CT_Height" Width="120" Height="33" Margin="436,0,0,0" MaxCharLength="5"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">

@@ -28,7 +28,7 @@ namespace MarkIt.worksheet
         private double wsWidth { get; set; } = 1050;
         public double wsHeight { get; set; } = 1440;
 
-        private Grid gridWorkSheet;
+        public Grid gridWorkSheet;
         private List<Canvas> canvisWsPages;
         private StackPanel stackpanelWorksheet;
 
@@ -37,6 +37,7 @@ namespace MarkIt.worksheet
         private double pageMargin = 50;
         private bool AddingInProzess = false;
 
+        public ScrollViewer ScrollViewerWorksheet { get; private set; }
         public ClassWorksheet()
         {
         }
@@ -51,10 +52,10 @@ namespace MarkIt.worksheet
         {
             this.gridWorkSheet.Children.Clear();
             this.stackpanelWorksheet.Children.Clear();
-            ScrollViewer ScrollViewerWorksheet = new ScrollViewer();
+            ScrollViewerWorksheet = new ScrollViewer();
             ScrollViewerWorksheet.HorizontalAlignment = HorizontalAlignment.Stretch;
             ScrollViewerWorksheet.VerticalAlignment = VerticalAlignment.Stretch;
-            ScrollViewerWorksheet.Height = 1000; // must be chanhe in windowsizechange event later on
+            ScrollViewerWorksheet.Height = 830; // must be chanhe in windowsizechange event later on
             stackpanelWorksheet.Margin = new System.Windows.Thickness(MainWindow.GeneralSettings.width);
             bool first = true;
             for (int pageNumber = 0; pageNumber < this.wsStringPages.Count(); pageNumber++)
@@ -62,7 +63,7 @@ namespace MarkIt.worksheet
                 CustomLine customLine = new CustomLine();
                 customLine.CT_TextBox.Text = wsStringPages[pageNumber]; // reupdate the text
                 customLine.Height = (int)MainWindow.GeneralSettings.height;
-                customLine.fontsize = (int)MainWindow.GeneralSettings.height - 20;
+                customLine.fontsize = (int)MainWindow.GeneralSettings.height - 16;
                 customLine.CT_TextBox.TextChanged += CT_TextBox_TextChanged;
                 customLine.CT_TextBox.PreviewKeyDown += CT_TextBox_PreviewKeyDown;
                 stackpanelWorksheet.Children.Add(customLine);
@@ -306,7 +307,7 @@ namespace MarkIt.worksheet
             CustomLine customLine = new CustomLine();
             customLine.CT_TextBox.Text = lineContent;
             customLine.Height = (int)MainWindow.GeneralSettings.height;
-            customLine.fontsize = (int)MainWindow.GeneralSettings.height - 20;
+            customLine.fontsize = (int)MainWindow.GeneralSettings.height - 16;
             int indx = wsStringPages.Count - 1;
             customLine.CT_TextBox.TextChanged += CT_TextBox_TextChanged;
             customLine.CT_TextBox.PreviewKeyDown += CT_TextBox_PreviewKeyDown;
@@ -385,7 +386,7 @@ namespace MarkIt.worksheet
             CustomLine customLine = new CustomLine();
             customLine.CT_TextBox.Text = addon + newline;
             customLine.Height = (int)MainWindow.GeneralSettings.height;
-            customLine.fontsize = (int)MainWindow.GeneralSettings.height - 20;
+            customLine.fontsize = (int)MainWindow.GeneralSettings.height - 16;
             int indx = wsStringPages.Count - 1;
             customLine.CT_TextBox.TextChanged += CT_TextBox_TextChanged;
             customLine.CT_TextBox.PreviewKeyDown += CT_TextBox_PreviewKeyDown;

@@ -43,7 +43,7 @@ namespace MarkIt
             Logger.Init();
             if(GeneralSettings.LoadFromFile("sources/options/generalSettings.json") == null)
             {
-                GeneralSettings = new GeneralSettings(40, 30, true, false, "12"); // has to be infront of init
+                GeneralSettings = new GeneralSettings(40, 40, true, false, "10"); // has to be infront of init
                 GeneralSettings.SaveToFile("sources/options/generalSettings.json");
             }
             else
@@ -114,6 +114,7 @@ namespace MarkIt
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            CurrentWorkSheet.ScrollViewerWorksheet.Height = this.ActualHeight-220;
             filebar.SetSize(this.ActualWidth, this.ActualHeight);
         }
 

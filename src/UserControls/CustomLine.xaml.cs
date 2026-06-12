@@ -70,9 +70,27 @@ namespace MarkIt.UserControls
             RenderedText = new TextBlock();
             RenderedText.VerticalAlignment = VerticalAlignment.Center;
             RenderedText.FontSize = _fontsize;
-            RenderedText.Padding = new Thickness(4, 0, 0, 0);
+            RenderedText.Background = Brushes.Transparent;
+            RenderedText.Cursor = Cursors.IBeam;
+            RenderedText.PreviewMouseDown += RenderedText_MouseDown;
+
+
+
+            Panel.SetZIndex(Rect_Overlay, 1);
+            Panel.SetZIndex(StackPanel_TextBoxes, 2);
 
             StackPanel_TextBoxes.Children.Add(RenderedText);
+        }
+        private void RenderedText_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Grid_line.Children.Remove(Rect_Overlay);
+            Grid_line.Children.Remove(StackPanel_TextBoxes);
+
+            CT_TextBox.Focus();
+            Keyboard.Focus(CT_TextBox);
+            CT_TextBox.CaretIndex = CT_TextBox.Text.Length;
+
+            e.Handled = true;
         }
 
         private void Render()
@@ -192,7 +210,7 @@ namespace MarkIt.UserControls
             // chatgpt anfang (erklärt von mir)
             // promt: what can I use instead of findSymbol to not have to make TextBoxes for all of this
             Run run = new Run(text); // das Run Element ist ein Teil von Einer Textbox, z.B: wenn ich einen kleinen Text teil (in diesem fall ein char) kann ich damit die Decoration ändern für diesen Text teil
-
+            run.FontSize = _fontsize ;
             if (bold) // geht durch ob eines von den tags activ ist und ändert die Textdecoration so damit es passt
                 run.FontWeight = FontWeights.Bold;
             if (italic)
