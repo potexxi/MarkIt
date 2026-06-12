@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -120,14 +121,17 @@ namespace MarkIt.windows
         private void Button_Save_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (CT_Height.CustomContent != null && CT_Height.CustomContent != "")
-                MainWindow.GeneralSettings.height = Convert.ToDouble(CT_Height.CustomContent);
+            {
+                int height = Convert.ToInt32(height = Convert.ToInt32(CT_Height.CustomContent));
+                if (height <= 40)
+                    MainWindow.GeneralSettings.height = 40;
+                else
+                    MainWindow.GeneralSettings.height = height;
+            }
             if (CT_Width.CustomContent != null && CT_Width.CustomContent != "")
             {
-                double width = Convert.ToDouble(CT_Width.CustomContent);
-                if (width <= 40)
-                    MainWindow.GeneralSettings.width = 40;
-                else
-                    MainWindow.GeneralSettings.width = width;
+                int width = Convert.ToInt32(CT_Width.CustomContent);
+                MainWindow.GeneralSettings.width = width;
             }
             if (CT_Animation_FPS.CustomContent != null && CT_Animation_FPS.CustomContent != "")
                 MainWindow.GeneralSettings.animationFPS = CT_Animation_FPS.CustomContent;
