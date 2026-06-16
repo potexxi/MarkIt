@@ -64,3 +64,4 @@
 | Max | 10.06. | export to pdf |
 | Max | 12.06. | bug fixes and details for demo |
 | Karim | 12.06. | bug fixes in work sheet |
+| Max | 16.06. | details in save, load and export to pdf and presentation |
