@@ -26,4 +26,7 @@ Please note that the server may not always be online or available. As a result, 
 
 ## Screenshots
 
-[placeholder for screenshots]
+<img width="1918" height="1020" alt="image" src="https://github.com/user-attachments/assets/9b6610db-80f4-4ce0-9257-7a2a3b64bc24" />
+<img width="1918" height="1020" alt="image" src="https://github.com/user-attachments/assets/005eac5a-2294-40b0-b6bd-fe09a27f7cc3" />
+
+
