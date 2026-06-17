@@ -272,7 +272,7 @@ namespace MarkIt
             return true;
         }
 
-        public async Task MarkdownToPdf(string markdown)
+        public async Task MarkdownToPdf(string markdown, ProgressBar progressBar)
         {
             // ChatGPT-Anfang
             // prompt: bevor ich geprompted habe, habe ich markdowntopdf nuget package benutzt, das war nicht gut.
@@ -297,11 +297,11 @@ namespace MarkIt
 
             if (sfd.ShowDialog() != true)
                 return;
-
+            progressBar.Value = 5;
             var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-
+            progressBar.Value = 15;
             string html = Markdown.ToHtml(markdown, pipeline);
-
+            progressBar.Value = 25;
             string fullHtml = $@"
                     <html>
                     <head>
@@ -316,23 +316,24 @@ namespace MarkIt
                     </html>";
 
             await new BrowserFetcher().DownloadAsync();
-
+            progressBar.Value = 40;
             await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
                 Headless = true
             });
-
+            progressBar.Value = 55;
             await using var page = await browser.NewPageAsync();
-
+            progressBar.Value = 60;
             await page.SetContentAsync(fullHtml);
-
+            progressBar.Value = 75;
             var pdf = await page.PdfDataAsync(new PdfOptions
             {
                 Format = PuppeteerSharp.Media.PaperFormat.A4,
                 PrintBackground = true
             });
-
+            progressBar.Value = 85;
             await File.WriteAllBytesAsync(sfd.FileName, pdf);
+            progressBar.Value = 100;
             // ChatGPT-Ende
         }
     }
