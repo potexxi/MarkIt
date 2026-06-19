@@ -8,6 +8,6 @@
              d:DesignHeight="70" d:DesignWidth="700"
              IsKeyboardFocusWithinChanged="UserControl_IsKeyboardFocusWithinChanged">
     <Grid x:Name="Grid_line" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
-        <TextBox x:Name="TextboxLineText" Background="White" BorderThickness="0" Focusable="True"/><!-- <- ChatGPT to remove the borderlines on the textbox-->
+        <TextBox x:Name="TextboxLineText" Background="White" BorderThickness="0" Focusable="True" MouseEnter="TextboxLineText_MouseEnter" MouseLeave="TextboxLineText_MouseLeave"/><!-- <- ChatGPT to remove the borderlines on the textbox-->
     </Grid>
 </UserControl>

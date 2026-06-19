@@ -46,6 +46,9 @@ namespace MarkIt.UserControls
             }
         }
 
+        // if the mouse is within for multi line selection
+        public bool IsMouseWithin;
+
         //live rendering Settings
         Rectangle Rect_Overlay;
         StackPanel StackPanel_TextBoxes;
@@ -85,6 +88,7 @@ namespace MarkIt.UserControls
         {
             Grid_line.Children.Remove(Rect_Overlay);
             Grid_line.Children.Remove(StackPanel_TextBoxes);
+
 
             CT_TextBox.Focus();
             Keyboard.Focus(CT_TextBox);
@@ -320,6 +324,16 @@ namespace MarkIt.UserControls
             }
 
             return -1;
+        }
+
+        private void TextboxLineText_MouseEnter(object sender, MouseEventArgs e)
+        {
+            IsMouseWithin = true;
+        }
+
+        private void TextboxLineText_MouseLeave(object sender, MouseEventArgs e)
+        {
+            IsMouseWithin = false;
         }
     }
 }
