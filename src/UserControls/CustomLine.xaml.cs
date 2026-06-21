@@ -50,9 +50,9 @@ namespace MarkIt.UserControls
         public bool IsMouseWithin;
 
         //live rendering Settings
-        Rectangle Rect_Overlay;
-        StackPanel StackPanel_TextBoxes;
-        TextBlock RenderedText;
+        public Rectangle Rect_Overlay;
+        private StackPanel StackPanel_TextBoxes;
+        public TextBlock RenderedText;
         //live rendering Settings end -
         public CustomLine()
         {
@@ -81,6 +81,10 @@ namespace MarkIt.UserControls
 
             Panel.SetZIndex(Rect_Overlay, 1);
             Panel.SetZIndex(StackPanel_TextBoxes, 2);
+
+            Rect_Overlay.IsHitTestVisible = false;
+            StackPanel_TextBoxes.IsHitTestVisible = false;
+            RenderedText.IsHitTestVisible = false;
 
             StackPanel_TextBoxes.Children.Add(RenderedText);
         }
