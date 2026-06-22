@@ -67,3 +67,7 @@
 | Max | 16.06. | details in save, load and export to pdf and presentation |
 | Karim | 19.06. | worksheet, selection over all lines |
 | Max | 19.06. | Presentation |
+| Max | 21.06. | Documentation |
+| Karim | 21.06. | Bug fixes and finish his features |
+| Max | 22.09. | Documentation and bug fixing |
+| Karim | 22.09. | final changes and bug fixing |
