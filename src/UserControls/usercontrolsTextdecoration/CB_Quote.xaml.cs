@@ -35,6 +35,7 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
             eli2.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             el1.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             el2.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+            Logger.logger.Verbose("[UC] Updated Settings Quote");
         }
 
         private void CB_Hitbox_MouseDown(object sender, MouseButtonEventArgs e)

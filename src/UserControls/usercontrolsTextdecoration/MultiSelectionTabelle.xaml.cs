@@ -48,6 +48,7 @@ namespace MarkIt.UserControls
             el2.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             el3.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             el4.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+            Logger.logger.Verbose("[UC] Updated Settings MultiSelectionTabelle");
         }
 
         private async void CB_Hitbox_MouseLeave(object sender, MouseEventArgs e)

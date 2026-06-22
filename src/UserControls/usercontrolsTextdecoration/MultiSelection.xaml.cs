@@ -42,6 +42,7 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
             Rect_BG.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
             Rect_BG.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             Label_Selection.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+            Logger.logger.Verbose("[UC] Updated Settings MultiSelection");
         }
         public void updateIDX()
         {

@@ -41,6 +41,7 @@ namespace MarkIt.UserControls
 
             CLabel.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             DLabel.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+            Logger.logger.Verbose("[UC] Updated Settings JSON usercontrol");
         }
 
         private async void CB_Hitbox_MouseLeave(object sender, MouseEventArgs e)

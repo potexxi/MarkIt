@@ -36,6 +36,7 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
             el1.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             el2.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             el3.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+            Logger.logger.Verbose("[UC] Updated Settings Image");
 
         }
         private void CB_Hitbox_MouseLeave(object sender, MouseEventArgs e)

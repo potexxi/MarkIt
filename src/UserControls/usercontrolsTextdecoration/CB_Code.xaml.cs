@@ -38,6 +38,7 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
             RectBackground.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             Ellipse_c.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             Rect_BGc.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+            Logger.logger.Verbose("[UC] Updated Settings Code");
         }
 
         private void CB_Hitbox_MouseDown(object sender, MouseButtonEventArgs e)

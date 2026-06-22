@@ -36,6 +36,8 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
             el2.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             el3.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             el4.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+
+            Logger.logger.Verbose("[UC] Updated Settings Superscript");
         }
 
         private void CB_Hitbox_MouseDown(object sender, MouseButtonEventArgs e)
