@@ -315,7 +315,18 @@ namespace MarkIt
                     </body>
                     </html>";
 
-            await new BrowserFetcher().DownloadAsync();
+            var downloadTask = new BrowserFetcher().DownloadAsync();
+            var timeoutTask = Task.Delay(TimeSpan.FromSeconds(20));
+
+            if (await Task.WhenAny(downloadTask, timeoutTask) == timeoutTask)
+            {
+                WindowMessageBox wmb = new WindowMessageBox("Export Error", "The Export was too long. Please try again later");
+                wmb.ShowDialog();
+                progressBar.Value = 0;
+                return;
+            }
+
+            await downloadTask;
             progressBar.Value = 40;
             await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {

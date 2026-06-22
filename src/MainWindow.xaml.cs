@@ -169,6 +169,7 @@ namespace MarkIt
         private void MenuItemNewFile_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             FileManager.CreateNewFile();
+            UpdateMenuItemBottom();
         }
 
         private void MenuItemOpenFile_PreviewMouseDown(object sender, MouseButtonEventArgs e)

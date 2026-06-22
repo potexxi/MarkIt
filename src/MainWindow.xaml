@@ -36,41 +36,40 @@
                     </MenuItem>
                     <MenuItem Header="Info" Opacity="0.6">
                         <MenuItem Header="Credits" Cursor="Hand" x:Name="MenuItemCredits" PreviewMouseDown="MenuItemCredits_PreviewMouseDown"></MenuItem>
-                        <MenuItem Header="Help" Cursor="Hand"></MenuItem>
                     </MenuItem>
                 </Menu>
             </DockPanel>
             <Grid x:Name="StackPanelNavigationBar" Background="Gray" HorizontalAlignment="Stretch" Height="120">
                 <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Orientation="Horizontal" Margin="20">
-                    <uc:SettingsIcon x:Name="UC_Settings" Width="50" Height="50"/>
-                    <uc:AccoundIcon x:Name="UC_AccountIcon" PreviewMouseDown="AccoundIcon_PreviewMouseDown" Width="50" Height="50"/>
-                    <uc:InformationIcon x:Name="UC_Information" PreviewMouseDown="InformationIcon_PreviewMouseDown" Width="50" Height="50"/>
+                    <uc:SettingsIcon x:Name="UC_Settings" Width="50" Height="50" Cursor="Hand"/>
+                    <uc:AccoundIcon x:Name="UC_AccountIcon" PreviewMouseDown="AccoundIcon_PreviewMouseDown" Width="50" Height="50" Cursor="Hand"/>
+                    <uc:InformationIcon x:Name="UC_Information" PreviewMouseDown="InformationIcon_PreviewMouseDown" Width="50" Height="50" Cursor="Hand"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <StackPanel Orientation="Vertical">
                         <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Orientation="Horizontal" Margin="7">
-                            <CB_uc:CB_Bold x:Name="CB_Bold" Width="50" Height="50" Margin="0,0,0,0" MouseDown="CB_Bold_MouseDown"></CB_uc:CB_Bold>
-                            <CB_uc:CB_Code x:Name="CB_Code" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Code_MouseDown"></CB_uc:CB_Code>
-                            <CB_uc:CB_Italic x:Name="CB_Italic" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Italic_MouseDown"></CB_uc:CB_Italic>
-                            <CB_uc:CB_StrikeThrough x:Name="CB_Striketrough" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Striketrough_MouseDown"></CB_uc:CB_StrikeThrough>
-                            <CB_uc:CB_Underlined x:Name="CB_Underline" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Underline_MouseDown"></CB_uc:CB_Underlined>
+                            <CB_uc:CB_Bold x:Name="CB_Bold" Width="50" Height="50" Margin="0,0,0,0" MouseDown="CB_Bold_MouseDown" Cursor="Hand"></CB_uc:CB_Bold>
+                            <CB_uc:CB_Code x:Name="CB_Code" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Code_MouseDown" Cursor="Hand"></CB_uc:CB_Code>
+                            <CB_uc:CB_Italic x:Name="CB_Italic" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Italic_MouseDown" Cursor="Hand"></CB_uc:CB_Italic>
+                            <CB_uc:CB_StrikeThrough x:Name="CB_Striketrough" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Striketrough_MouseDown" Cursor="Hand"></CB_uc:CB_StrikeThrough>
+                            <CB_uc:CB_Underlined x:Name="CB_Underline" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Underline_MouseDown" Cursor="Hand"></CB_uc:CB_Underlined>
 
                         </StackPanel>
                         <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Orientation="Horizontal" Margin="7,0,0,0">
-                            <CB_uc:CB_Subscript x:Name="CB_Subscript" Width="50" Height="50" Margin="0,0,0,0" MouseDown="CB_Subscript_MouseDown"></CB_uc:CB_Subscript>
-                            <CB_uc:CB_Superscript x:Name="CB_Superscript" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Superscript_MouseDown"></CB_uc:CB_Superscript>
-                            <CB_uc:CB_Quote x:Name="CB_Quote" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Quote_MouseDown"></CB_uc:CB_Quote>
-                            <CB_uc:CB_Link x:Name="CB_Link" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Link_MouseDown"></CB_uc:CB_Link>
-                            <CB_uc:CB_Image x:Name="CB_Image" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Image_MouseDown"></CB_uc:CB_Image>
+                            <CB_uc:CB_Subscript x:Name="CB_Subscript" Width="50" Height="50" Margin="0,0,0,0" MouseDown="CB_Subscript_MouseDown" Cursor="Hand"></CB_uc:CB_Subscript>
+                            <CB_uc:CB_Superscript x:Name="CB_Superscript" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Superscript_MouseDown" Cursor="Hand"></CB_uc:CB_Superscript>
+                            <CB_uc:CB_Quote x:Name="CB_Quote" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Quote_MouseDown" Cursor="Hand"></CB_uc:CB_Quote>
+                            <CB_uc:CB_Link x:Name="CB_Link" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Link_MouseDown" Cursor="Hand"></CB_uc:CB_Link>
+                            <CB_uc:CB_Image x:Name="CB_Image" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Image_MouseDown" Cursor="Hand"></CB_uc:CB_Image>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <uc:MultiSelectionTabelle x:Name="MS_tabels" Height="100" Width="100" Margin="10" MouseDown="MS_tabels_MouseDown"></uc:MultiSelectionTabelle>
-                        <uc:JSON x:Name="MS_JSON" Height="100" Width="100" Margin="10" MouseDown="MS_tabels_MouseDown_1"></uc:JSON>
+                        <uc:MultiSelectionTabelle x:Name="MS_tabels" Height="100" Width="100" Margin="10" MouseDown="MS_tabels_MouseDown" Cursor="Hand"></uc:MultiSelectionTabelle>
+                        <uc:JSON x:Name="MS_JSON" Height="100" Width="100" Margin="10" MouseDown="MS_tabels_MouseDown_1" Cursor="Hand"></uc:JSON>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Orientation="Horizontal">
-                        <CB_uc:MultiSelection x:Name="MS_Headers" Width="300" Height="50" MouseDown="MS_Headers_MouseDown" Margin="0, 0, 0, 0"></CB_uc:MultiSelection>
-                        <CB_uc:MultiSelection x:Name="MS_List" Width="300" Height="50" MouseDown="MS_List_MouseDown" Margin="15, 0, 0, 0"></CB_uc:MultiSelection>
+                        <CB_uc:MultiSelection x:Name="MS_Headers" Width="300" Height="50" MouseDown="MS_Headers_MouseDown" Margin="0, 0, 0, 0" Cursor="Hand"></CB_uc:MultiSelection>
+                        <CB_uc:MultiSelection x:Name="MS_List" Width="300" Height="50" MouseDown="MS_List_MouseDown" Margin="15, 0, 0, 0" Cursor="Hand"></CB_uc:MultiSelection>
                     </StackPanel>
                 </StackPanel>
             </Grid>
