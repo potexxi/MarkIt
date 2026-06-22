@@ -12,6 +12,7 @@ Whether you're taking notes, writing documentation, or creating README files, Ma
 * Markdown syntax-buttons
 * Easy editing of documents
 * Adjust the performance-usage of animations
+* Export your Markdown file to PDF
 
 ## Cloud-Sync
 
