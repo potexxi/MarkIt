@@ -91,6 +91,9 @@ namespace MarkIt.worksheet
             {
                 cl.CT_TextBox.Background = Brushes.White;
                 cl.CT_TextBox.Foreground = Brushes.Black;
+
+                cl.Rect_Overlay.Fill = Brushes.White;
+                cl.RenderedText.Foreground = Brushes.Black;
             }
             sellectedLines.Clear();
 
@@ -164,7 +167,9 @@ namespace MarkIt.worksheet
                         if (!sellectedLines.Contains(cl)) // chatgpt
                             sellectedLines.Add(cl);
                         cl.CT_TextBox.Background = new SolidColorBrush(Color.FromRgb(228, 228, 228));
+                        cl.Rect_Overlay.Fill = new SolidColorBrush(Color.FromRgb(228, 228, 228));
                         cl.CT_TextBox.Foreground = Brushes.Gray;
+                        cl.RenderedText.Foreground = Brushes.Gray;
                     }
                 }
             }
@@ -174,11 +179,29 @@ namespace MarkIt.worksheet
         {
             if (e.Key == Key.C && Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) // chatgpt diese line weil e kann nur eine Taste gleichzeitig sein
             {
+                int start = Math.Min(selectionSize[0], selectionSize[1]);
+                int end = Math.Max(selectionSize[0], selectionSize[1]);
+                string text = "";
+                for(int i = start; i <= end; i ++)
+                {
+                    text += wsStringPages[i] + "\n";
+                }
+                Clipboard.SetText(text); // Line from chatgpt to load the text into the Clipboard
                 e.Handled = true;
                 //TODO STR C
             }
             if (e.Key == Key.V && Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) // chatgpt diese line weil e kann nur eine Taste gleichzeitig sein
             {
+                string eingefuegterText = Clipboard.GetText(); // aus Strg+V / Clipboard holen this line chatgpt
+                if(eingefuegterText != null)
+                {
+                    string[] splitted = eingefuegterText.Split("\n");
+                    foreach (string line in splitted)
+                    {
+                        addLineWithContent(line);
+                    }
+                }
+                ClearSelction();
                 e.Handled = true;
                 //TODO STR V
             }
@@ -188,16 +211,19 @@ namespace MarkIt.worksheet
                 if(AddingInProzess)
                     return;
                 addLine();
+                ClearSelction();
             }
             if (e.Key == Key.Up)
             {
                 e.Handled = true; //tells the programm that e has been handelt
                 moveLineUp();
+                ClearSelction();
             }
             if (e.Key == Key.Down)
             {
                 e.Handled = true;
                 moveLineDown();
+                ClearSelction();
             }
             if (e.Key == Key.Back)
             {
@@ -206,10 +232,6 @@ namespace MarkIt.worksheet
                 TextBox cl = (TextBox)sender;
                 if (cl.CaretIndex == 0)
                     deletLine();
-            }
-            else
-            {
-                ClearSelction();
             }
         }
 
@@ -426,6 +448,18 @@ namespace MarkIt.worksheet
             customLine.CT_TextBox.PreviewKeyDown += CT_TextBox_PreviewKeyDown;
             stackpanelWorksheet.Children.Insert(line + 1, customLine);
             wsStringPages.Insert(line + 1, lineContent);
+        }
+
+        private void addLineWithContent(string content)
+        {
+            int currentline = checkCurrentLine();
+            if(currentline != -1 && stackpanelWorksheet.Children != null)
+            {
+                addLine();
+                wsStringPages[currentline + 1] = content;
+                CustomLine cl = (CustomLine)stackpanelWorksheet.Children[currentline + 1];
+                cl.CT_TextBox.Text = content;
+            }
         }
 
         private void addLine()
