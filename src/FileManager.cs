@@ -214,7 +214,6 @@ namespace MarkIt
             try
             {
                 byte[] bytes = Encoding.UTF8.GetBytes(content);
-                await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, path);
                 Supabase.Storage.FileOptions options = new Supabase.Storage.FileOptions { Upsert = true };
                 await MainWindow.supabase.Storage.From("MarkIt").Upload(bytes, path, options);
                 loadingscreen.Visibility = Visibility.Hidden;
@@ -239,6 +238,7 @@ namespace MarkIt
                 AddToHistory(new FileHistoryItem(path, FileType.Cloud));
                 loadingscreen.Visibility = Visibility.Hidden;
                 fileType = FileType.Cloud;
+                CurrentFilePath = path;
                 return Encoding.UTF8.GetString(content_byte);
             }
             catch (Exception ex)

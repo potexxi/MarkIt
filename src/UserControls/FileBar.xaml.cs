@@ -687,6 +687,7 @@ namespace MarkIt.UserControls
             };
             BorderTransform.BeginAnimation(TranslateTransform.XProperty, animation);
             // Ende
+            MainWindow.UpdateMenuItemBottom();
         }
 
         private void TimerBlurIn_Tick(object? sender, EventArgs e)
