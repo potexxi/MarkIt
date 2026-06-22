@@ -7,8 +7,8 @@
         xmlns:uc="clr-namespace:MarkIt.UserControls"
         xmlns:CB_uc="clr-namespace:MarkIt.UserControls.usercontrolsTextdecoration"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
-        mc:Ignorable="d" KeyDown="Window_KeyDown"
-        Title="MarkIt" Height="900" Width="1600" SizeChanged="Window_SizeChanged" MinWidth="650" MinHeight="550" Icon="/images/markit-logo.png">
+        mc:Ignorable="d" KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen"
+        Title="MarkIt" Height="800" Width="1500" SizeChanged="Window_SizeChanged" MinWidth="650" MinHeight="550" Icon="/images/markit-logo.png">
     <Grid x:Name="GridMain">
         <StackPanel x:Name="StackPanelMainWindow" Orientation="Vertical">
             <DockPanel>
@@ -75,11 +75,17 @@
                 </StackPanel>
             </Grid>
             <Grid x:Name="GridWorksheet" Background="LightGray" Height="350" VerticalAlignment="Center"/>
-            <Menu Foreground="Black" x:Name="MenuBottom" Background="LightGray" Height="50">
-                <MenuItem Cursor="Hand" FontSize="14" Foreground="Black" x:Name="MenuItemCurrentFilePath" Header="No File opened">
-                    <MenuItem x:Name="MenuItemOpenFolder" Header="Open in Folder" Cursor="Hand" PreviewMouseDown="MenuItemOpenFolder_PreviewMouseDown"></MenuItem>
-                </MenuItem>
-            </Menu>
+            <StackPanel Orientation="Horizontal" Background="LightGray">
+                <Menu Width="1180" Foreground="Black" x:Name="MenuBottom" Background="LightGray" Height="35">
+                    <MenuItem Cursor="Hand" Height="35" FontSize="13" Foreground="Black" x:Name="MenuItemCurrentFilePath" Header="No File opened">
+                        <MenuItem x:Name="MenuItemOpenFolder" Header="Open in Folder" Cursor="Hand" PreviewMouseDown="MenuItemOpenFolder_PreviewMouseDown"></MenuItem>
+                    </MenuItem>
+                </Menu>
+                <StackPanel Width="500" Background="LightGray" IsHitTestVisible="False" x:Name="LoadingScreenExport" Visibility="Hidden" Orientation="Horizontal">
+                    <Label VerticalContentAlignment="Center" FontSize="13" Content="Exporting PDF:"></Label>
+                    <ProgressBar x:Name="ProgressBarExport" Value="0" Height="20"  Width="200"></ProgressBar>
+                </StackPanel>
+            </StackPanel>
         </StackPanel>
         <uc:FileBar Opacity="1" x:Name="filebar"></uc:FileBar>
         <Grid Visibility="Hidden" x:Name="LoadingScreen">

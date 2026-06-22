@@ -121,7 +121,8 @@ namespace MarkIt
         {
             CurrentWorkSheet.ScrollViewerWorksheet.Height = this.ActualHeight-220;
             filebar.SetSize(this.ActualWidth, this.ActualHeight);
-            GridWorksheet.Height = this.ActualHeight - 200;
+            GridWorksheet.Height = this.ActualHeight - 210;
+            MenuBottom.Width = this.ActualWidth - 320;
         }
 
         private void MenuItemWorkspace_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -184,6 +185,7 @@ namespace MarkIt
                 FileManager.CurrentFilePath = openFileDialog.FileName;
                 CurrentWorkSheet.LoadFromString(FileManager.LoadFromFile(openFileDialog.FileName));
             }
+            UpdateMenuItemBottom();
         }
 
         private void MenuItemSaveFile_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -228,9 +230,9 @@ namespace MarkIt
 
         private void CB_Underline_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("<u>", "</u>");}
 
-        private void CB_Subscript_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("<sub>", "</sub>");}
+        private void CB_Subscript_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("<sup>", "</sup>");}
 
-        private void CB_Superscript_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("<sup>", "</sup>");}
+        private void CB_Superscript_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("<sub>", "</sub>");}
 
         private void CB_Quote_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToLineBeginning("> ");}
 
@@ -282,9 +284,12 @@ namespace MarkIt
 
         private async void MenuItemExport_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            loadingScreen.Visibility = Visibility.Visible;
-            await FileManager.MarkdownToPdf(CurrentWorkSheet.GetContent());
-            loadingScreen.Visibility = Visibility.Hidden;
+            MenuItemExport.IsEnabled = false;
+            LoadingScreenExport.Visibility = Visibility.Visible;
+            await FileManager.MarkdownToPdf(CurrentWorkSheet.GetContent(), ProgressBarExport);
+            LoadingScreenExport.Visibility = Visibility.Hidden;
+            MenuItemExport.IsEnabled = true;
+            ProgressBarExport.Value = 0;
         }
 
         public static void UpdateMenuItemBottom()

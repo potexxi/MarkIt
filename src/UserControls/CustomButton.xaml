@@ -4,12 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MarkIt.UserControls"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" Cursor="Hand"
              d:DesignHeight="50" d:DesignWidth="100">
-    <Grid>
-        <Rectangle x:Name="RectButton" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="LightGray" Stroke="Black" StrokeThickness="2" RadiusX="15" RadiusY="15"/>
-        <Label x:Name="ButtonContent" Content="Button" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20" FontFamily="Leelawadee UI"/>
+    <Grid Cursor="Hand">
+        <Rectangle x:Name="RectButton" Cursor="Hand" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="LightGray" Stroke="Black" StrokeThickness="2" RadiusX="15" RadiusY="15"/>
+        <Label x:Name="ButtonContent" Cursor="Hand" Content="Button" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20" FontFamily="Leelawadee UI"/>
 
-        <Rectangle VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="Transparent" MouseEnter="Rectangle_MouseEnter" MouseLeave="Rectangle_MouseLeave"/>
+        <Rectangle VerticalAlignment="Stretch" Cursor="Hand" HorizontalAlignment="Stretch" Fill="Transparent" MouseEnter="Rectangle_MouseEnter" MouseLeave="Rectangle_MouseLeave"/>
     </Grid>
 </UserControl>
