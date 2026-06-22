@@ -364,13 +364,7 @@ namespace MarkIt.UserControls
             item.ContextMenu.Closed += ContextMenu_Closed;
             MenuItem menuItem1 = new MenuItem { Header = "Create File", Cursor = Cursors.Hand };
             menuItem1.Click += MenuItemCreate_Click;
-            MenuItem menuItem2 = new MenuItem { Header = "Delete", Cursor = Cursors.Hand };
-            menuItem2.Click += MenuItemDelete_Click;
-            MenuItem menuItem3 = new MenuItem { Header = "Rename", Cursor = Cursors.Hand };
-            menuItem3.Click += MenuItemRename_Click;
             item.ContextMenu.Items.Add(menuItem1);
-            item.ContextMenu.Items.Add(menuItem2);
-            item.ContextMenu.Items.Add(menuItem3);
 
             if (TreeViewLocalRootCount == 0)
             {
@@ -546,13 +540,7 @@ namespace MarkIt.UserControls
             big.ContextMenu.Closed += ContextMenu_Closed;
             MenuItem menuItem1 = new MenuItem { Header = "Create File", Cursor = Cursors.Hand };
             menuItem1.PreviewMouseDown += MenuItemCreate_Click;
-            MenuItem menuItem2 = new MenuItem { Header = "Delete", Cursor = Cursors.Hand };
-            menuItem2.PreviewMouseDown += MenuItemDelete_Click;
-            MenuItem menuItem3 = new MenuItem { Header = "Rename", Cursor = Cursors.Hand };
-            menuItem3.PreviewMouseDown += MenuItemRename_Click;
             big.ContextMenu.Items.Add(menuItem1);
-            big.ContextMenu.Items.Add(menuItem2);
-            big.ContextMenu.Items.Add(menuItem3);
 
             if (storageitems == null || storageitems.Count == 0)
             {
@@ -660,7 +648,7 @@ namespace MarkIt.UserControls
             else
                 RectBackground.Opacity = 0.5;
             RectBackground.IsHitTestVisible = true;
-            // Valentin-GPT
+            // Valentin-GPT <3
             // prompt: wie hast du das gemacht bei raumwechsel
             DoubleAnimation animation = new DoubleAnimation
             {
@@ -686,7 +674,7 @@ namespace MarkIt.UserControls
             else
                 RectBackground.Opacity = 0;
             RectBackground.IsHitTestVisible = false;
-            // Valentin-GPT
+            // Valentin-GPT <3
             // prompt: wie hast du das gemacht bei raumwechsel
             DoubleAnimation animation = new DoubleAnimation
             {

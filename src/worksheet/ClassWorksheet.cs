@@ -26,7 +26,7 @@ namespace MarkIt.worksheet
     {
         private string wsName { get; set; } = "markdown";
         private DateTime wsCreationDate { get; set; }
-        private List<string> wsStringPages { get; set; } = [""];
+        private List<string> wsStringPages { get; set; } = [];
         private double wsWidth { get; set; } = 1050;
         public double wsHeight { get; set; } = 1440;
 
