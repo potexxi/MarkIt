@@ -313,11 +313,19 @@ namespace MarkIt
                 return;
             // ChatGPT
             // Prompt: wie kann ich process start fuer folder
-            Process.Start(new ProcessStartInfo
+            try
             {
-                FileName = Directory.GetParent(FileManager.CurrentFilePath).ToString(),
-                UseShellExecute = true
-            });
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = Directory.GetParent(FileManager.CurrentFilePath).ToString(),
+                    UseShellExecute = true
+                });
+            }
+            catch
+            {
+                WindowMessageBox box = new WindowMessageBox("Cloud", "This file does not exist or is a cloud file.");
+                box.ShowDialog();
+            }
             // Ende
         }
     }
