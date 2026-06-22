@@ -16,12 +16,14 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Margin" FontSize="20" FontWeight="Bold"/>
-                            <uc:CustomTextBox x:Name="CT_Width" Width="120" Height="33" Margin="477,0,0,0" MaxCharLength="5"/>
+                            <uc:CustomTextBox x:Name="CT_Width" Width="120" Height="33" Margin="477,0,0,0" MaxCharLength="2"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Line Height" FontSize="20" FontWeight="Bold"/>
-                            <uc:CustomTextBox x:Name="CT_Height" Width="120" Height="33" Margin="436,0,0,0" MaxCharLength="5"/>
+                            <uc:CustomTextBox x:Name="CT_Height" Width="120" Height="33" Margin="436,0,0,0" MaxCharLength="3"/>
                         </StackPanel>
+
+                        <Label>These features require a restart to be viewable</Label>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="20" Orientation="Horizontal">
                         <uc:CustomButton Width="100" Height="50" Margin="0,0,10,0" CustomContent="Save" MouseDown="Button_Save_MouseDown"/>

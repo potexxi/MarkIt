@@ -641,7 +641,10 @@ namespace MarkIt.worksheet
         public void LoadFromString(string content)
         { // loads the
             wsStringPages.Clear();
-            string[] splitted = content.Split("\n");
+            string[] splitted = content.Split( // chatgpt (fix line spacing not always working bc windows also uses \r)
+                new[] { "\r\n", "\n", "\r" },
+                StringSplitOptions.None
+            ); // chatgpt ending
             for (int i = 0; i < splitted.Length; i++)
             {
                 wsStringPages.Add(splitted[i]);

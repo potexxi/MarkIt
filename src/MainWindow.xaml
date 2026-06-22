@@ -36,7 +36,6 @@
                     </MenuItem>
                     <MenuItem Header="Info" Opacity="0.6">
                         <MenuItem Header="Credits" Cursor="Hand" x:Name="MenuItemCredits" PreviewMouseDown="MenuItemCredits_PreviewMouseDown"></MenuItem>
-                        <MenuItem Header="Help" Cursor="Hand"></MenuItem>
                     </MenuItem>
                 </Menu>
             </DockPanel>
