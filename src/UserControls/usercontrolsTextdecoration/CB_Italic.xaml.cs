@@ -40,6 +40,7 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
 
             Rect_I.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             Ellipse_I.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+            Logger.logger.Verbose("[UC] Updated Settings Italic");
         }
 
         private void CB_Hitbox_MouseDown(object sender, MouseButtonEventArgs e)

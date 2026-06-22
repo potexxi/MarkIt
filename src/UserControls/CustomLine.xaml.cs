@@ -46,10 +46,13 @@ namespace MarkIt.UserControls
             }
         }
 
+        // if the mouse is within for multi line selection
+        public bool IsMouseWithin;
+
         //live rendering Settings
-        Rectangle Rect_Overlay;
-        StackPanel StackPanel_TextBoxes;
-        TextBlock RenderedText;
+        public Rectangle Rect_Overlay;
+        private StackPanel StackPanel_TextBoxes;
+        public TextBlock RenderedText;
         //live rendering Settings end -
         public CustomLine()
         {
@@ -79,12 +82,17 @@ namespace MarkIt.UserControls
             Panel.SetZIndex(Rect_Overlay, 1);
             Panel.SetZIndex(StackPanel_TextBoxes, 2);
 
+            Rect_Overlay.IsHitTestVisible = false;
+            StackPanel_TextBoxes.IsHitTestVisible = false;
+            RenderedText.IsHitTestVisible = false;
+
             StackPanel_TextBoxes.Children.Add(RenderedText);
         }
         private void RenderedText_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Grid_line.Children.Remove(Rect_Overlay);
             Grid_line.Children.Remove(StackPanel_TextBoxes);
+
 
             CT_TextBox.Focus();
             Keyboard.Focus(CT_TextBox);
@@ -320,6 +328,16 @@ namespace MarkIt.UserControls
             }
 
             return -1;
+        }
+
+        private void TextboxLineText_MouseEnter(object sender, MouseEventArgs e)
+        {
+            IsMouseWithin = true;
+        }
+
+        private void TextboxLineText_MouseLeave(object sender, MouseEventArgs e)
+        {
+            IsMouseWithin = false;
         }
     }
 }

@@ -102,6 +102,7 @@ namespace MarkIt
                 CB_Superscript.updateSettings();
 
                 MS_tabels.updateSettings();
+                MS_JSON.updateSettings();
 
                 MS_Headers.updateSettings();
                 MS_List.updateSettings();
@@ -217,7 +218,7 @@ namespace MarkIt
          }
   
         // all the Custom Button features that you can press on the navigation bar
-        private void CB_Bold_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("**"); }
+        private void CB_Bold_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("**");}
 
         private void CB_Code_MouseDown(object sender, MouseButtonEventArgs e){CurrentWorkSheet.addToPostion("`");}
 
@@ -250,19 +251,33 @@ namespace MarkIt
         {
             string ListType = "- ";
             if(MS_List.selectionIndex == 1)
-            {
                 ListType = "1. ";
-            }
             else if (MS_List.selectionIndex == 2)
-            {
                 ListType = "- [ ] ";
-            }
             CurrentWorkSheet.addToLineBeginning(ListType);
         }
 
         private void MS_tabels_MouseDown(object sender, MouseButtonEventArgs e)
         {
             CurrentWorkSheet.addTabel(MS_tabels.height, MS_tabels.width);
+        }
+
+        private void MS_tabels_MouseDown_1(object sender, MouseButtonEventArgs e)
+        {
+            if(MS_JSON.width == 1)
+                CurrentWorkSheet.addToPostion("{}", "");
+            else if (MS_JSON.width == 2)
+                CurrentWorkSheet.addToPostion("[{}, {}]", "");
+            else if (MS_JSON.width == 3)
+                CurrentWorkSheet.addToPostion("[{}, {}, {}]", "");
+            else if (MS_JSON.width == 4)
+                CurrentWorkSheet.addToPostion("[{}, {}, {}, {}]", "");
+            else if (MS_JSON.width == 5)
+                CurrentWorkSheet.addToPostion("[{}, {}, {}, {}, {}]", "");
+            else if (MS_JSON.width == 6)
+                CurrentWorkSheet.addToPostion("[{}, {}, {}, {}, {}, {}]", "");
+            else
+                CurrentWorkSheet.addToPostion("[{}, {}, {}, {}, {}, {}, {}]", "");
         }
 
         private async void MenuItemExport_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -289,9 +304,7 @@ namespace MarkIt
         private void MenuItemOpenFolder_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (string.IsNullOrEmpty(FileManager.CurrentFilePath))
-            {
                 return;
-            }
             // ChatGPT
             // Prompt: wie kann ich process start fuer folder
             Process.Start(new ProcessStartInfo

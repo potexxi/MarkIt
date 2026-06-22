@@ -64,8 +64,9 @@
                             <CB_uc:CB_Image x:Name="CB_Image" Width="50" Height="50" Margin="10,0,0,0" MouseDown="CB_Image_MouseDown"></CB_uc:CB_Image>
                         </StackPanel>
                     </StackPanel>
-                    <StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <uc:MultiSelectionTabelle x:Name="MS_tabels" Height="100" Width="100" Margin="10" MouseDown="MS_tabels_MouseDown"></uc:MultiSelectionTabelle>
+                        <uc:JSON x:Name="MS_JSON" Height="100" Width="100" Margin="10" MouseDown="MS_tabels_MouseDown_1"></uc:JSON>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Orientation="Horizontal">
                         <CB_uc:MultiSelection x:Name="MS_Headers" Width="300" Height="50" MouseDown="MS_Headers_MouseDown" Margin="0, 0, 0, 0"></CB_uc:MultiSelection>

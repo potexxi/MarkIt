@@ -42,6 +42,7 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
             Rect_1.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             Rect_2.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
             Rect_3.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+            Logger.logger.Verbose("[UC] Updated Settings StrikeThrough");
         }
 
         private void CB_Hitbox_MouseDown(object sender, MouseButtonEventArgs e)

@@ -22,6 +22,7 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
     {
         private string[] selection;
         public int selectionIndex = 0;
+        private bool animation = MainWindow.GeneralSettings.iconAnimations;
 
         public MultiSelection()
         {
@@ -36,9 +37,12 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
         }
         public void updateSettings()
         {
+            animation = MainWindow.GeneralSettings.iconAnimations;
+
             Rect_BG.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
             Rect_BG.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             Label_Selection.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+            Logger.logger.Verbose("[UC] Updated Settings MultiSelection");
         }
         public void updateIDX()
         {
@@ -47,8 +51,11 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
         }
         private void Rect_Hitbox_MouseEnter(object sender, MouseEventArgs e)
         {
-            Rect_BG.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
-            Label_Selection.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+            if (animation)
+            {
+                Rect_BG.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+                Label_Selection.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+            }
             if (selection == null) // savety check (NOT FORM KI) but I asked a question and I he told me if selection is not set it could potentialy couse an error so I added this to make sure it doesnt through an error
                 return;
             foreach(string sel in selection)

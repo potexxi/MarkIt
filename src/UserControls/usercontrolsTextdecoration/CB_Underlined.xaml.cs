@@ -41,6 +41,7 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
             Rect_U1.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             Rect_U2.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             Rect_U3.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+            Logger.logger.Verbose("[UC] Updated Settings Underlined");
         }
 
         private void CB_Hitbox_MouseDown(object sender, MouseButtonEventArgs e)

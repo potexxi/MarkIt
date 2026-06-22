@@ -1,5 +1,4 @@
-﻿using MarkIt.UserControls.usercontrolsTextdecoration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,21 +16,19 @@ using System.Windows.Shapes;
 namespace MarkIt.UserControls
 {
     /// <summary>
-    /// Interaktionslogik für MultiSelectionTabelle.xaml
+    /// Interaktionslogik für JSON.xaml
     /// </summary>
-    public partial class MultiSelectionTabelle : UserControl
+    public partial class JSON : UserControl
     {
         public int height = 7;
-        public int width = 7;
+        public int width = 1;
 
         private int MAXheight = 7; // if you wannt bigger tabels you can change the size here
-        private int MAXwidth = 7;
-
+        private int MAXwidth = 1;
 
         private bool animation = MainWindow.GeneralSettings.iconAnimations;
 
-
-        public MultiSelectionTabelle()
+        public JSON()
         {
             InitializeComponent();
         }
@@ -42,13 +39,9 @@ namespace MarkIt.UserControls
             RectBackground.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
             RectBackground.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
 
-            el2.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
-
-            el1.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
-            el2.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
-            el3.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
-            el4.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
-            Logger.logger.Verbose("[UC] Updated Settings MultiSelectionTabelle");
+            CLabel.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+            DLabel.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
+            Logger.logger.Verbose("[UC] Updated Settings JSON usercontrol");
         }
 
         private async void CB_Hitbox_MouseLeave(object sender, MouseEventArgs e)
@@ -79,13 +72,10 @@ namespace MarkIt.UserControls
             if (animation)
             {
                 RectBackground.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
-                el2.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
-
-                el1.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
-                el2.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
-                el3.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
-                el4.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+                CLabel.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+                DLabel.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
             }
+
             SP_TableGrid.Children.Clear();
             PopupContent.Background = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
 
@@ -137,3 +127,4 @@ namespace MarkIt.UserControls
         }
     }
 }
+

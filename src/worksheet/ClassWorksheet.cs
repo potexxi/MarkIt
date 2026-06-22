@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Reactive;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Security.Permissions;
@@ -14,6 +15,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Xml;
 
 namespace MarkIt.worksheet
@@ -30,19 +32,27 @@ namespace MarkIt.worksheet
 
         public Grid gridWorkSheet;
         private List<Canvas> canvisWsPages;
+
+        private List<int> selectionSize = [0, 0];
+        private List<CustomLine> sellectedLines = new List<CustomLine>();
         private StackPanel stackpanelWorksheet;
+
+        private DispatcherTimer dt;
 
         // might be moved to a different setting / config file
         private double Zoom = 0.8;
         private double pageMargin = 50;
         private bool AddingInProzess = false;
 
+        private bool MouseIsDown = false;
         public ScrollViewer ScrollViewerWorksheet { get; private set; }
-        public ClassWorksheet()
+        public ClassWorksheet(){ Logger.logger.Verbose("[] Worksheet new created"); }
+        public ClassWorksheet(Grid _gridWorkSheet) : this()
         {
-        }
-        public ClassWorksheet(Grid _gridWorkSheet):this()
-        {
+            dt = new DispatcherTimer();
+            dt.Interval = TimeSpan.FromMilliseconds(10);
+            dt.Tick += Dt_Tick;
+
             this.gridWorkSheet = _gridWorkSheet;
             stackpanelWorksheet = new StackPanel();
         }
@@ -68,33 +78,175 @@ namespace MarkIt.worksheet
                 customLine.CT_TextBox.PreviewKeyDown += CT_TextBox_PreviewKeyDown;
                 stackpanelWorksheet.Children.Add(customLine);
             }
+            gridWorkSheet.PreviewMouseDown += GridWorkSheet_MouseDown;
+            gridWorkSheet.PreviewMouseUp += GridWorkSheet_MouseUp;
             ScrollViewerWorksheet.Content = stackpanelWorksheet;
             this.gridWorkSheet.Children.Add(ScrollViewerWorksheet);
+            Logger.logger.Verbose("[] Worksheet renderd all lines");
+        }
+        private void ClearSelction()
+        {
+            selectionSize[0] = 0;
+            selectionSize[1] = 0;
+            foreach (CustomLine cl in stackpanelWorksheet.Children)
+            {
+                cl.CT_TextBox.Background = Brushes.White;
+                cl.CT_TextBox.Foreground = Brushes.Black;
+
+                cl.Rect_Overlay.Fill = Brushes.White;
+                cl.RenderedText.Foreground = Brushes.Black;
+            }
+            sellectedLines.Clear();
+            Logger.logger.Verbose("[] Worksheet cleared selection");
+        }
+        private void GridWorkSheet_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = false;
+            MouseIsDown = false;
+            dt.Stop();
+        }
+
+        public bool IsMarked { get; private set; }
+
+        private void GridWorkSheet_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+            ClearSelction();
+            MouseIsDown = true;
+
+            for (int i = 0; i < stackpanelWorksheet.Children.Count; i++)
+            {
+                CustomLine cl = (CustomLine)stackpanelWorksheet.Children[i];
+
+                if (cl.IsMouseWithin)
+                {
+                    selectionSize[0] = i;
+                    selectionSize[1] = i;
+                    break;
+                }
+            }
+            if (!dt.IsEnabled)
+                dt.Start();
+            Logger.logger.Verbose("[] Worksheet new Selection");
+        }
+        private void SelectLine(CustomLine cl)
+        {
+            if (!sellectedLines.Contains(cl))
+                sellectedLines.Add(cl);
+
+            cl.CT_TextBox.Focus();
+            Keyboard.Focus(cl.CT_TextBox);
+            cl.CT_TextBox.CaretIndex = cl.CT_TextBox.Text.Length;
+        }
+        private void Dt_Tick(object? sender, EventArgs e)
+        {
+            int i = 0;
+            if (MouseIsDown)
+            {
+                foreach (CustomLine cl in stackpanelWorksheet.Children)
+                {
+                    cl.CT_TextBox.Background = Brushes.White;
+                    cl.CT_TextBox.Foreground = Brushes.Black;
+                }
+                foreach (CustomLine cl in stackpanelWorksheet.Children)
+                {
+                    if (cl.IsMouseWithin)
+                    {
+                        SelectLine(cl);
+                        selectionSize[1] = i;
+                    }
+                    i++;
+                }
+                int start = Math.Min(selectionSize[0], selectionSize[1]); // chatgpt anfang
+                int end = Math.Max(selectionSize[0], selectionSize[1]); // chatgpt ende
+
+                for (int i2 = 0; i2 < stackpanelWorksheet.Children.Count; i2++)
+                {
+                    if (i2 >= start && i2 <= end)
+                    {
+
+                        CustomLine cl = (CustomLine)stackpanelWorksheet.Children[i2];
+                        if (!sellectedLines.Contains(cl)) // chatgpt
+                            sellectedLines.Add(cl);
+                        cl.CT_TextBox.Background = new SolidColorBrush(Color.FromRgb(228, 228, 228));
+                        cl.Rect_Overlay.Fill = new SolidColorBrush(Color.FromRgb(228, 228, 228));
+                        cl.CT_TextBox.Foreground = Brushes.Gray;
+                        cl.RenderedText.Foreground = Brushes.Gray;
+                    }
+                }
+            }
         }
 
         private void CT_TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Key == Key.C && Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) // chatgpt diese line weil e kann nur eine Taste gleichzeitig sein
+            {
+                int start = Math.Min(selectionSize[0], selectionSize[1]);
+                int end = Math.Max(selectionSize[0], selectionSize[1]);
+                string text = "";
+                for(int i = start; i <= end; i ++)
+                {
+                    text += wsStringPages[i] + "\n";
+                }
+                Clipboard.SetText(text); // Line from chatgpt to load the text into the Clipboard
+                e.Handled = true;
+                //TODO STR C
+            }
+            if (e.Key == Key.V && Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) // chatgpt diese line weil e kann nur eine Taste gleichzeitig sein
+            {
+                string eingefuegterText = Clipboard.GetText(); // aus Strg+V / Clipboard holen this line chatgpt
+                if (eingefuegterText != null)
+                {
+                    string[] splitted = eingefuegterText.Split("\n");
+                    foreach (string line in splitted)
+                    {
+                        addLineWithContent(line);
+                    }
+                }
+                ClearSelction();
+                e.Handled = true;
+                //TODO STR V
+            }
+            if (e.Key == Key.A && Keyboard.Modifiers.HasFlag(ModifierKeys.Control)) // chatgpt diese line weil e kann nur eine Taste gleichzeitig sein
+            {
+                for(int i = 0; i < stackpanelWorksheet.Children.Count; i++)
+                {
+                    CustomLine cl = (CustomLine)stackpanelWorksheet.Children[i];
+                    sellectedLines.Add(cl);
+                    cl.CT_TextBox.Background = new SolidColorBrush(Color.FromRgb(228, 228, 228));
+                    cl.Rect_Overlay.Fill = new SolidColorBrush(Color.FromRgb(228, 228, 228));
+                }
+                selectionSize[0] = 0;
+                selectionSize[1] = stackpanelWorksheet.Children.Count - 1;
+
+                e.Handled = true;
+                //TODO STR V
+            }
             if (e.Key == Key.Enter)
             {
                 e.Handled = true; // ChatGPT to stop the refocus on the old line
                 if(AddingInProzess)
                     return;
                 addLine();
+                ClearSelction();
             }
             if (e.Key == Key.Up)
             {
                 e.Handled = true; //tells the programm that e has been handelt
                 moveLineUp();
+                ClearSelction();
             }
             if (e.Key == Key.Down)
             {
                 e.Handled = true;
                 moveLineDown();
+                ClearSelction();
             }
             if (e.Key == Key.Back)
             {
+                if (sellectedLines.Count > 1)
+                    deletSelection();
                 TextBox cl = (TextBox)sender;
-
                 if (cl.CaretIndex == 0)
                     deletLine();
             }
@@ -130,6 +282,7 @@ namespace MarkIt.worksheet
                 l.CT_TextBox.Text = bevor + symbols + symbols + after;
                 l.CT_TextBox.CaretIndex = cursorpos + symbols.Length;
             }
+            Logger.logger.Verbose("[] Worksheet checked line");
         }
         public void addToPostion(string symbols,string symbolsEND)
         {
@@ -153,6 +306,7 @@ namespace MarkIt.worksheet
                 l.CT_TextBox.Text = bevor + symbols + symbolsEND + after;
                 l.CT_TextBox.CaretIndex = cursorpos + symbols.Length;
             }
+            Logger.logger.Verbose($"[] Worksheet added {symbols} and {symbolsEND}");
         }
         public void addToLineBeginning(string symbol)
         {
@@ -165,6 +319,7 @@ namespace MarkIt.worksheet
                 l.CT_TextBox.Text = symbol + content;
                 l.CT_TextBox.CaretIndex = cursorpos + symbol.Length;
             }
+            Logger.logger.Verbose($"[] Worksheet added {symbol} to the begining of the line");
         }
         private int checkCurrentLine()
         { // returns the current line
@@ -182,7 +337,7 @@ namespace MarkIt.worksheet
             if (line == -1)
                 return -1;
             CustomLine l = (CustomLine)stackpanelWorksheet.Children[line]; // converts the child into the line
-            return l.CT_TextBox.CaretIndex;  // CaretIndex is form ChatGPT what it does is that it shows the current cursor position
+            return l.CT_TextBox.CaretIndex;  // CaretIndex is form ChatGPT what it does is that it shows the current cursor position$
         }
 
 
@@ -219,7 +374,8 @@ namespace MarkIt.worksheet
 
                 customLine.CT_TextBox.CaretIndex = linepos; // change the carter index to the beginning of the line
             }), System.Windows.Threading.DispatcherPriority.Input); // runs the focusing code later if WPF is still processing previews inputs
-            //chatGPT end
+                                                                    //chatGPT end
+            Logger.logger.Verbose($"[] Worksheet line up");
         }
         private void moveLineDown()
         {
@@ -253,6 +409,7 @@ namespace MarkIt.worksheet
                 customLine.CT_TextBox.CaretIndex = linepos; // change the carter index to the beginning of the line
             }), System.Windows.Threading.DispatcherPriority.Input); // runs the focusing code later if WPF is still processing previews inputs
             //chatGPT end
+            Logger.logger.Verbose($"[] Worksheet line up");
         }
         public void addTabel(int height, int width)
         {
@@ -288,6 +445,7 @@ namespace MarkIt.worksheet
             {
                 makeLineNoCarterIDX(lines[i]);
             }
+            Logger.logger.Verbose($"[] Worksheet table added");
         }
         
         private void makeLineNoCarterIDX(string lineContent)
@@ -313,6 +471,18 @@ namespace MarkIt.worksheet
             customLine.CT_TextBox.PreviewKeyDown += CT_TextBox_PreviewKeyDown;
             stackpanelWorksheet.Children.Insert(line + 1, customLine);
             wsStringPages.Insert(line + 1, lineContent);
+        }
+
+        private void addLineWithContent(string content)
+        {
+            int currentline = checkCurrentLine();
+            if(currentline != -1 && stackpanelWorksheet.Children != null)
+            {
+                addLine();
+                wsStringPages[currentline + 1] = content;
+                CustomLine cl = (CustomLine)stackpanelWorksheet.Children[currentline + 1];
+                cl.CT_TextBox.Text = content;
+            }
         }
 
         private void addLine()
@@ -408,7 +578,27 @@ namespace MarkIt.worksheet
             }), System.Windows.Threading.DispatcherPriority.Input); // runs the focusing code later if WPF is still processing previews inputs
             //chatGPT end
         }
-        private void deletLine()
+
+        private void deletSelection()
+        {
+            //chatgpt
+            int start = Math.Min(selectionSize[0], selectionSize[1]);
+            int end = Math.Max(selectionSize[0], selectionSize[1]);
+
+            for (int i = end; i >= start; i--)
+            {
+                if (i <= 0)
+                    continue;
+
+                wsStringPages.RemoveAt(i);
+                stackpanelWorksheet.Children.RemoveAt(i);
+            }
+            //chatgpt ende
+            ClearSelction();
+
+            Logger.logger.Verbose($"[] delet selection");
+        }
+        private void deletLine(bool bypass = false)
         { // deletes a line (if the current lines content is 0)
             int line = -1;
             int cursorPOS = -1;
@@ -419,7 +609,7 @@ namespace MarkIt.worksheet
                     return;
                 cursorPOS = getCursorPosition(line);
             }
-            if(wsStringPages[line] == "" || cursorPOS == 0)
+            if(wsStringPages[line] == "" || cursorPOS == 0 || bypass)
             {
                 if(line <= 0)
                     return; // to make sure you dont remove line 1
@@ -442,15 +632,9 @@ namespace MarkIt.worksheet
                     );
                     customLine.CT_TextBox.CaretIndex = OLDcarterINDX; // change the carter index to the beginning of the line
                 }), System.Windows.Threading.DispatcherPriority.Input); // runs the focusing code later if WPF is still processing previews inputs
-            //chatGPT end
-            }
-        }
-        public void Render()
-        // renders the pages that are in view (*italic*, **Bold**)
-        {
-            foreach (Canvas page in this.canvisWsPages)
-            {
+                                                                        //chatGPT end
 
+                Logger.logger.Verbose($"[] deleted line");
             }
         }
 
@@ -477,6 +661,8 @@ namespace MarkIt.worksheet
                     content += "\n";
             }
             return content;
+
+            Logger.logger.Verbose($"Returned Content");
         }
     }
 }

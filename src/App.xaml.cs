@@ -23,11 +23,12 @@ namespace MarkIt
             DispatcherUnhandledException += (s,e) =>
             {
                 WindowMessageBox box;
-                if(e.Exception is Supabase.Gotrue.Exceptions.GotrueException)
+                if (e.Exception is Supabase.Gotrue.Exceptions.GotrueException ||
+                    e.Exception is System.Net.Http.HttpRequestException ||
+                    e.Exception is System.Net.Sockets.SocketException)
                 {
-                    box = new WindowMessageBox("Server connection closed.", "Please try again.");
+                    box = new WindowMessageBox("Server unreachable", "Please try again later or continue as guest.");
                     box.ShowDialog();
-                    Timer_Tick(null, null);
                     e.Handled = true;
                     return;
                 }
@@ -44,15 +45,14 @@ namespace MarkIt
         private HttpClient client;
         private async void Timer_Tick(object? sender, EventArgs e)
         {
-            await ServerSettings.Init();
             try
             {
+                await ServerSettings.Init();
                 await client.GetStringAsync(ServerSettings.URL);
             }
             catch
             {
-                WindowMessageBox box = new WindowMessageBox("Server unreachable.", "It seems, that our server is currently unreachable. Please restart the app, or continue using it restricted.");
-                box.ShowDialog();
+
             }
         }
     }

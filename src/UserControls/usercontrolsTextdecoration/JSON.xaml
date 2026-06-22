@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="MarkIt.UserControls.JSON"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MarkIt.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="100">
+    <Grid>
+        <Rectangle x:Name="RectBackground" StrokeThickness="4" Stroke="Black" RadiusX="5" RadiusY="5" Fill="White"/>
+        <Label x:Name="CLabel" FontFamily="Bold" FontSize="35" FontWeight="Bold" Margin="0,5,0,5">JSON</Label>
+        <Label x:Name="DLabel" FontFamily="Bold" FontSize="35" FontWeight="Bold" Margin="10,45,0,5">[ {} ]</Label>
+        <Rectangle x:Name="CB_Hitbox" Fill="Transparent" MouseEnter="CB_Hitbox_MouseEnter" MouseLeave="CB_Hitbox_MouseLeave"/>
+        <!--ChatGPT-->
+        <Popup x:Name="TablePopup"
+       PlacementTarget="{Binding ElementName=CB_Hitbox}"
+       Placement="Bottom"
+       StaysOpen="True"
+       AllowsTransparency="True">
+
+            <Border x:Name="PopupContent"
+            Background="White"
+            Padding="6"
+            CornerRadius="6"
+            MouseLeave="Popup_MouseLeave">
+
+                <StackPanel x:Name="SP_TableGrid"/>
+
+            </Border>
+        </Popup>
+        <!--ChatGPT-->
+    </Grid>
+</UserControl>
