@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -20,6 +21,7 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
     /// </summary>
     public partial class CB_Image : UserControl
     {
+        private bool animation = MainWindow.GeneralSettings.iconAnimations;
         public CB_Image()
         {
             InitializeComponent();
@@ -27,6 +29,7 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
 
         public void updateSettings()
         {
+            animation = MainWindow.GeneralSettings.iconAnimations;
             RectBackground.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
             RectBackground.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
 
@@ -42,10 +45,13 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
 
         private void CB_Hitbox_MouseEnter(object sender, MouseEventArgs e)
         {
-            RectBackground.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
-            el1.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
-            el2.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
-            el3.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+            if (animation)
+            {
+                RectBackground.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+                el1.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+                el2.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+                el3.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+            }
         }
 
         private void CB_Hitbox_MouseDown(object sender, MouseButtonEventArgs e)

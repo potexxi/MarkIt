@@ -26,6 +26,7 @@ namespace MarkIt.UserControls
         private int MAXheight = 7; // if you wannt bigger tabels you can change the size here
         private int MAXwidth = 1;
 
+        private bool animation = MainWindow.GeneralSettings.iconAnimations;
 
         public JSON()
         {
@@ -34,6 +35,7 @@ namespace MarkIt.UserControls
 
         public void updateSettings()
         {
+            animation = MainWindow.GeneralSettings.iconAnimations;
             RectBackground.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
             RectBackground.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
 
@@ -66,10 +68,12 @@ namespace MarkIt.UserControls
 
         private void CB_Hitbox_MouseEnter(object sender, MouseEventArgs e)
         {
-            RectBackground.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
-            CLabel.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
-            DLabel.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
-
+            if (animation)
+            {
+                RectBackground.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+                CLabel.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+                DLabel.Foreground = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+            }
 
             SP_TableGrid.Children.Clear();
             PopupContent.Background = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);

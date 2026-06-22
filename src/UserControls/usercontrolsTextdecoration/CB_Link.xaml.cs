@@ -20,6 +20,7 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
     /// </summary>
     public partial class CB_Link : UserControl
     {
+        private bool animation = MainWindow.GeneralSettings.iconAnimations;
         public CB_Link()
         {
             InitializeComponent();
@@ -27,6 +28,7 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
 
         public void updateSettings()
         {
+            animation = MainWindow.GeneralSettings.iconAnimations;
             RectBackground.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
             RectBackground.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.HoverColor);
             Rect_BGR.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
@@ -42,11 +44,15 @@ namespace MarkIt.UserControls.usercontrolsTextdecoration
 
         private void CB_Hitbox_MouseEnter(object sender, MouseEventArgs e)
         {
-            RectBackground.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
-            Rect_BGR.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+            if (animation)
+            {
+                RectBackground.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
+                Rect_BGR.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Foreground);
 
-            el1.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
-            el2.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+                el1.Stroke = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+                el2.Fill = (Brush)new BrushConverter().ConvertFromString(MainWindow.GeneralSettings.currentColorTheme.Textcolor);
+            }
+
         }
 
         private void CB_Hitbox_MouseLeave(object sender, MouseEventArgs e)
