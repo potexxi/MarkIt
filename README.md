@@ -4,6 +4,9 @@
 
 Whether you're taking notes, writing documentation, or creating README files, MarkIt provides a clean editing experience with instant Markdown support.
 
+## RELEASE
+https://github.com/potexxi/MarkIt/releases/tag/v0.1.1
+
 ## Features
 
 * Supports text documents, especially Markdown files
